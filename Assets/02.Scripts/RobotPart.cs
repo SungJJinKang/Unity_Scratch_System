@@ -6,7 +6,8 @@ public class RobotPart : MonoBehaviour
 {
     protected RobotBase RobotBase;
 
-    private List<Method> BuiltInMethod;
+    private List<Function> BuiltInMethod;
+    /*
     protected bool AddRobotPartMethod()
     {
 
@@ -26,7 +27,17 @@ public class RobotPart : MonoBehaviour
 
         //Check Static Method 
     }
+    */
 
+    public virtual void OnPreStartMainLoopedFunction()
+    {
+
+    }
+
+    public virtual void OnEndMainLoopedFunction()
+    {
+
+    }
 
 
     protected virtual void Awake()

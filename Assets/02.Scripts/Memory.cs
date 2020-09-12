@@ -4,70 +4,7 @@ using UnityEngine;
 
 public class Memory : RobotPart
 {
-    [System.Serializable]
-    public class Variable
-    {
-        [System.Serializable]
-        public enum VariableType
-        {
-            Number,
-            Text,
-            Boolean
-        }
 
-        public virtual object GetValue()
-        {
-            return null;
-        }
-    }
-
-    [System.Serializable]
-    public class Number : Variable
-    {
-        public float value;
-
-        public Number()
-        {
-            value = 0;
-        }
-
-        public override object GetValue()
-        {
-            return value;
-        }
-    }
-
-    [System.Serializable]
-    public class Text : Variable
-    {
-        public string value;
-
-        public Text() 
-        {
-            value = "";
-        }
-
-        public override object GetValue()
-        {
-            return value;
-        }
-    }
-
-    [System.Serializable]
-    public class Boolean : Variable
-    {
-        public bool value;
-
-        public Boolean() 
-        {
-            value = false;
-        }
-
-        public override object GetValue()
-        {
-            return value;
-        }
-    }
 
     private string MemoryName;
     private Variable _Variable;

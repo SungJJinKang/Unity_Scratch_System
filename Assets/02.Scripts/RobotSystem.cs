@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Robot system.
+/// Contain All Robots Info,
+/// Contain All Methods Used In This Game
+/// 
+/// </summary>
 public class RobotSystem : MonoBehaviour
 {
     public static RobotSystem instance;
@@ -42,7 +48,9 @@ public class RobotSystem : MonoBehaviour
         {
             for (int i = 0; i < this.SpawnedRobotList.Count; i++)
             {
-                this.SpawnedRobotList[i].ExecuteLoopedMethod(); // Call Looped Method Every Time
+                this.SpawnedRobotList[i].OnPreStartMainLoopedFunction();
+                this.SpawnedRobotList[i].MainLoopedFunction.Operation(this.SpawnedRobotList[i]); // Call Looped Method Every Time
+                this.SpawnedRobotList[i].OnEndMainLoopedFunction();
             }
 
             yield return new WaitForSeconds(1.0f);
@@ -63,40 +71,14 @@ public class RobotSystem : MonoBehaviour
     //////////////////////////
 
 
-    public Dictionary<string, Method> StoredMethodDictionary;
-    public bool ExecuteMethod(string methodName, RobotBase robot)
+    public Dictionary<string, Function> StoredMethodDictionary;
+    public bool ExecuteFunction(string funcName, RobotBase robot)
     {
-        if(StoredMethodDictionary.ContainsKey(methodName))
-        {
-            StoredMethodDictionary[methodName].ExecuteMethod(ref robot);
-            return true;
-        }
-        else
-        {
+        if (this.StoredMethodDictionary.ContainsKey(funcName) == false)
             return false;
-        }
+
+        return this.StoredMethodDictionary[funcName].Operation(robot);
     }
    
    
 }
-
-[System.Serializable]
-public class Method
-{
-    public string MathodName;
-    public UnityAction[]
-
-    /// <summary>
-    /// Lenth of this value is count of parameter for this method
-    /// each item is parameter type of method.
-    /// ex) void Move(Text s, Number a) -> ParameterList = [VariableType.Text, VariableType.Number]
-    /// </summary>
-    public Memory.Variable.VariableType[] ParameterTypeList;
-    public Memory.Variable.VariableType ReturnType;
-
-    public void ExecuteMethod(ref RobotBase robot)
-    {
-
-    }
-}
-

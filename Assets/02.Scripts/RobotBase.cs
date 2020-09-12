@@ -4,15 +4,43 @@ using UnityEngine;
 
 public class RobotBase : RobotPart
 {
-    public List<RobotPart> AttacehdRobotPart;
-
-    [SerializeField]
-    private List<string> loopedMethodNameList;
-    public void ExecuteLoopedMethod()
+    /// <summary>
+    /// The attacehd robot parts.
+    /// this can't contain RobotBase
+    /// </summary>
+    private List<RobotPart> AttacehdRobotParts;
+    public bool AttachRobotPart(RobotPart robotPart)
     {
-        for (int i = 0; i < loopedMethodNameList.Count; i++)
+        if (robotPart is RobotBase || this.AttacehdRobotParts.Contains(robotPart) == true)
+            return false;
+
+        this.AttacehdRobotParts.Add(robotPart);
+        return true;
+    }
+
+    public bool DetachRobotPart(RobotPart robotPart)
+    {
+        return this.AttacehdRobotParts.Remove(robotPart);
+    }
+    /// <summary>
+    /// Should Referece from RobotSystem.StoredMethodDictionary
+    /// </summary>
+    [SerializeField]
+    public Function MainLoopedFunction;
+
+    public override void OnPreStartMainLoopedFunction()
+    {
+        for(int i=0;i< AttacehdRobotParts.Count;i++)
         {
-            RobotSystem.instance.ExecuteMethod(this.loopedMethodNameList[i], this);
+            AttacehdRobotParts[i].OnPreStartMainLoopedFunction();
+        }
+    }
+
+    public override void OnEndMainLoopedFunction()
+    {
+        for (int i = 0; i < AttacehdRobotParts.Count; i++)
+        {
+            AttacehdRobotParts[i].OnEndMainLoopedFunction();
         }
     }
 
@@ -39,12 +67,12 @@ public class RobotBase : RobotPart
         }
 
         Memory memory = null;
-        for (int i = 0; i < this.AttacehdRobotPart.Count; i++)
+        for (int i = 0; i < this.AttacehdRobotParts.Count; i++)
         {
-            if (this.AttacehdRobotPart[i] is Memory)
+            if (this.AttacehdRobotParts[i] is Memory)
             {
                 string tempMemoryName = "";
-                memory = this.AttacehdRobotPart[i] as Memory;
+                memory = this.AttacehdRobotParts[i] as Memory;
                 if (memory.GetMemoryName(ref tempMemoryName))
                 {
                     if (tempMemoryName == memoryName)

@@ -1,0 +1,45 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Package/Bolt.Flow/Runtime/Unit.cs">
+    <Files>
+      <File FileName="Package/Bolt.Flow/Runtime/Flow.cs" Line="1" Column="1" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Add.cs" Line="6" Column="26" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Generic/GenericAdd.cs" Line="10" Column="15" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Scalar/ScalarAdd.cs" Line="8" Column="34" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Vector2/Vector2Add.cs" Line="10" Column="35" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Scalar/ScalarMultiply.cs" Line="1" Column="1" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Scalar/ScalarRoot.cs" Line="1" Column="1" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Scalar/ScalarNormalize.cs" Line="1" Column="1" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Scalar/ScalarMoveTowards.cs" Line="1" Column="1" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Scalar/ScalarModulo.cs" Line="1" Column="1" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Scalar/ScalarAbsolute.cs" Line="10" Column="41" />
+      <File FileName="Package/Bolt.Flow/Runtime/Framework/Math/Absolute.cs" Line="6" Column="45" />
+      <File FileName="Package/Bolt.Flow/Runtime/Unit.cs" Line="11" Column="61" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Ludiq" expanded="True">
+            <Node name="Bolt.Flow.Runtime" expanded="True">
+              <Node name="Framework" expanded="True">
+                <Node name="Math" expanded="True">
+                  <Node name="Generic" expanded="True" />
+                  <Node name="Scalar" expanded="True" />
+                  <Node name="Vector2" expanded="True" />
+                </Node>
+                <Node name="Variables" expanded="True" />
+              </Node>
+              <Node name="Properties" expanded="True" />
+              <Node name="Unit.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Bolt1.Net3.Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

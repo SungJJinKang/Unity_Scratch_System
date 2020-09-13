@@ -9,6 +9,14 @@ public sealed class VariableBlock : ReporterBlock, IVariableBlockType
 
     sealed public override string GetReporterStringValue()
     {//Think How To Robotbase.StoredVariableBlock
-        return "fd";
+        RobotBase robotBase = base.GetOperatingRobotBase();
+        if (robotBase != null)
+        {
+            return robotBase.GetMemoryVariable(this.VariableName);
+        }
+        else
+        {
+            return "";
+        }
     }
 }

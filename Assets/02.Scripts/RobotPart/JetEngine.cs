@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JetEngine : RobotPart
+public sealed class JetEngine : RobotPart
 {
     public float EnginePower;
 

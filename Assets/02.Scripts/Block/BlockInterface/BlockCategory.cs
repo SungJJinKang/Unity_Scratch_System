@@ -19,6 +19,10 @@ public interface ICustomBlockType
 {
 }
 
+
+/// <summary>
+/// Robot part block type.
+/// </summary>
 public interface IRobotPartBlockType
 {
 }
@@ -33,4 +37,20 @@ public interface IMiningBlockType : IRobotPartBlockType
 {
 }
 
-// ,,,, Robot Parts
+[BlockCategoryAttribute("Speak")]
+public interface ISpeakerBlockType : IRobotPartBlockType
+{
+}
+
+[BlockCategoryAttribute("GPS")]
+public interface IGPSBlockType : IRobotPartBlockType
+{
+}
+
+///////
+
+// About All Robots
+public interface IRobotSystemType
+{
+}
+

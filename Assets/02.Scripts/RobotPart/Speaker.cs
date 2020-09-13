@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Do Nothing
-//Just For Counting Number of Memory Attached To RobotBase
-public sealed class Memory : RobotPart
+public class Speaker : RobotPart
 {
     protected override void Awake()
     {
@@ -17,6 +15,9 @@ public sealed class Memory : RobotPart
         base.Start();
     }
 
+    public void Speak(string text)
+    {
 
+    }
 }
 

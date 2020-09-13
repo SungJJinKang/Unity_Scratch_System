@@ -1,4 +1,5 @@
-﻿/// <summary>
+﻿using UnityEngine;
+/// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
 /// </summary>
 [System.Serializable]
@@ -11,6 +12,7 @@ public abstract class Block
 
     /// <summary>
     /// Check If All parameters is filled?
+    /// This is called just one time when modify sourrcede, so this expensive performance is accepted
     /// </summary>
     public bool IsAllPrameterFilled 
     { 
@@ -52,15 +54,28 @@ public abstract class Block
     
     }
 
+     /// <summary>
+    /// Get Robot Base Instance of Operating Robot Instance
+    /// </summary>
+    /// <returns></returns>
+    protected RobotBase GetOperatingRobotBase()
+    {
+
+        Debug.LogError("Cant Find Robot Base");
+        return null;
+    }
+
     /// <summary>
-    /// Get Cached Robot Part of Robot Instance
+    /// Get Robot Part Instance of Operating Robot Instance
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public T GetRobotPart<T>() where T : RobotPart
+    protected T GetOperatingRobotPart<T>() where T : RobotPart
     {
-        return null;
+        return GetOperatingRobotBase()?.GetRobotPart<T>();
     }
+
+ 
 }
 
 /// <summary>

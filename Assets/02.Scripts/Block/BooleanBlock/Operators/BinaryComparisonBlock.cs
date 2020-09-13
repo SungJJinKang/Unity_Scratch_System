@@ -1,5 +1,3 @@
-﻿public abstract class BinaryComparisonBlock : BooleanBlock, IContainingParameter<ReporterBlock, ReporterBlock>, IOperatorBlockType
+﻿public abstract class BinaryComparisonBlock : BooleanBlock, IOperatorBlockType
 {
-    public ReporterBlock Input1 { get; set; }
-    public ReporterBlock Input2 { get; set; }
 }

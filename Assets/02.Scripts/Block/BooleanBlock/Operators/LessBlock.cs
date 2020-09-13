@@ -1,5 +1,5 @@
 ﻿[BlockTitle("Less")]
-public sealed class LessBlock : BinaryComparisonBlock
+public sealed class LessBlock : BinaryComparisonTwoReporterBlock
 {
     sealed public override bool GetBooleanValue()
     {

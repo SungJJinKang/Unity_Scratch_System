@@ -1,5 +1,5 @@
 ﻿[BlockTitle("GreaterOrEqual")]
-public sealed class GreaterOrEqualBlock : BinaryComparisonBlock
+public sealed class GreaterOrEqualBlock : BinaryComparisonTwoReporterBlock
 {
     sealed public override bool GetBooleanValue()
     {

@@ -2,8 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RobotPart : MonoBehaviour
+public abstract class RobotPart : MonoBehaviour
 {
+    protected RobotBase MotherRobotBase = null;
+    public void SetMotherRobotBase(RobotBase robotBase)
+    {
+        if(this.MotherRobotBase != null)
+        {
+            Debug.LogError("MotherRobotBase Already Set!!!!!");
+            return;
+        }
+
+        this.MotherRobotBase = robotBase;
+    }
+
     public virtual void OnPreStartMainLoopedFunction()
     {
 

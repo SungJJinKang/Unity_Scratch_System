@@ -16,31 +16,31 @@ public abstract class Block
     { 
         get
         {
-            BlockParameter blockParameter = this as BlockParameter;
+            IContainingParameter blockParameter = this as IContainingParameter;
             if (blockParameter == null)
             {
                 return true; // There is no parameter
             }
             else
             {//There is parameters
-                if(blockParameter is BlockParameter<CanBeParameterBlockInterface>)
+                if(blockParameter is IContainingParameter<ICanBeParameter>)
                 {//Have 1 Parameter
-                    BlockParameter<CanBeParameterBlockInterface> blockParameter1 = this as BlockParameter<CanBeParameterBlockInterface>;
+                    IContainingParameter<ICanBeParameter> blockParameter1 = this as IContainingParameter<ICanBeParameter>;
                     return blockParameter1.Input1 != null;
                 }
-                else if (blockParameter is BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface>)
+                else if (blockParameter is IContainingParameter<ICanBeParameter, ICanBeParameter>)
                 {//Have 2 Parameter
-                    BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface> blockParameter2 = this as BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface>;
+                    IContainingParameter<ICanBeParameter, ICanBeParameter> blockParameter2 = this as IContainingParameter<ICanBeParameter, ICanBeParameter>;
                     return blockParameter2.Input1 != null && blockParameter2.Input2 != null;
                 }
-                else if (blockParameter is BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface>)
+                else if (blockParameter is IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter>)
                 {//Have 3 Parameter
-                    BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface> blockParameter3 = this as BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface>;
+                    IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter> blockParameter3 = this as IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter>;
                     return blockParameter3.Input1 != null && blockParameter3.Input2 != null && blockParameter3.Input3 != null;
                 }
-                else if (blockParameter is BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface>)
+                else if (blockParameter is IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter>)
                 {//Have 4 Parameter
-                    BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface> blockParameter4 = this as BlockParameter<CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface, CanBeParameterBlockInterface>;
+                    IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter> blockParameter4 = this as IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter>;
                     return blockParameter4.Input1 != null && blockParameter4.Input2 != null && blockParameter4.Input3 != null && blockParameter4.Input4 != null;
                 }
 

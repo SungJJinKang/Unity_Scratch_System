@@ -1,5 +1,5 @@
 ﻿[BlockTitle("GetEnginePower")]
-public sealed class JetEngine_GetEnginePower : ReporterBlock, JetEngineBlockType
+public sealed class JetEngine_GetEnginePower : ReporterBlock, IJetEngineBlockType
 {
     public override string GetReporterStringValue()
     {

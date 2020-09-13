@@ -1,5 +1,5 @@
 ﻿[BlockTitle("SetEnginePower")]
-public sealed class JetEngine_SetEnginePower : StackBlock, BlockParameter<VariableBlock>,  JetEngineBlockType
+public sealed class JetEngine_SetEnginePower : StackBlock, IContainingParameter<VariableBlock>,  IJetEngineBlockType
 {
     public VariableBlock Input1 { get ; set; }
 

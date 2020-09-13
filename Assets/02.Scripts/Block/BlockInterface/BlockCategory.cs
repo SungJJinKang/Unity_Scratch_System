@@ -1,31 +1,35 @@
 ﻿
 [BlockCategoryAttribute("Event")]
-public interface EventBlockType
+public interface IEventBlockType
 {
 }
 
 [BlockCategoryAttribute("Operator")]
-public interface OperatorBlockType
+public interface IOperatorBlockType
 { 
 }
 
 [BlockCategoryAttribute("Variable")]
-public interface VariableBlockType
+public interface IVariableBlockType
 {
 }
 
 [BlockCategoryAttribute("CustomFunction")]
-public interface CustomFunctionBlockType
+public interface ICustomBlockType
+{
+}
+
+public interface IRobotPartBlockType
 {
 }
 
 [BlockCategoryAttribute("JetEngine")]
-public interface JetEngineBlockType
+public interface IJetEngineBlockType : IRobotPartBlockType
 {
 }
 
 [BlockCategoryAttribute("Mining")]
-public interface MiningBlockType
+public interface IMiningBlockType : IRobotPartBlockType
 {
 }
 

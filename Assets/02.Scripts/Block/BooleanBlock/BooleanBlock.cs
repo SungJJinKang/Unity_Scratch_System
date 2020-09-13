@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public abstract class BooleanBlock : Block, CanBeParameterBlockInterface
+public abstract class BooleanBlock : Block, ICanBeParameter
 {
     public virtual bool GetBooleanValue()
     {

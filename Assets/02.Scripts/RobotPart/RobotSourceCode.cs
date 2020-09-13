@@ -12,7 +12,7 @@ public class RobotSourceCode
     /// <summary>
     /// Please Check if Same Function Name is existing In Block
     /// </summary>
-    public Dictionary<string, CustomFunctionBlock> StoredCustomFunctionBlock;
+    public Dictionary<string, CustomBlock> StoredCustomFunctionBlock;
     
 
     ///////////////////////////

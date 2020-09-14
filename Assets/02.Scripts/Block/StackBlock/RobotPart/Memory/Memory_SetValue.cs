@@ -13,12 +13,11 @@ public sealed class Memory_SetValue : StackBlock, IContainingParameter<VariableB
     /// <value>The input2.</value>
     public ReporterBlock Input2 { get ; set; }
 
-    sealed public override void Operation()
+    sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        RobotBase robotBase = base.GetOperatingRobotBase();
-        if (robotBase != null)
+        if (operatingRobotBase != null)
         {
-            robotBase.SetMemoryVariable(Input1.VariableName, Input2.GetReporterStringValue());
+            operatingRobotBase.SetMemoryVariable(Input1.VariableName, Input2.GetReporterStringValue(operatingRobotBase));
         }
     }
 }

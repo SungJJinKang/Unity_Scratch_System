@@ -19,12 +19,12 @@ public sealed class DefinitionOneParameterCustomBlock : DefinitionCustomBlock, I
     /// Parameter Of Custom Block is set to passed String Value of ReporterBlock
     /// </summary>
     /// <param name="passedReporterBlock">Passed reporter block.</param>
-    public void CopyParamter(ReporterBlock passedReporterBlock)
+    public void CopyParamter(RobotBase operatingRobotBase, ReporterBlock passedReporterBlock)
     {
-        this.Input1 = new LiteralBlock(passedReporterBlock.GetReporterStringValue()); // 
+        this.Input1 = new LiteralBlock(passedReporterBlock.GetReporterStringValue(operatingRobotBase)); // 
     }
 
-    public override void Operation()
+    public override void Operation(RobotBase operatingRobotBase)
     {
     }
 }

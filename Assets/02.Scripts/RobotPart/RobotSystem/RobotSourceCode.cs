@@ -16,7 +16,7 @@ public class RobotSourceCode
         this.initBlock = null;
         this.loopedBlock = null;
         this.StoredCustomBlockDefinitionBlock = new Dictionary<string, DefinitionCustomBlock>();
-        this.VariableTemplate = new Dictionary<string, string>();
+        this.VariableTemplateList = new Dictionary<string, string>();
 
     }
 
@@ -151,7 +151,7 @@ public class RobotSourceCode
     /// 
     /// Variable Can Have Init Value
     /// </summary>
-    private Dictionary<string, string> VariableTemplate;
+    private Dictionary<string, string> VariableTemplateList;
 
     /// <summary>
     /// Sets to variable template.
@@ -160,24 +160,24 @@ public class RobotSourceCode
     /// <returns><c>true</c>, if to variable template was set succesfully, <c>false</c> otherwise.</returns>
     /// <param name="key">Key.</param>
     /// <param name="text">Text.</param>
-    public bool SetToVariableTemplate(string key, string text)
+    public bool SetToVariableTemplateList(string key, string text)
     {
         if(this.IsEditing == false)
         {
-            Debug.LogError("Cant Change VariableTemplate, Because Source Code Editing Completely Finished");
+            Debug.LogError("Cant Change VariableTemplateList, Because Source Code Editing Completely Finished");
             return false;
         }
 
 
-        if(this.VariableTemplate.ContainsKey(key) == true)
+        if(this.VariableTemplateList.ContainsKey(key) == true)
         {// If VariableTemplate Already Have Key
-            Debug.Log("VariableTemplate Already Have Key : " + key + " So Changed Value");
-            this.VariableTemplate[key] = text;
+            Debug.Log("VariableTemplateList Already Have Key : " + key + " So Changed Value");
+            this.VariableTemplateList[key] = text;
         }
         else
         {// If VariableTemplate Dont Have Key Yet
-            Debug.Log("VariableTemplate Dont Have Key Yet : " + key + " So Add new item");
-            this.VariableTemplate.Add(key, text);
+            Debug.Log("VariableTemplateList Dont Have Key Yet : " + key + " So Add new item");
+            this.VariableTemplateList.Add(key, text);
         }
 
       
@@ -190,24 +190,24 @@ public class RobotSourceCode
     /// </summary>
     /// <returns><c>true</c>, if item of variable template was removed succesfully, <c>false</c> otherwise.</returns>
     /// <param name="key">Key.</param>
-    public bool RemoveFromVariableTemplate(string key)
+    public bool RemoveFromVariableTemplateList(string key)
     {
         if (this.IsEditing == false)
         {
-            Debug.LogError("Cant Change VariableTemplate, Because Source Code Editing Completely Finished");
+            Debug.LogError("Cant Change VariableTemplateList, Because Source Code Editing Completely Finished");
             return false;
         }
 
 
-        if (this.VariableTemplate.ContainsKey(key) == true)
+        if (this.VariableTemplateList.ContainsKey(key) == true)
         {// If VariableTemplate Have Key
-            Debug.Log("VariableTemplate Have Key : " + key + " So Remove Item with key");
-            this.VariableTemplate.Remove(key);;
+            Debug.Log("VariableTemplateList Have Key : " + key + " So Remove Item with key");
+            this.VariableTemplateList.Remove(key);;
             return false;
         }
         else
         {// If VariableTemplate Dont Have Key Yet
-            Debug.Log("VariableTemplate Dont Have Key Yet : " + key);
+            Debug.Log("VariableTemplateList Dont Have Key Yet : " + key);
             return false;
         }
 
@@ -215,14 +215,14 @@ public class RobotSourceCode
 
     public bool GetVariableTemplateValue(string key, ref string text)
     {
-        if (this.VariableTemplate.ContainsKey(key) == false)
+        if (this.VariableTemplateList.ContainsKey(key) == false)
         {
-            Debug.LogError("VariableTemplate Dont Have Key : " + key);
+            Debug.LogError("VariableTemplateList Dont Have Key : " + key);
             return false;
         }
         else
         {//VariableTemplate Have Key 
-            text = string.Copy(this.VariableTemplate[key]);
+            text = string.Copy(this.VariableTemplateList[key]);
             return true;
         }
     }
@@ -230,7 +230,7 @@ public class RobotSourceCode
     public Dictionary<string, string> GetDeepCopyOfVariableTemplate()
     {
         Dictionary<string, string> deepCopiedVariableTemplate = new Dictionary<string, string>();
-        foreach (KeyValuePair<string, string> pair in this.VariableTemplate)
+        foreach (KeyValuePair<string, string> pair in this.VariableTemplateList)
         {
             deepCopiedVariableTemplate.Add(pair.Key, string.Copy(pair.Value)); // deep copy string ( string is referce type )
         }

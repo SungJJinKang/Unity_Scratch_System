@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<SourceCode>
+
+  <SourceCodeName>소스 코드 이름</SourceCodeName>
+
+  <InitBlock>
+
+    <!-- Next Block-->
+    <Block> 
+      <BlockClassName>블록 클래스명1</BlockClassName>
+
+      <!-- 생성자의 Parameter Type에 따라 string으로 변환할지 , 리플렉션으로 text를 클래스로 변환해서 instance를 생성할지, Text를 Boolean으로 변환할지를 결정할 수 있다. -->>
+      <!-- ConstructorParameter 개수만큼만 써넣으면 된다-->
+      <ConstructorParameter1></ConstructorParameter1>
+      <ConstructorParameter2></ConstructorParameter2>
+
+      <!-- Input의 Type에 따라 string으로 변환할지 , 리플렉션으로 text를 클래스로 변환해서 instance를 생성할지, Text를 Boolean으로 변환할지를 결정할 수 있다. -->>
+      <!-- Input 개수만큼만 써넣으면 된다-->
+      <Input1>
+
+          <!-- Input Block Of 블록 클래스명1-->
+          <Block> 
+            <BlockClassName>블록 클래스명2</BlockClassName>
+
+            <!-- 생성자의 Parameter Type에 따라 string으로 변환할지 , 리플렉션으로 text를 클래스로 변환해서 instance를 생성할지, Text를 Boolean으로 변환할지를 결정할 수 있다. -->>
+            <!-- ConstructorParameter 개수만큼만 써넣으면 된다-->
+            <ConstructorParameter1></ConstructorParameter1>
+            <ConstructorParameter2></ConstructorParameter2>
+
+            <!-- Input Block(블록 클래스명3) Of 블록 클래스명2 Input Of 블록 클래스명1 -->
+            <Input1>
+              
+              <Block>
+                <BlockClassName>블록 클래스명3</BlockClassName>
+
+                <ConstructorParameter1></ConstructorParameter1>
+
+                <Input1>
+                </Input1>
+              </Block>
+
+            </Input1>
+            <Input2>
+
+
+            </Input2>
+          </Block>
+
+      </Input1>
+      
+      <Input2>
+
+
+      </Input2>
+      <Input3>
+
+
+      </Input3>
+      <Input4>
+
+
+      </Input4>
+    </Block>
+
+
+    <!-- Next Block-->
+    <Block>
+      <BlockClassName>블록 클래스명</BlockClassName>
+      <ConstructorParameter1></ConstructorParameter1>
+      <ConstructorParameter2></ConstructorParameter2>
+      <Input1></Input1>
+      <Input2></Input2>
+      <Input3></Input3>
+      <Input4></Input4>
+    </Block>
+
+
+    <!-- Next Block-->
+    <Block>
+      <BlockClassName>블록 클래스명</BlockClassName>
+      <ConstructorParameter1></ConstructorParameter1>
+      <ConstructorParameter2></ConstructorParameter2>
+      <Input1></Input1>
+      <Input2></Input2>
+      <Input3></Input3>
+      <Input4></Input4>
+    </Block>
+
+  </InitBlock>
+
+
+
+
+  <!--///////////////////////////////-->
+
+
+
+
+  <LoopedBlock>
+
+    <Block>
+      <BlockClassName>블록 클래스명</BlockClassName>
+      <ConstructorParameter1></ConstructorParameter1>
+      <ConstructorParameter2></ConstructorParameter2>
+      <Input1></Input1>
+      <Input2></Input2>
+      <Input3></Input3>
+      <Input4></Input4>
+    </Block>
+
+
+    <Block>
+      <BlockClassName>블록 클래스명</BlockClassName>
+      <ConstructorParameter1></ConstructorParameter1>
+      <ConstructorParameter2></ConstructorParameter2>
+      <Input1></Input1>
+      <Input2></Input2>
+      <Input3></Input3>
+      <Input4></Input4>
+    </Block>
+
+  </LoopedBlock>
+
+
+
+
+  <!--///////////////////////////////-->
+
+
+
+
+  <!-- 무조건 CallCustomBlock-->
+  <StoredCustomBlockDefinitionBlock>
+
+    <CustomBlock>
+      <CustomBlockName>커스텀 블록명</CustomBlockName>
+
+      <Block>
+        <BlockClassName>블록 클래스명</BlockClassName>
+        <ConstructorParameter1></ConstructorParameter1>
+        <ConstructorParameter2></ConstructorParameter2>
+        <Input1></Input1>
+        <Input2></Input2>
+        <Input3></Input3>
+        <Input4></Input4>
+      </Block>
+
+      <Block>
+        <BlockClassName>블록 클래스명</BlockClassName>
+        <ConstructorParameter1></ConstructorParameter1>
+        <ConstructorParameter2></ConstructorParameter2>
+        <Input1></Input1>
+        <Input2></Input2>
+        <Input3></Input3>
+        <Input4></Input4>
+      </Block>
+
+    </CustomBlock>
+
+    <CustomBlock>
+      <CustomBlockName>커스텀 블록명</CustomBlockName>
+
+      <Block>
+        <BlockClassName>블록 클래스명</BlockClassName>
+        <ConstructorParameter1></ConstructorParameter1>
+        <ConstructorParameter2></ConstructorParameter2>
+        <Input1></Input1>
+        <Input2></Input2>
+        <Input3></Input3>
+        <Input4></Input4>
+      </Block>
+
+      <Block>
+        <BlockClassName>블록 클래스명</BlockClassName>
+        <ConstructorParameter1></ConstructorParameter1>
+        <ConstructorParameter2></ConstructorParameter2>
+        <Input1></Input1>
+        <Input2></Input2>
+        <Input3></Input3>
+        <Input4></Input4>
+      </Block>
+
+    </CustomBlock>
+
+
+  </StoredCustomBlockDefinitionBlock>
+
+
+
+
+  <!--///////////////////////////////-->
+
+
+
+
+  <StoredEventBlockList>
+
+    <EventBlock>
+      <EventBlockName>이벤트 블록명</EventBlockName>
+
+      <Block>
+        <BlockClassName>블록 클래스명</BlockClassName>
+        <ConstructorParameter1></ConstructorParameter1>
+        <ConstructorParameter2></ConstructorParameter2>
+        <Input1></Input1>
+        <Input2></Input2>
+        <Input3></Input3>
+        <Input4></Input4>
+      </Block>
+
+      <Block>
+        <BlockClassName>블록 클래스명</BlockClassName>
+        <ConstructorParameter1></ConstructorParameter1>
+        <ConstructorParameter2></ConstructorParameter2>
+        <Input1></Input1>
+        <Input2></Input2>
+        <Input3></Input3>
+        <Input4></Input4>
+      </Block>
+
+    </EventBlock>
+
+    <EventBlock>
+      <EventBlockName>이벤트 블록명</EventBlockName>
+
+      <Block>
+        <BlockClassName>블록 클래스명</BlockClassName>
+        <ConstructorParameter1></ConstructorParameter1>
+        <ConstructorParameter2></ConstructorParameter2>
+        <Input1></Input1>
+        <Input2></Input2>
+        <Input3></Input3>
+        <Input4></Input4>
+      </Block>
+
+      <Block>
+        <BlockClassName>블록 클래스명</BlockClassName>
+        <ConstructorParameter1></ConstructorParameter1>
+        <ConstructorParameter2></ConstructorParameter2>
+        <Input1></Input1>
+        <Input2></Input2>
+        <Input3></Input3>
+        <Input4></Input4>
+      </Block>
+
+    </EventBlock>
+
+  </StoredEventBlockList>
+
+
+
+
+  <!--///////////////////////////////-->
+
+
+
+
+  <VariableTemplateList>
+
+    <VariableTemplate>
+      <VariableKey>무조건 string으로 취급</VariableKey>
+      <VariableValue>무조건 string 취급</VariableValue>
+    </VariableTemplate>
+
+    <VariableTemplate>
+      <VariableKey>무조건 string으로 취급</VariableKey>
+      <VariableValue>무조건 string 취급</VariableValue>
+    </VariableTemplate>
+
+  </VariableTemplateList>
+
+
+
+
+</SourceCode>

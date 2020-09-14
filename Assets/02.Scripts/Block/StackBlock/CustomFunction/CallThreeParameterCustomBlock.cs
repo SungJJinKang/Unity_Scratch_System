@@ -3,7 +3,7 @@
 
 /// </summary>
 [System.Serializable]
-public sealed class CallThreeParameterCustomBlock : CallCustomFunctionBlock, IContainingParameter<ReporterBlock, ReporterBlock, ReporterBlock>
+public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContainingParameter<ReporterBlock, ReporterBlock, ReporterBlock>
 {
 
     private DefinitionThreeParameterCustomBlock definitionThreeParameterCustomBlock;
@@ -12,10 +12,10 @@ public sealed class CallThreeParameterCustomBlock : CallCustomFunctionBlock, ICo
     public ReporterBlock Input2 { get; set; }
     public ReporterBlock Input3 { get; set; }
 
-    sealed public override void Operation()
+    sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        this.definitionThreeParameterCustomBlock.CopyParamter(this.Input1, this.Input2, this.Input3);
-        base.Operation();
+        this.definitionThreeParameterCustomBlock.CopyParamter(operatingRobotBase, this.Input1, this.Input2, this.Input3);
+        base.Operation(operatingRobotBase);
     }
 
     protected override void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock)

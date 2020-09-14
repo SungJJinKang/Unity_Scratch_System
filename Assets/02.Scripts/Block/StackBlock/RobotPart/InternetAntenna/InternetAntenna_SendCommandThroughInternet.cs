@@ -14,12 +14,12 @@ public sealed class InternetAntenna_SendCommandThroughInternet : StackBlock, ICo
     public ReporterBlock Input2 { get; set; }
 
 
-    sealed public override void Operation()
+    sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        InternetAntenna internetAntenna = base.GetOperatingRobotPart<InternetAntenna>();
+        InternetAntenna internetAntenna = operatingRobotBase.GetRobotPart<InternetAntenna>();
         if (internetAntenna != null)
         {
-            internetAntenna.SendCommandThroughInternet(Input1.GetReporterStringValue(), Input2.GetReporterStringValue());
+            internetAntenna.SendCommandThroughInternet(Input1.GetReporterStringValue(operatingRobotBase), Input2.GetReporterStringValue(operatingRobotBase));
         }
 
     }

@@ -3,12 +3,12 @@ public class Speaker_Speak : StackBlock, IContainingParameter<ReporterBlock>, IV
 {
     public ReporterBlock Input1 { get; set; }
 
-    sealed public override void Operation()
+    sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        Speaker speaker = base.GetOperatingRobotPart<Speaker>();
+        Speaker speaker = operatingRobotBase.GetRobotPart<Speaker>();
         if (speaker != null)
         {
-            speaker.Speak(this.Input1.GetReporterStringValue());
+            speaker.Speak(this.Input1.GetReporterStringValue(operatingRobotBase));
         }
 
     }

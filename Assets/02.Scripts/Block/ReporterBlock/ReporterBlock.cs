@@ -7,11 +7,11 @@ public abstract class ReporterBlock : Block, ICanBeParameter
         return DefaultStringValue;
     }
     */
-    public abstract string GetReporterStringValue();
+    public abstract string GetReporterStringValue(RobotBase operatingRobotBase);
 
-    public float GetReporterNumberValue()
+    public float GetReporterNumberValue(RobotBase operatingRobotBase)
     {
-        return BlockUtility.ConvertStringToFloat(this.GetReporterStringValue());
+        return BlockUtility.ConvertStringToFloat(this.GetReporterStringValue(operatingRobotBase));
 
     }
 

@@ -33,15 +33,15 @@ public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, 
     /// <param name="passedReporterBlock2">Passed reporter block2.</param>
     /// <param name="passedReporterBlock3">Passed reporter block3.</param>
     /// <param name="passedReporterBlock4">Passed reporter block4.</param>
-    public void CopyParamter(ReporterBlock passedReporterBlock1, ReporterBlock passedReporterBlock2, ReporterBlock passedReporterBlock3, ReporterBlock passedReporterBlock4)
+    public void CopyParamter(RobotBase operatingRobotBase, ReporterBlock passedReporterBlock1, ReporterBlock passedReporterBlock2, ReporterBlock passedReporterBlock3, ReporterBlock passedReporterBlock4)
     {
-        this.Input1 = new LiteralBlock(passedReporterBlock1.GetReporterStringValue()); // 
-        this.Input2 = new LiteralBlock(passedReporterBlock2.GetReporterStringValue()); // 
-        this.Input3 = new LiteralBlock(passedReporterBlock3.GetReporterStringValue()); // 
-        this.Input4 = new LiteralBlock(passedReporterBlock4.GetReporterStringValue()); // 
+        this.Input1 = new LiteralBlock(passedReporterBlock1.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input2 = new LiteralBlock(passedReporterBlock2.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input3 = new LiteralBlock(passedReporterBlock3.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input4 = new LiteralBlock(passedReporterBlock4.GetReporterStringValue(operatingRobotBase)); // 
     }
 
-    public override void Operation()
+    public override void Operation(RobotBase operatingRobotBase)
     {
     }
 }

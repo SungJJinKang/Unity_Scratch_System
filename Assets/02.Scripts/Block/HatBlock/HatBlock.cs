@@ -7,10 +7,10 @@ public abstract class HatBlock : FlowBlock, DownBumpBlock
 {
     public UpNotchBlock NextBlock { get; set; }
 
-    sealed public override void EndFlowBlock()
+    sealed public override void EndFlowBlock(RobotBase operatingRobotBase)
     {
         if (NextBlock != null)
-            NextBlock.StartFlowBlock(base.OperatingRobotBase);
+            NextBlock.StartFlowBlock(operatingRobotBase);
     }
 
 

@@ -5,7 +5,7 @@ public sealed class GetVariableName : ReporterBlock, IContainingParameter<Variab
 {
     public VariableBlock Input1 { get; set; }
 
-    public override string GetReporterStringValue()
+    public override string GetReporterStringValue(RobotBase operatingRobotBase)
     {
         return this.Input1.VariableName;
     }

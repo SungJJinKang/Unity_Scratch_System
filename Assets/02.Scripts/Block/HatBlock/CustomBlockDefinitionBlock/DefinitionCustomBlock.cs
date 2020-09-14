@@ -7,8 +7,12 @@
 [System.Serializable]
 public abstract class DefinitionCustomBlock : HatBlock, IDefinitionCustomBlockType
 {
-    public string CustomBlockName;
+    public readonly string CustomBlockName;
 
+    public DefinitionCustomBlock(string customBlockName)
+    {
+        this.CustomBlockName = customBlockName;
+    }
 
     //Parameter Of Custom Block is Just LiteralBlock
     //Parameter Of Custom Block is set to passed String Value of ReporterBlock

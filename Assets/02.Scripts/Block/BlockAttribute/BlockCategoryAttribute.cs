@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-[AttributeUsage(AttributeTargets.Interface, Inherited = true)]
+[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
 //[fsObject(Converter = typeof(UnitCategoryConverter))]
 public class BlockCategoryAttribute : Attribute
 {

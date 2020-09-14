@@ -1,9 +1,9 @@
 ﻿[BlockTitle("GetRobotLocationX")]
 public sealed class GPS_GetRobotLocationX : ReporterBlock, IGPSBlockType
 {
-    public override string GetReporterStringValue()
+    public override string GetReporterStringValue(RobotBase operatingRobotBase)
     {
-        GPS gps = base.GetOperatingRobotPart<GPS>();
+        GPS gps = operatingRobotBase.GetRobotPart<GPS>();
         if (gps != null)
         {
             return gps.GetRobotLocationX().ToString();

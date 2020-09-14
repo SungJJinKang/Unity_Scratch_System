@@ -3,12 +3,12 @@ public sealed class JetEngine_SetEnginePower : StackBlock, IContainingParameter<
 {
     public ReporterBlock Input1 { get ; set ; }
 
-    sealed public override void Operation()
+    sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        JetEngine jetEngine = base.GetOperatingRobotPart<JetEngine>();
+        JetEngine jetEngine = operatingRobotBase.GetRobotPart<JetEngine>();
         if(jetEngine != null)
         {
-            jetEngine.EnginePower = Input1.GetReporterNumberValue();
+            jetEngine.EnginePower = Input1.GetReporterNumberValue(operatingRobotBase);
         }
        
     }

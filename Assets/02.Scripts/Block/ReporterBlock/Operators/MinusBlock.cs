@@ -1,8 +1,8 @@
 ﻿[BlockTitle("Minus")]
 public sealed class MinusBlock : ArithmeticBlock
 {
-    sealed public override string GetReporterStringValue()
+    sealed public override string GetReporterStringValue(RobotBase operatingRobotBase)
     {
-        return (base.Input1.GetReporterNumberValue() - base.Input2.GetReporterNumberValue()).ToString();
+        return (base.Input1.GetReporterNumberValue(operatingRobotBase) - base.Input2.GetReporterNumberValue(operatingRobotBase)).ToString();
     }
 }

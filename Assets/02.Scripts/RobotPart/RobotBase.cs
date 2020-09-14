@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -93,8 +94,33 @@ public sealed class RobotBase : RobotPart
     /// You can access to this variable through Block.Memory_SetValue Class or Momory_ChangeValue Class
     /// </summary>
     private Dictionary<string, string> MemoryVariable;
-    private void InitMemoryVariable(Dictionary<string, string> deepCopiedMemoryVariableTamplate)
+
+    /// <summary>
+    /// Clean Only Value Of Dictionary
+    /// </summary>
+    private void CleanMemoryVariableValue()
     {
+        this.MemoryVariable.Keys.ToList().ForEach(x => this.MemoryVariable[x] = "");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="deepCopiedMemoryVariableTamplate"></param>
+    /// <param name="maintainOriginalValue">If MemoryVariable have same key with deepCopiedMemoryVariableTamplate, </param>
+    private void InitMemoryVariable(Dictionary<string, string> deepCopiedMemoryVariableTamplate, bool maintainOriginalValue = false)
+    {
+        if(maintainOriginalValue == true)
+        {//Copy this.MemoryVariable Value To deepCopiedMemoryVariableTamplate
+            this.MemoryVariable.Keys.ToList().ForEach(x =>
+            {
+                if (deepCopiedMemoryVariableTamplate.ContainsKey(x))
+                {
+                    deepCopiedMemoryVariableTamplate[x] = this.MemoryVariable[x];
+                }
+            });
+        }
+
         this.MemoryVariable = deepCopiedMemoryVariableTamplate;
     }
 
@@ -183,7 +209,7 @@ public sealed class RobotBase : RobotPart
        
         this.InitMemoryVariable(robotSourceCodeTemplate.GetDeepCopyOfVariableTemplate());  // Deep copy MemoryVariable
 
-        robotSourceCodeTemplate.AddToInstalledRobotList(this);
+        this.RobotSourceCode._OriginalRobotSourceCodeTemplate.AddToInstalledRobotList(this);
 
         return true;
     }

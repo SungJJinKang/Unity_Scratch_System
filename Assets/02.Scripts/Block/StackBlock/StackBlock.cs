@@ -9,10 +9,10 @@ public abstract class StackBlock : FlowBlock, UpNotchBlock, DownBumpBlock
     /// <value>The next block.</value>
     public UpNotchBlock NextBlock { get ; set ; }
 
-    sealed public override void EndFlowBlock()
+    sealed public override void EndFlowBlock(RobotBase operatingRobotBase)
     {
         if (NextBlock != null)
-            NextBlock.StartFlowBlock(base.OperatingRobotBase);
+            NextBlock.StartFlowBlock(operatingRobotBase);
     }
 
 }

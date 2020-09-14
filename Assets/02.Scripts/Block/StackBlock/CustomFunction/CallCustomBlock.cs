@@ -5,8 +5,14 @@
 /// CustomFunctionBlock Can Have Just ReporterBlock Type !!!
 /// </summary>
 [System.Serializable]
-public abstract class CallCustomFunctionBlock : StackBlock, ICallCustomBlockType
+public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
 {
+    private readonly string CustomBlockName;
+    public CallCustomBlock(string customBlockName)
+    {
+        this.CustomBlockName = customBlockName;
+    }
+
     private DefinitionCustomBlock customBlockDefinitionBlock;
     public DefinitionCustomBlock CustomBlockDefinitionBlock
     {
@@ -28,7 +34,7 @@ public abstract class CallCustomFunctionBlock : StackBlock, ICallCustomBlockType
 
     protected abstract void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock);
 
-    public override void Operation()
+    public override void Operation(RobotBase operatingRobotBase)
     {
         if(this.customBlockDefinitionBlock == null)
         {
@@ -38,6 +44,6 @@ public abstract class CallCustomFunctionBlock : StackBlock, ICallCustomBlockType
 
         // Operation Of CallCustomFunctionBlock is Passsing Parameters To CustomBlockDefinitionBlock And Starting Flow Of CustomBlockDefinitionBlock CustomBlockDefinitionBlock
         // Passing Parameter is called at child method
-        this.customBlockDefinitionBlock.StartFlowBlock();
+        this.customBlockDefinitionBlock.StartFlowBlock(operatingRobotBase);
     }
 }

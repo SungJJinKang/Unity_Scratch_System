@@ -16,7 +16,7 @@ public sealed class EventBlock : HatBlock, IContainingParameter<LiteralBlock>
     /// <value>The input1.</value>
     public LiteralBlock Input1 { get ; set ; }
 
-    sealed public override void Operation()
+    sealed public override void Operation(RobotBase operatingRobotBase)
     {
         //DO NOTHING, JUST CALL NEXT BLOCK
     }

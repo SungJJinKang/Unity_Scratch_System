@@ -6,13 +6,13 @@
 /// (TwoParameter Is Onparameter) return True . This cause bugs
 /// </summary>
 [System.Serializable]
-public sealed class CallNoParameterCustomBlock : CallCustomFunctionBlock
+public sealed class CallNoParameterCustomBlock : CallCustomBlock
 {
     private DefinitionNoParameterCustomBlock definitionNoParameterCustomBlock;
 
-    sealed public override void Operation()
+    sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        base.Operation();
+        base.Operation(operatingRobotBase);
     }
 
     sealed protected override void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock)

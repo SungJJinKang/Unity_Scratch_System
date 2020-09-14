@@ -18,7 +18,6 @@ public class RobotSystem : MonoBehaviour
     {
         instance = this;
 
-        this.SpawnedRobotList = new List<RobotBase>();
         this.SpawnedRobotDictionary = new Dictionary<string, RobotBase>();
     }
 

@@ -13,7 +13,7 @@ public sealed class LiteralBlock : ReporterBlock
     /// </summary>
     public readonly string LiteralValue;
 
-    sealed public override string GetReporterStringValue()
+    sealed public override string GetReporterStringValue(RobotBase operatingRobotBase = null)
     {
         return String.Copy(this.LiteralValue); // For Protecting LiteralValue, return cloned new string instnace
     }

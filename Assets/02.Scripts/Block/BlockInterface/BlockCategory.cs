@@ -35,27 +35,37 @@ public interface IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("JetEngine")]
+/// <summary>
+/// Look BlockCategoryAttribute Constructor
+/// "/" works for Root Category
+/// </summary>
+[BlockCategoryAttribute("RobotPart/RobotBase")] // Look BlockCategoryAttribute Constructor.  "/" works for Root Category
+public interface IRobotBaseBlockType : IRobotPartBlockType
+{
+}
+
+
+[BlockCategoryAttribute("RobotPart/JetEngine")]
 public interface IJetEngineBlockType : IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("Mining")]
+[BlockCategoryAttribute("RobotPart/Mining")]
 public interface IMiningBlockType : IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("Speak")]
+[BlockCategoryAttribute("RobotPart/Speak")]
 public interface ISpeakerBlockType : IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("GPS")]
+[BlockCategoryAttribute("RobotPart/GPS")]
 public interface IGPSBlockType : IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("InternetAntenna")]
+[BlockCategoryAttribute("RobotPart/InternetAntenna")]
 public interface IInternetAntennaBlockType : IRobotPartBlockType
 {
 }

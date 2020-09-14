@@ -5,11 +5,7 @@
 [System.Serializable]
 public abstract class Block
 {
-    public RobotBase OperatingRobotBase
-    {
-        protected get;
-        set;
-    }
+    
 
     /// <summary>
     /// Check If All parameters is filled?
@@ -55,27 +51,7 @@ public abstract class Block
     
     }
 
-     /// <summary>
-    /// Get Robot Base Instance of Operating Robot Instance
-    /// </summary>
-    /// <returns></returns>
-    protected RobotBase GetOperatingRobotBase()
-    {
-
-        Debug.LogError("Cant Find Robot Base");
-        return null;
-    }
-
-    /// <summary>
-    /// Get Robot Part Instance of Operating Robot Instance
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    protected T GetOperatingRobotPart<T>() where T : RobotPart
-    {
-        return GetOperatingRobotBase()?.GetRobotPart<T>();
-    }
-
+  
  
 }
 
@@ -89,12 +65,12 @@ public interface FlowBlockType
     /// <summary>
     /// Opeate Block Work
     /// </summary>
-    void Operation();
+    void Operation(RobotBase operatingRobotBase);
 
     /// <summary>
     /// On End Flow
     /// </summary>
-    void EndFlowBlock();
+    void EndFlowBlock(RobotBase operatingRobotBase);
 }
 
 /// <summary>

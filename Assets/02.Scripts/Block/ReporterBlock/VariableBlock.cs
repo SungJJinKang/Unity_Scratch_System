@@ -1,4 +1,8 @@
-﻿[BlockTitle("Variable")]
+﻿/// <summary>
+/// This works like Memory_GetValue
+/// But Memory_GetValue doesn't exist. This replace that
+/// </summary>
+[BlockTitle("Variable")]
 [System.Serializable]
 public sealed class VariableBlock : ReporterBlock, IVariableBlockType
 {
@@ -6,14 +10,18 @@ public sealed class VariableBlock : ReporterBlock, IVariableBlockType
     /// VariableValue는 각 로봇마다 다른 값을 가질 수 있다.
     /// Sync this value to Key of RobotBase.MemoryVariable Dictionary
     /// </summary>
-    public string VariableName;
+    public readonly string VariableName;
 
-    sealed public override string GetReporterStringValue()
+    public VariableBlock(string variableName)
+    {
+        this.VariableName = variableName;
+    }
+
+    sealed public override string GetReporterStringValue(RobotBase operatingRobotBase)
     {//Think How To Robotbase.StoredVariableBlock
-        RobotBase robotBase = base.GetOperatingRobotBase();
-        if (robotBase != null)
+        if (operatingRobotBase != null)
         {
-            return robotBase.GetMemoryVariable(this.VariableName);
+            return operatingRobotBase.GetMemoryVariable(this.VariableName);
         }
         else
         {

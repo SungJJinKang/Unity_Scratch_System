@@ -29,14 +29,14 @@ public sealed class DefinitionThreeParameterCustomBlock : DefinitionCustomBlock,
     /// <param name="passedReporterBlock1">Passed reporter block1.</param>
     /// <param name="passedReporterBlock2">Passed reporter block2.</param>
     /// <param name="passedReporterBlock3">Passed reporter block3.</param>
-    public void CopyParamter(ReporterBlock passedReporterBlock1, ReporterBlock passedReporterBlock2, ReporterBlock passedReporterBlock3)
+    public void CopyParamter(RobotBase operatingRobotBase, ReporterBlock passedReporterBlock1, ReporterBlock passedReporterBlock2, ReporterBlock passedReporterBlock3)
     {
-        this.Input1 = new LiteralBlock(passedReporterBlock1.GetReporterStringValue()); // 
-        this.Input2 = new LiteralBlock(passedReporterBlock2.GetReporterStringValue()); // 
-        this.Input3 = new LiteralBlock(passedReporterBlock3.GetReporterStringValue()); // 
+        this.Input1 = new LiteralBlock(passedReporterBlock1.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input2 = new LiteralBlock(passedReporterBlock2.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input3 = new LiteralBlock(passedReporterBlock3.GetReporterStringValue(operatingRobotBase)); // 
     }
 
-    public override void Operation()
+    public override void Operation(RobotBase operatingRobotBase)
     {
     }
 }

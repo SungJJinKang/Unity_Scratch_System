@@ -6,6 +6,63 @@
 
   <InitBlock>
 
+    <!-- 
+    만약 커스톰 블록 호출 원하면
+     <Block>
+      <BlockClassName>CallThreeParameterCustomBlock</BlockClassName>
+      <ConstructorParameter1>Defination 커스톰 블록 CustomBlockName 넣으면 된다</ConstructorParameter1>
+      
+      <Input1>
+        <Block>
+          <BlockClassName>블록 클래스명</BlockClassName>
+          <ConstructorParameter1></ConstructorParameter1>
+          <ConstructorParameter2></ConstructorParameter2>
+          <Input1></Input1>
+          <Input2></Input2>
+          <Input3></Input3>
+          <Input4></Input4>
+        </Block>
+      </Input1>
+      
+      <Input2>
+        <Block>
+          <BlockClassName>블록 클래스명</BlockClassName>
+          <ConstructorParameter1></ConstructorParameter1>
+          <ConstructorParameter2></ConstructorParameter2>
+          <Input1></Input1>
+          <Input2></Input2>
+          <Input3></Input3>
+          <Input4></Input4>
+        </Block>
+      </Input2>
+      
+      <Input3>
+        <Block>
+          <BlockClassName>블록 클래스명</BlockClassName>
+          <ConstructorParameter1></ConstructorParameter1>
+          <ConstructorParameter2></ConstructorParameter2>
+          <Input1></Input1>
+          <Input2></Input2>
+          <Input3></Input3>
+          <Input4></Input4>
+        </Block>
+      </Input3>
+      
+      <Input4>
+        <Block>
+          <BlockClassName>블록 클래스명</BlockClassName>
+          <ConstructorParameter1></ConstructorParameter1>
+          <ConstructorParameter2></ConstructorParameter2>
+          <Input1></Input1>
+          <Input2></Input2>
+          <Input3></Input3>
+          <Input4></Input4>
+        </Block>
+      </Input4>
+    
+    </Block>
+    
+    -->
     <!-- Next Block-->
     <Block> 
       <BlockClassName>블록 클래스명1</BlockClassName>

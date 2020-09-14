@@ -1,8 +1,6 @@
 ﻿[System.Serializable]
 public abstract class ReporterBlock : Block, ICanBeParameter
 {
-    public const string DefaultStringValue = "";
-
     /*
     public virtual string GetReporterStringValue()
     {

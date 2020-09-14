@@ -13,7 +13,7 @@ public sealed class RobotBase : RobotPart
     protected override void Awake()
     {
         base.Awake();
-        base.SetMotherRobotBase(this); // set itsetf to mother robotbase
+        base.MotherRobotBase = this; // set itsetf to mother robotbase
     }
 
     protected override void Start()
@@ -21,7 +21,7 @@ public sealed class RobotBase : RobotPart
         base.Start();
     }
 
-    public uint UniqueRobotId
+    public string UniqueRobotId
     {
         private set;
         get;
@@ -38,7 +38,7 @@ public sealed class RobotBase : RobotPart
             return false;
 
         this.AttacehdRobotParts.Add(robotPart);
-        robotPart.SetMotherRobotBase(this);
+        robotPart.MotherRobotBase = this;
         return true;
     }
 
@@ -106,6 +106,7 @@ public sealed class RobotBase : RobotPart
         }
 
         this.MemoryVariable[key] = text;
+        this.OnUpdateMemoryVariable(key);
     }
 
     public string GetMemoryVariable(string key)
@@ -119,8 +120,41 @@ public sealed class RobotBase : RobotPart
         return string.Copy(this.MemoryVariable[key]);
     }
 
+    private void OnUpdateMemoryVariable(string key)
+    {
+
+    }
+
     #endregion
 
+    #region Event
+
+    public void StartInitBlock()
+    {
+        if(this.RobotSourceCode.InitBlock == null)
+        {
+            Debug.LogError("this.RobotSourceCode.InitBlock is null");
+            return;
+        }
+        this.RobotSourceCode.InitBlock.StartFlowBlock(this);
+    }
+
+    public void StartLoopedBlock()
+    {
+        if (this.RobotSourceCode.LoopedBlock == null)
+        {
+            Debug.LogError("this.RobotSourceCode.LoopedBlock is null");
+            return;
+        }
+        this.RobotSourceCode.LoopedBlock.StartFlowBlock(this);
+    }
+
+    public void StartEventBlock(string eventName)
+    {
+        this.RobotSourceCode.StartEventBlock(this, eventName);
+    }
+
+    #endregion
 
     #region RobotSourceCode
     /// <summary>

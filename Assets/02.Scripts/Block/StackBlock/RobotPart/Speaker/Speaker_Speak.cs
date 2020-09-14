@@ -3,7 +3,7 @@ public class Speaker_Speak : StackBlock, IContainingParameter<ReporterBlock>, IV
 {
     public ReporterBlock Input1 { get; set; }
 
-    sealed public override void ExecuteCommand()
+    sealed public override void Operation()
     {
         Speaker speaker = base.GetOperatingRobotPart<Speaker>();
         if (speaker != null)

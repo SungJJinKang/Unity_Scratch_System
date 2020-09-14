@@ -4,16 +4,26 @@ using UnityEngine;
 
 public abstract class RobotPart : MonoBehaviour
 {
-    protected RobotBase MotherRobotBase = null;
-    public void SetMotherRobotBase(RobotBase robotBase)
+    private RobotBase motherRobotBase ;
+    public RobotBase MotherRobotBase
     {
-        if(this.MotherRobotBase != null)
+        protected get 
         {
-            Debug.LogError("MotherRobotBase Already Set!!!!!");
-            return;
-        }
+            if (this.motherRobotBase == null)
+                Debug.LogError("MotherRobotBase is null");
 
-        this.MotherRobotBase = robotBase;
+            return this.motherRobotBase;
+        }
+        set
+        {
+            if (this.motherRobotBase != null)
+            {
+                Debug.LogError("MotherRobotBase Already Set!!!!!");
+                return;
+            }
+
+            this.motherRobotBase = value;
+        }
     }
 
     public virtual void OnPreStartMainLoopedFunction()

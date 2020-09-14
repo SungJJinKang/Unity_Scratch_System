@@ -15,8 +15,9 @@ public class RobotSourceCode
         this.sourceCodeName = "";
         this.initBlock = null;
         this.loopedBlock = null;
-        this.StoredCustomFunctionBlock = new Dictionary<string, CustomBlock>();
+        this.StoredCustomBlockDefinitionBlock = new Dictionary<string, DefinitionCustomBlock>();
         this.VariableTemplate = new Dictionary<string, string>();
+
     }
 
 
@@ -75,12 +76,67 @@ public class RobotSourceCode
         }
     }
 
-    #region StoredCustomFunctionBlock
+    #region EventBlock
+
+    /// <summary>
+    /// The stored event block list.
+    /// Command is Event
+    /// </summary>
+    private Dictionary<string, EventBlock> StoredEventBlockList;
+    public bool AddToStoredEventBlockList(EventBlock eventBlock)
+    {
+        if (this.IsEditing == false)
+        {
+            Debug.LogError("Cant Change StoredEventBlockList, Because Source Code Editing Completely Finished");
+            return false;
+        }
+
+        if (eventBlock == null)
+            return false;
+
+        RemoveFromStoredEventBlockList(eventBlock);
+        this.StoredEventBlockList.Add(eventBlock.Input1.GetReporterStringValue(), eventBlock);
+        return true;
+
+    }
+
+    public bool RemoveFromStoredEventBlockList(EventBlock eventBlock)
+    {
+        if (this.IsEditing == false)
+        {
+            Debug.LogError("Cant Change StoredEventBlockList, Because Source Code Editing Completely Finished");
+            return false;
+        }
+
+        if (eventBlock == null)
+            return false;
+
+        this.StoredEventBlockList.Remove(eventBlock.Input1.GetReporterStringValue());
+        return true;
+    }
+
+    public void StartEventBlock(RobotBase robotBase, string eventName)
+    {
+        if (robotBase == null)
+            return;
+
+        if (this.StoredEventBlockList.ContainsKey(eventName) == false)
+            return;
+
+        this.StoredEventBlockList[eventName].StartFlowBlock(robotBase);
+    }
+
+    #endregion
+
+    #region StoredCustomBlockDefinitionBlock
 
     /// <summary>
     /// Please Check if Same Function Name is existing In Block
+    /// This can be called InternetAntenna_SendCommandThroughInternet!!!!!
     /// </summary>
-    private Dictionary<string, CustomBlock> StoredCustomFunctionBlock;
+    private Dictionary<string, DefinitionCustomBlock> StoredCustomBlockDefinitionBlock;
+
+
 
     #endregion
 

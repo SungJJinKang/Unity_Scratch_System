@@ -15,7 +15,15 @@ public interface IVariableBlockType
 }
 
 [BlockCategoryAttribute("CustomFunction")]
-public interface ICustomBlockType
+public interface CustomBlockType { }
+
+
+public interface ICallCustomBlockType : CustomBlockType
+{
+    DefinitionCustomBlock CustomBlockDefinitionBlock { get; set; }
+}
+
+public interface IDefinitionCustomBlockType : CustomBlockType
 {
 }
 
@@ -44,6 +52,11 @@ public interface ISpeakerBlockType : IRobotPartBlockType
 
 [BlockCategoryAttribute("GPS")]
 public interface IGPSBlockType : IRobotPartBlockType
+{
+}
+
+[BlockCategoryAttribute("InternetAntenna")]
+public interface IInternetAntennaBlockType : IRobotPartBlockType
 {
 }
 

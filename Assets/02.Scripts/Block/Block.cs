@@ -5,10 +5,11 @@
 [System.Serializable]
 public abstract class Block
 {
-    public RobotBase TargetRobotBase;
-
-
-    public virtual string BlockName { get; set; }
+    public RobotBase OperatingRobotBase
+    {
+        protected get;
+        set;
+    }
 
     /// <summary>
     /// Check If All parameters is filled?
@@ -78,19 +79,41 @@ public abstract class Block
  
 }
 
+public interface FlowBlockType
+{
+    /// <summary>
+    /// Start Flow
+    /// </summary>
+    void StartFlowBlock(RobotBase operatingRobotBase);
+
+    /// <summary>
+    /// Opeate Block Work
+    /// </summary>
+    void Operation();
+
+    /// <summary>
+    /// On End Flow
+    /// </summary>
+    void EndFlowBlock();
+}
+
 /// <summary>
 /// StackBlock, C Block, CapBlock
 /// </summary>
-public interface UpNotchBlock
+public interface UpNotchBlock : FlowBlockType
 {
     DownBumpBlock PreviousBlock { get; set; }
+
+
 }
 
 /// <summary>
 /// This Block can have NextBlock
 /// Hat Block, StackBlock, C Block
 /// </summary>
-public interface DownBumpBlock
+public interface DownBumpBlock : FlowBlockType
 {
     UpNotchBlock NextBlock { get; set; }
+
+   
 }

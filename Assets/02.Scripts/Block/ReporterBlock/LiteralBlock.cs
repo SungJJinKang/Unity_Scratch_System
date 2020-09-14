@@ -2,10 +2,16 @@
 
 public sealed class LiteralBlock : ReporterBlock
 {
+    public LiteralBlock(string value = "")
+    {
+        this.LiteralValue = value;
+    }
+
     /// <summary>
     /// LiteralValue는 RobotSourceCode에서 정해지고 각 로봇에서는 변경안된다!!!!!!
+    /// READ ONLY
     /// </summary>
-    public string LiteralValue;
+    public readonly string LiteralValue;
 
     sealed public override string GetReporterStringValue()
     {

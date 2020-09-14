@@ -5,8 +5,11 @@ public interface ICanBeParameter
 {
 }
 
-
-
+/// Why Make Seperately Each Class Have multipleParameter
+/// -> For Checking Type Check 
+/// If TwoParameter inherit OneParameter, 
+/// (TwoParameter Is Onparameter) return True . This cause bugs
+/// //
 public interface IContainingParameter
 {
   

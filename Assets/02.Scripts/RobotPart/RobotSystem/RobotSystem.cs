@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Linq;
 
 /// <summary>
 /// Robot system.
@@ -16,30 +17,60 @@ public class RobotSystem : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        this.SpawnedRobotList = new List<RobotBase>();
+        this.SpawnedRobotDictionary = new Dictionary<string, RobotBase>();
     }
 
-    private Dictionary<uint, RobotBase> SpawnedRobotList;
+    /// <summary>
+    /// The spawned robot list.
+    /// This is updated when SpawnedRobotDictionary is dirty For Performance!!!!!
+    /// </summary>
+    private RobotBase[] SpawnedRobotList;
+
+    private void StartLoopedBlockForAllSpawnedRobot()
+    {
+        for (int i = 0; i < this.SpawnedRobotList.Length; i++)
+        {
+            if (this.SpawnedRobotList[i] != null)
+                this.SpawnedRobotList[i].StartLoopedBlock();
+        }
+    }
+    private Dictionary<string, RobotBase> SpawnedRobotDictionary;
 
     public void AddToSpawnedRobotList(RobotBase robot)
     {
         if (robot == null)
             return;
 
-        if (this.SpawnedRobotList.ContainsKey(robot.UniqueRobotId) == true)
-            return;
+        if (this.SpawnedRobotDictionary.ContainsKey(robot.UniqueRobotId) == false)
+        {
+            this.SpawnedRobotDictionary.Add(robot.UniqueRobotId, robot);
+            SpawnedRobotList = SpawnedRobotDictionary.Values.ToArray(); // SpawnedRobotList is updated when SpawnedRobotDictionary is dirty
+        }
 
-        this.SpawnedRobotList.Add(robot.UniqueRobotId, robot);
+
+       
     }
 
-    public RobotBase GetSpawnedRobot(uint uniqueId)
+    public void RemoveFromSpawnedRobotList(RobotBase robot)
     {
-        if(this.SpawnedRobotList.ContainsKey(uniqueId) == false)
+        if(this.SpawnedRobotDictionary.Remove(robot.UniqueRobotId))
+        {
+            SpawnedRobotList = SpawnedRobotDictionary.Values.ToArray(); // SpawnedRobotList is updated when SpawnedRobotDictionary is dirty
+        }
+
+    }
+
+    public RobotBase GetSpawnedRobot(string uniqueId)
+    {
+        if(this.SpawnedRobotDictionary.ContainsKey(uniqueId) == false)
         {
             return null;
         }
         else
         {
-            return this.SpawnedRobotList[uniqueId];
+            return this.SpawnedRobotDictionary[uniqueId];
         }
 
     }

@@ -8,20 +8,24 @@ public sealed class CallOneParameterCustomBlock : CallCustomBlock, IContainingPa
     private DefinitionOneParameterCustomBlock definitionOneParameterCustomBlock;
     public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionOneParameterCustomBlock as DefinitionCustomBlock; }
 
-    public CallOneParameterCustomBlock(string customBlockName, DefinitionOneParameterCustomBlock definitionOneParameterCustomBlock, ReporterBlock input1) : base(customBlockName)
+    public CallOneParameterCustomBlock(DefinitionOneParameterCustomBlock definitionOneParameterCustomBlock)
     {
         this.definitionOneParameterCustomBlock = definitionOneParameterCustomBlock;
-        Input1 = input1;
     }
 
+    /// <summary>
+    /// Passed Paramter 1
+    /// </summary>
     public ReporterBlock Input1 { get; set; }
+
 
     sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        this.definitionOneParameterCustomBlock.CopyParamter(operatingRobotBase, this.Input1);
+        if (this.Input1 != null)
+            operatingRobotBase.SetCustomBlockLocalVariables(definitionOneParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
+
         base.Operation(operatingRobotBase);
     }
-
     protected override void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock)
     {
         this.definitionOneParameterCustomBlock = customBlockDefinitionBlock as DefinitionOneParameterCustomBlock;

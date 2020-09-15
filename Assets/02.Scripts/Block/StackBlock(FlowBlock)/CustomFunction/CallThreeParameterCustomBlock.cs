@@ -9,21 +9,37 @@ public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContaining
     private DefinitionThreeParameterCustomBlock definitionThreeParameterCustomBlock;
     public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionThreeParameterCustomBlock as DefinitionCustomBlock; }
 
-    public CallThreeParameterCustomBlock(string customBlockName, DefinitionThreeParameterCustomBlock definitionThreeParameterCustomBlock, ReporterBlock input1, ReporterBlock input2, ReporterBlock input3) : base(customBlockName)
+    public CallThreeParameterCustomBlock(DefinitionThreeParameterCustomBlock definitionThreeParameterCustomBlock)
     {
         this.definitionThreeParameterCustomBlock = definitionThreeParameterCustomBlock;
-        Input1 = input1;
-        Input2 = input2;
-        Input3 = input3;
     }
 
+    /// <summary>
+    /// Passed Paramter 1
+    /// </summary>
     public ReporterBlock Input1 { get; set; }
+    /// <summary>
+    /// Passed Paramter 2
+    /// </summary>
     public ReporterBlock Input2 { get; set; }
+    /// <summary>
+    /// Passed Paramter 3
+    /// </summary>
     public ReporterBlock Input3 { get; set; }
+
 
     sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        this.definitionThreeParameterCustomBlock.CopyParamter(operatingRobotBase, this.Input1, this.Input2, this.Input3);
+        if (this.Input1 != null)
+            operatingRobotBase.SetCustomBlockLocalVariables(definitionThreeParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
+
+        if (this.Input2 != null)
+            operatingRobotBase.SetCustomBlockLocalVariables(definitionThreeParameterCustomBlock.Input2Name, this.Input2.GetReporterStringValue(operatingRobotBase));
+
+        if (this.Input3 != null)
+            operatingRobotBase.SetCustomBlockLocalVariables(definitionThreeParameterCustomBlock.Input3Name, this.Input3.GetReporterStringValue(operatingRobotBase));
+
+      
         base.Operation(operatingRobotBase);
     }
 

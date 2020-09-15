@@ -49,7 +49,7 @@ public class RobotSystem : MonoBehaviour
         while(true)
         {
 
-            this.ExecuteRobotsWaitingBlock();
+            this.ExecuteRobotsWaitingBlock(ExecuteRobotsWaitingBlockRate);
 
             // WaitForSeconds works as scaledTime(deltaTime, not RealTime)
             // So You don't need 
@@ -67,12 +67,12 @@ public class RobotSystem : MonoBehaviour
     /// <summary>
     /// Executes all spawned the robot's waiting block.
     /// </summary>
-    private void ExecuteRobotsWaitingBlock()
+    private void ExecuteRobotsWaitingBlock(float deltaTime)
     {
         for (int i = 0; i < this.SpawnedRobotList.Count; i++)
         {
             if (this.SpawnedRobotList[i] != null)
-                this.SpawnedRobotList[i].ExecuteWaitingBlock(ExecuteRobotsWaitingBlockRate);
+                this.SpawnedRobotList[i].ExecuteWaitingBlock(deltaTime);
         }
     }
 

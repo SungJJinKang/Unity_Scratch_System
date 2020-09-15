@@ -3,16 +3,14 @@
 /// Fuction Created By Player
 /// This can be used Event through InternetAntenna_SendCommandThroughInternet
 /// CustomFunctionBlock Can Have Just ReporterBlock Type !!!
+/// 
+/// 
+/// 
+/// Please Set Next to Next Block Of CallCustomBlock
 /// </summary>
 [System.Serializable]
 public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
 {
-    private readonly string CustomBlockName;
-    public CallCustomBlock(string customBlockName)
-    {
-        this.CustomBlockName = customBlockName;
-    }
-
     public abstract DefinitionCustomBlock CustomBlockDefinitionBlock { get; }
 
     protected abstract void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock);

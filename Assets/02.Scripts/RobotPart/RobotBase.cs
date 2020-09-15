@@ -157,28 +157,77 @@ public sealed class RobotBase : RobotPart
 
     #endregion
 
+    #region FunctionLocalVariable
+
+    /// <summary>
+    /// Memory Variable
+    /// You can access to this variable through CustomBlock
+    /// </summary>
+    private Dictionary<string, string> CustomBlockLocalVariables;
+
+    /// <summary>
+    /// Init this.CustomBlockLocalVariable
+    /// </summary>
+    /// <param name="CustomBlockLocalVariableKeyArray"></param>
+    /// <param name="maintainOriginalValue">If MemoryVariable have same key with FunctionLocalVariableKeyArray, </param>
+    private void InitCustomBlockLocalVariables(List<string> CustomBlockLocalVariableKeyArray, bool maintainOriginalValue = false)
+    { 
+        if(CustomBlockLocalVariableKeyArray == null)
+        {
+            Debug.LogError("CustomBlockLocalVariable is null");
+            return;
+        }
+
+        if (CustomBlockLocalVariables == null)
+        {
+            this.CustomBlockLocalVariables = new Dictionary<string, string>();
+        }
+        else
+        {
+            this.CustomBlockLocalVariables.Clear();
+        }
+           
+
+        for (int i = 0; i < CustomBlockLocalVariableKeyArray.Count; i++)
+        {
+            this.CustomBlockLocalVariables.Add(CustomBlockLocalVariableKeyArray[i], ""); // Add Key with FunctionLocalVariableKeyArray
+        }
+        
+    }
+
+    public void SetCustomBlockLocalVariables(string key, string text)
+    {
+        if (this.CustomBlockLocalVariables.ContainsKey(key) == false)
+        {
+            Debug.LogError("CustomBlockLocalVariable Dont Have Key : " + key);
+        }
+
+        this.CustomBlockLocalVariables[key] = text;
+        this.OnUpdateMemoryVariable(key);
+    }
+
+    public string GetCustomBlockLocalVariables(string key)
+    {
+        if (this.CustomBlockLocalVariables.ContainsKey(key) == false)
+        {
+            Debug.LogError("CustomBlockLocalVariable Dont Have Key : " + key);
+            return "";
+        }
+
+        return string.Copy(this.CustomBlockLocalVariables[key]);
+    }
+
+    private void OnUpdateCustomBlockLocalVariables(string key)
+    {
+
+    }
+
+    #endregion
+
+
+    
+
     #region Event
-
-    public void SetInitBlockToWaitingBlock()
-    {
-        if(this.RobotSourceCode.InitBlock == null)
-        {
-            Debug.LogError("this.RobotSourceCode.InitBlock is null");
-            return;
-        }
-        this.RobotSourceCode.InitBlock.StartFlowBlock(this);
-    }
-
-    public void SetLoopedBlockToWaitingBlock()
-    {
-        if (this.RobotSourceCode.LoopedBlock == null)
-        {
-            Debug.LogError("this.RobotSourceCode.LoopedBlock is null");
-            return;
-        }
-
-        this.WaitingBlock = this.RobotSourceCode.LoopedBlock;
-    }
 
     public void StartEventBlock(string eventName)
     {
@@ -206,12 +255,38 @@ public sealed class RobotBase : RobotPart
         }
     }
 
+    public void SetInitBlockToWaitingBlock()
+    {
+        if (this.RobotSourceCode.InitBlock == null)
+        {
+            Debug.LogError("this.RobotSourceCode.InitBlock is null");
+            return;
+        }
+        this.RobotSourceCode.InitBlock.StartFlowBlock(this);
+    }
+
+    public void SetLoopedBlockToWaitingBlock()
+    {
+        if (this.RobotSourceCode.LoopedBlock == null)
+        {
+            Debug.LogError("this.RobotSourceCode.LoopedBlock is null");
+            return;
+        }
+
+        this.WaitingBlock = this.RobotSourceCode.LoopedBlock;
+    }
+
     #endregion
 
     #region RobotSourceCode
     /// <summary>
     /// Installed Robot Source Code On Thie Robot Instance
     /// Should Reference From RobotSystem.instance.StoredRobotSourceCode
+    /// 
+    /// 
+    /// 
+    /// 
+    /// If RobotSourceCodeTemplate is changed or RobotSourceCode is set newly, WaitingBlock is cleaned, ReStart SourceCode Newly From InitBlock To LoopedBlcok
     /// </summary>
     private RobotSourceCode RobotSourceCode; 
 
@@ -232,12 +307,18 @@ public sealed class RobotBase : RobotPart
 
         this.RobotSourceCode = robotSourceCodeTemplate; //shallow Copy
         this.RobotSourceCode._OriginalRobotSourceCodeTemplate = robotSourceCodeTemplate; // Store Ref To Original RobotSourceCodeTemplate
-       
-        this.InitMemoryVariable(robotSourceCodeTemplate.GetDeepCopyOfVariableTemplate());  // Deep copy MemoryVariable
-
         this.RobotSourceCode._OriginalRobotSourceCodeTemplate.AddToInstalledRobotList(this);
 
+        OnSetRobotSourceCode(robotSourceCodeTemplate);
+
         return true;
+    }
+
+    private void OnSetRobotSourceCode(RobotSourceCodeTemplate robotSourceCodeTemplate)
+    {
+        this.InitMemoryVariable(robotSourceCodeTemplate.GetDeepCopyOfMemoryVariableTemplate());  // Deep copy MemoryVariable
+        this.InitCustomBlockLocalVariables(robotSourceCodeTemplate.CustomBlockLocalVariableParameterNames);
+
     }
     #endregion
 }

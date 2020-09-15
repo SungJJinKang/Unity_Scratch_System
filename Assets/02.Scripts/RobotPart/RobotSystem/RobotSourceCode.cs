@@ -16,7 +16,7 @@ public class RobotSourceCode
         this.initBlock = null;
         this.loopedBlock = null;
         this.StoredCustomBlockDefinitionBlock = new Dictionary<string, DefinitionCustomBlock>();
-        this.VariableTemplateList = new Dictionary<string, string>();
+        this.MemoryVariableTemplateList = new Dictionary<string, string>();
 
     }
 
@@ -135,14 +135,68 @@ public class RobotSourceCode
     /// This can be called InternetAntenna_SendCommandThroughInternet!!!!!
     /// </summary>
     private Dictionary<string, DefinitionCustomBlock> StoredCustomBlockDefinitionBlock;
+    /// <summary>
+    /// Parameter List Of DefinitionCustomBlocks
+    /// </summary>
+    public List<string> CustomBlockLocalVariableParameterNames
+    {
+        private set;
+        get;
+    }
+
+    public bool AddToStoredCustomBlockDefinitionBlock(DefinitionCustomBlock definitionCustomBlock)
+    {
+        if (this.IsEditing == false)
+        {
+            Debug.LogError("Cant Change StoredEventBlockList, Because Source Code Editing Completely Finished");
+            return false;
+        }
+
+        if (definitionCustomBlock == null)
+            return false;
+
+        RemoveFromStoredCustomBlockDefinitionBlockt(definitionCustomBlock);
+        this.StoredCustomBlockDefinitionBlock.Add(definitionCustomBlock.CustomBlockName, definitionCustomBlock);
 
 
+
+        if (this.CustomBlockLocalVariableParameterNames == null)
+            this.CustomBlockLocalVariableParameterNames = new List<string>();
+
+        this.CustomBlockLocalVariableParameterNames.Add(definitionCustomBlock.CustomBlockName);
+        return true;
+
+    }
+
+    public bool RemoveFromStoredCustomBlockDefinitionBlockt(DefinitionCustomBlock definitionCustomBlock)
+    {
+        if (this.IsEditing == false)
+        {
+            Debug.LogError("Cant Change StoredCustomBlockDefinitionBlock, Because Source Code Editing Completely Finished");
+            return false;
+        }
+
+        if (definitionCustomBlock == null)
+            return false;
+
+        this.StoredCustomBlockDefinitionBlock.Remove(definitionCustomBlock.CustomBlockName);
+
+
+
+        if (this.CustomBlockLocalVariableParameterNames == null)
+            this.CustomBlockLocalVariableParameterNames = new List<string>();
+
+        this.CustomBlockLocalVariableParameterNames.RemoveAll(x => x == definitionCustomBlock.CustomBlockName);
+        return true;
+    }
+
+   
 
     #endregion
 
-    #region VariableTemplate
+    #region MemoryVariableTemplate
     /// <summary>
-    /// Variable List
+    /// MemoryVariable List
     /// This Variable is just template
     /// Each Robot Instance Should Have their StoredVariableBlock Instance
     /// Key Variable Name, Value Variable Value
@@ -151,33 +205,33 @@ public class RobotSourceCode
     /// 
     /// Variable Can Have Init Value
     /// </summary>
-    private Dictionary<string, string> VariableTemplateList;
+    private Dictionary<string, string> MemoryVariableTemplateList;
 
     /// <summary>
-    /// Sets to variable template.
+    /// Sets to MemoryVariable template.
     /// This Should Called From Block Editor
     /// </summary>
     /// <returns><c>true</c>, if to variable template was set succesfully, <c>false</c> otherwise.</returns>
     /// <param name="key">Key.</param>
     /// <param name="text">Text.</param>
-    public bool SetToVariableTemplateList(string key, string text)
+    public bool SetToMemoryVariableTemplateList(string key, string text)
     {
         if(this.IsEditing == false)
         {
-            Debug.LogError("Cant Change VariableTemplateList, Because Source Code Editing Completely Finished");
+            Debug.LogError("Cant Change MemoryVariableTemplateList, Because Source Code Editing Completely Finished");
             return false;
         }
 
 
-        if(this.VariableTemplateList.ContainsKey(key) == true)
-        {// If VariableTemplate Already Have Key
-            Debug.Log("VariableTemplateList Already Have Key : " + key + " So Changed Value");
-            this.VariableTemplateList[key] = text;
+        if(this.MemoryVariableTemplateList.ContainsKey(key) == true)
+        {// If MemoryVariableTemplate Already Have Key
+            Debug.Log("MemoryVariableTemplateList Already Have Key : " + key + " So Changed Value");
+            this.MemoryVariableTemplateList[key] = text;
         }
         else
-        {// If VariableTemplate Dont Have Key Yet
-            Debug.Log("VariableTemplateList Dont Have Key Yet : " + key + " So Add new item");
-            this.VariableTemplateList.Add(key, text);
+        {// If MemoryVariableTemplate Dont Have Key Yet
+            Debug.Log("MemoryVariableTemplateList Dont Have Key Yet : " + key + " So Add new item");
+            this.MemoryVariableTemplateList.Add(key, text);
         }
 
       
@@ -185,57 +239,57 @@ public class RobotSourceCode
     }
 
     /// <summary>
-    /// Removes from variable template.
+    /// Removes from MemoryVariable template.
     /// This Should Called From Block Editor
     /// </summary>
-    /// <returns><c>true</c>, if item of variable template was removed succesfully, <c>false</c> otherwise.</returns>
+    /// <returns><c>true</c>, if item of MemoryVariable template was removed succesfully, <c>false</c> otherwise.</returns>
     /// <param name="key">Key.</param>
-    public bool RemoveFromVariableTemplateList(string key)
+    public bool RemoveFromMemoryVariableTemplateList(string key)
     {
         if (this.IsEditing == false)
         {
-            Debug.LogError("Cant Change VariableTemplateList, Because Source Code Editing Completely Finished");
+            Debug.LogError("Cant Change MemoryVariableTemplateList, Because Source Code Editing Completely Finished");
             return false;
         }
 
 
-        if (this.VariableTemplateList.ContainsKey(key) == true)
-        {// If VariableTemplate Have Key
-            Debug.Log("VariableTemplateList Have Key : " + key + " So Remove Item with key");
-            this.VariableTemplateList.Remove(key);;
+        if (this.MemoryVariableTemplateList.ContainsKey(key) == true)
+        {// If MemoryVariableTemplate Have Key
+            Debug.Log("MemoryVariableTemplateList Have Key : " + key + " So Remove Item with key");
+            this.MemoryVariableTemplateList.Remove(key);;
             return false;
         }
         else
-        {// If VariableTemplate Dont Have Key Yet
-            Debug.Log("VariableTemplateList Dont Have Key Yet : " + key);
+        {// If MemoryVariableTemplate Dont Have Key Yet
+            Debug.Log("MemoryVariableTemplateList Dont Have Key Yet : " + key);
             return false;
         }
 
     }
 
-    public bool GetVariableTemplateValue(string key, ref string text)
+    public bool GetMemoryVariableTemplateValue(string key, ref string text)
     {
-        if (this.VariableTemplateList.ContainsKey(key) == false)
+        if (this.MemoryVariableTemplateList.ContainsKey(key) == false)
         {
-            Debug.LogError("VariableTemplateList Dont Have Key : " + key);
+            Debug.LogError("MemoryVariableTemplateList Dont Have Key : " + key);
             return false;
         }
         else
-        {//VariableTemplate Have Key 
-            text = string.Copy(this.VariableTemplateList[key]);
+        {//MemoryVariableTemplate Have Key 
+            text = string.Copy(this.MemoryVariableTemplateList[key]);
             return true;
         }
     }
 
-    public Dictionary<string, string> GetDeepCopyOfVariableTemplate()
+    public Dictionary<string, string> GetDeepCopyOfMemoryVariableTemplate()
     {
-        Dictionary<string, string> deepCopiedVariableTemplate = new Dictionary<string, string>();
-        foreach (KeyValuePair<string, string> pair in this.VariableTemplateList)
+        Dictionary<string, string> deepCopiedMemoryVariableTemplate = new Dictionary<string, string>();
+        foreach (KeyValuePair<string, string> pair in this.MemoryVariableTemplateList)
         {
-            deepCopiedVariableTemplate.Add(pair.Key, string.Copy(pair.Value)); // deep copy string ( string is referce type )
+            deepCopiedMemoryVariableTemplate.Add(pair.Key, string.Copy(pair.Value)); // deep copy string ( string is referce type )
         }
 
-        return deepCopiedVariableTemplate;
+        return deepCopiedMemoryVariableTemplate;
     }
 
     #endregion

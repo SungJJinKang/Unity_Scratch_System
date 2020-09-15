@@ -12,7 +12,7 @@ public abstract class FlowBlock : Block, FlowBlockType
     {
         WaitDurationTime,
         StartNextBlockAfterOperation,
-        EndFlowAfterOperation
+        ExitFlowAfterOperation
     
     }
 
@@ -51,7 +51,7 @@ public abstract class FlowBlock : Block, FlowBlockType
         }
         else
         {// End Operation. End FlowBlock, Because There is no Next Block
-            return FlowBlock.FlowBlockState.EndFlowAfterOperation;
+            return FlowBlock.FlowBlockState.ExitFlowAfterOperation;
         }
         
     }

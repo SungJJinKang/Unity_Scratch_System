@@ -250,12 +250,15 @@ public sealed class RobotBase : RobotPart
     /// 
     /// You Should Set This At Start { }
     /// Like Call Function , You should come back to NextBlock of Call Function, After Execute CustomBlock
+    /// 
+    /// 
+    /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
+    /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
+    /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
+    /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
+    /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// </summary>
-    public FlowBlock ComeBackFlowBlockAfterFinishFlow
-    {
-        private get;
-        set;
-    }
+    public Stack<FlowBlock> ComeBackFlowBlockStack;
 
 
     public void SetWaitingBlock(FlowBlock flowBlock)
@@ -272,9 +275,9 @@ public sealed class RobotBase : RobotPart
 
             switch (flowBlockState)
             {
-                case FlowBlock.FlowBlockState.EndFlowAfterOperation:
+                case FlowBlock.FlowBlockState.ExitFlowAfterOperation:
 
-                    SetWaitingBlock(ComeBackFlowBlockAfterFinishFlow);
+                    SetWaitingBlock(this.ComeBackFlowBlockStack.Pop());
 
                     break;
             }

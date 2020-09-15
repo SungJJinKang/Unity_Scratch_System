@@ -16,8 +16,7 @@ public abstract class CapBlock : FlowBlock, UpNotchBlock
     /// </returns>
     sealed public override bool EndFlowBlock(RobotBase operatingRobotBase)
     {
-        return false;
-
+        return false; // Cap Block Don't have NextBlock
     }
 
 }

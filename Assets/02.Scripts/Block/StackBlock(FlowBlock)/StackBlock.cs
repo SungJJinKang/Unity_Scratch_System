@@ -12,7 +12,6 @@ public abstract class StackBlock : FlowBlock, UpNotchBlock, DownBumpBlock
     
     /// <summary>
     /// EndFlowBlock
-    /// And Start NextBlock
     /// </summary>
     /// <param name="operatingRobotBase"></param>
     /// <returns>

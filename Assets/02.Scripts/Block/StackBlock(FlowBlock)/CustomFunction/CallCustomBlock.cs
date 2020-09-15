@@ -13,8 +13,7 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
 {
     public abstract DefinitionCustomBlock CustomBlockDefinitionBlock { get; }
 
-    protected abstract void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock);
-
+  
     public override void Operation(RobotBase operatingRobotBase)
     {
         if(this.CustomBlockDefinitionBlock == null)
@@ -25,6 +24,16 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
 
         // Operation Of CallCustomFunctionBlock is Passsing Parameters To CustomBlockDefinitionBlock And Starting Flow Of CustomBlockDefinitionBlock CustomBlockDefinitionBlock
         // Passing Parameter is called at child method
+        //
+        //You should Set CustomBlockLocalVariables before Start CustomBlockDefinitionBlock
+        //Maybe CustomBlockLocalVariables was set in child method
         this.CustomBlockDefinitionBlock.StartFlowBlock(operatingRobotBase);
+    }
+
+    public override bool EndFlowBlock(RobotBase operatingRobotBase)
+    {
+        operatingRobotBase.ComeBackFlowBlockAfterFinishFlow = base.NextBlock as FlowBlock; // Set NextBlockAfterExitFlow to NextBlock Of This CallCustomBlock
+        return true; 
+
     }
 }

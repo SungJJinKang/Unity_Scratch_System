@@ -30,6 +30,7 @@ public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContaining
 
     sealed public override void Operation(RobotBase operatingRobotBase)
     {
+        //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
             operatingRobotBase.SetCustomBlockLocalVariables(definitionThreeParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
@@ -43,8 +44,5 @@ public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContaining
         base.Operation(operatingRobotBase);
     }
 
-    protected override void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock)
-    {
-        this.definitionThreeParameterCustomBlock = customBlockDefinitionBlock as DefinitionThreeParameterCustomBlock;
-    }
+   
 }

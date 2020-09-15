@@ -242,6 +242,22 @@ public sealed class RobotBase : RobotPart
 
     private FlowBlock WaitingBlock;
 
+    /// <summary>
+    /// ex ) After Call CallCustomBlock And Finished CustomBlock operation
+    /// We should get back NextBlock Of CallCustomBlock!!!!!!!!!!
+    /// 
+    /// So We set this variable to NextBlock Of CallCustomBlock When Start CallCustomBlock
+    /// 
+    /// You Should Set This At Start { }
+    /// Like Call Function , You should come back to NextBlock of Call Function, After Execute CustomBlock
+    /// </summary>
+    public FlowBlock ComeBackFlowBlockAfterFinishFlow
+    {
+        private get;
+        set;
+    }
+
+
     public void SetWaitingBlock(FlowBlock flowBlock)
     {
         this.WaitingBlock = flowBlock;
@@ -251,7 +267,18 @@ public sealed class RobotBase : RobotPart
         this.WaitingTime += waitTime;
         if(this.WaitingBlock != null)
         {
-            this.WaitingBlock.StartFlowBlock(this);
+
+            FlowBlock.FlowBlockState flowBlockState = this.WaitingBlock.StartFlowBlock(this);
+
+            switch (flowBlockState)
+            {
+                case FlowBlock.FlowBlockState.EndFlowAfterOperation:
+
+                    SetWaitingBlock(ComeBackFlowBlockAfterFinishFlow);
+
+                    break;
+            }
+
         }
     }
 

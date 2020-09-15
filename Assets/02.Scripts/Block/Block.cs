@@ -67,17 +67,24 @@ public interface FlowBlockType
     /// <summary>
     /// Start Flow
     /// </summary>
-    void StartFlowBlock(RobotBase operatingRobotBase);
+    FlowBlock.FlowBlockState StartFlowBlock(RobotBase operatingRobotBase);
 
     /// <summary>
     /// Opeate Block Work
     /// </summary>
     void Operation(RobotBase operatingRobotBase);
 
+
     /// <summary>
-    /// On End Flow
+    /// EndFlowBlock
+    /// And Start NextBlock
     /// </summary>
-    void EndFlowBlock(RobotBase operatingRobotBase);
+    /// <param name="operatingRobotBase"></param>
+    /// <returns>
+    /// If There is NextBlock , return true.
+    /// otherwise, return false
+    /// </returns>
+    bool EndFlowBlock(RobotBase operatingRobotBase);
 }
 
 /// <summary>

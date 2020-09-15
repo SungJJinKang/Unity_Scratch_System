@@ -36,7 +36,8 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
    
     sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        if(this.Input1 != null)
+        //Set RobotBase.CustomBlockLocalVariables with Input String Value 
+        if (this.Input1 != null)
             operatingRobotBase.SetCustomBlockLocalVariables(definitionFourParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
         if (this.Input2 != null)
@@ -51,8 +52,5 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
         base.Operation(operatingRobotBase);
     }
 
-    protected override void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock)
-    {
-        this.definitionFourParameterCustomBlock = customBlockDefinitionBlock as DefinitionFourParameterCustomBlock;
-    }
+    
 }

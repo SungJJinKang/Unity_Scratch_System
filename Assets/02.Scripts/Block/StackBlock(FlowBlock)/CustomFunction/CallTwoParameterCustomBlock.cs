@@ -24,6 +24,7 @@ public sealed class CallTwoParameterCustomBlock : CallCustomBlock, IContainingPa
 
     sealed public override void Operation(RobotBase operatingRobotBase)
     {
+        //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
             operatingRobotBase.SetCustomBlockLocalVariables(definitionTwoParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
@@ -34,8 +35,5 @@ public sealed class CallTwoParameterCustomBlock : CallCustomBlock, IContainingPa
         base.Operation(operatingRobotBase);
     }
 
-    protected override void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock)
-    {
-        this.definitionTwoParameterCustomBlock = customBlockDefinitionBlock as DefinitionTwoParameterCustomBlock;
-    }
+   
 }

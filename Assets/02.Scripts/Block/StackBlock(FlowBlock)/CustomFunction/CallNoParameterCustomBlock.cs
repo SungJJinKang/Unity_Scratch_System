@@ -20,8 +20,5 @@ public sealed class CallNoParameterCustomBlock : CallCustomBlock
         base.Operation(operatingRobotBase);
     }
 
-    sealed protected override void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock)
-    {
-        this.definitionNoParameterCustomBlock = customBlockDefinitionBlock as DefinitionNoParameterCustomBlock;
-    }
+   
 }

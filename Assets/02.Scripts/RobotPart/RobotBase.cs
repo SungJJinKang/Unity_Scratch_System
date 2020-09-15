@@ -28,6 +28,8 @@ public sealed class RobotBase : RobotPart
         get;
     }
 
+    #region RobotPart
+
     /// <summary>
     /// The attacehd robot parts.
     /// this can't contain RobotBase
@@ -87,6 +89,8 @@ public sealed class RobotBase : RobotPart
 
         return null;
     }
+
+    #endregion
 
     #region MemoryVariable
     /// <summary>
@@ -155,7 +159,7 @@ public sealed class RobotBase : RobotPart
 
     #region Event
 
-    public void StartInitBlock()
+    public void SetInitBlockToWaitingBlock()
     {
         if(this.RobotSourceCode.InitBlock == null)
         {
@@ -165,19 +169,41 @@ public sealed class RobotBase : RobotPart
         this.RobotSourceCode.InitBlock.StartFlowBlock(this);
     }
 
-    public void StartLoopedBlock()
+    public void SetLoopedBlockToWaitingBlock()
     {
         if (this.RobotSourceCode.LoopedBlock == null)
         {
             Debug.LogError("this.RobotSourceCode.LoopedBlock is null");
             return;
         }
-        this.RobotSourceCode.LoopedBlock.StartFlowBlock(this);
+
+        this.WaitingBlock = this.RobotSourceCode.LoopedBlock;
     }
 
     public void StartEventBlock(string eventName)
     {
         this.RobotSourceCode.StartEventBlock(this, eventName);
+    }
+
+    #endregion
+
+    #region WaitBlock
+
+    public float WaitingTime = 0;
+
+    private FlowBlock WaitingBlock;
+
+    public void SetWaitingBlock(FlowBlock flowBlock)
+    {
+        this.WaitingBlock = flowBlock;
+    }
+    public void ExecuteWaitingBlock(float waitTime)
+    {
+        this.WaitingTime += waitTime;
+        if(this.WaitingBlock != null)
+        {
+            this.WaitingBlock.StartFlowBlock(this);
+        }
     }
 
     #endregion

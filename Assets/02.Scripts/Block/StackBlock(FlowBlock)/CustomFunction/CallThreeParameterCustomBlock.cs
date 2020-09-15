@@ -7,6 +7,15 @@ public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContaining
 {
 
     private DefinitionThreeParameterCustomBlock definitionThreeParameterCustomBlock;
+    public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionThreeParameterCustomBlock as DefinitionCustomBlock; }
+
+    public CallThreeParameterCustomBlock(string customBlockName, DefinitionThreeParameterCustomBlock definitionThreeParameterCustomBlock, ReporterBlock input1, ReporterBlock input2, ReporterBlock input3) : base(customBlockName)
+    {
+        this.definitionThreeParameterCustomBlock = definitionThreeParameterCustomBlock;
+        Input1 = input1;
+        Input2 = input2;
+        Input3 = input3;
+    }
 
     public ReporterBlock Input1 { get; set; }
     public ReporterBlock Input2 { get; set; }

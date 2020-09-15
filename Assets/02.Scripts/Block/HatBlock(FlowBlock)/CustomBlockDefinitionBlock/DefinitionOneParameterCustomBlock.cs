@@ -5,7 +5,7 @@
 [System.Serializable]
 public sealed class DefinitionOneParameterCustomBlock : DefinitionCustomBlock, IContainingParameter<LiteralBlock>
 {
-    public DefinitionOneParameterCustomBlock(string input1Name)
+    public DefinitionOneParameterCustomBlock(string customBlockName, string input1Name) : base(customBlockName)
     {
         this.Input1Name = input1Name;
     }

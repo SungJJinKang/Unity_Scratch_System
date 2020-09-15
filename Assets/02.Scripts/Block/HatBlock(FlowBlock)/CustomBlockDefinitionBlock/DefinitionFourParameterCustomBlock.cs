@@ -5,7 +5,7 @@
 [System.Serializable]
 public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, IContainingParameter<LiteralBlock, LiteralBlock, LiteralBlock, LiteralBlock>
 {
-    public DefinitionFourParameterCustomBlock(string inputName1, string inputName2, string inputName3, string inputName4)
+    public DefinitionFourParameterCustomBlock(string customBlockName, string inputName1, string inputName2, string inputName3, string inputName4) : base(customBlockName)
     {
         this.Input1Name = inputName1;
         this.Input2Name = inputName2;

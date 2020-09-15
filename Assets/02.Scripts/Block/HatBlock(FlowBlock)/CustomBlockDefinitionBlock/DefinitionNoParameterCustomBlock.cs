@@ -8,6 +8,10 @@
 [System.Serializable]
 public sealed class DefinitionNoParameterCustomBlock : DefinitionCustomBlock
 {
+    public DefinitionNoParameterCustomBlock(string customBlockName) : base(customBlockName)
+    {
+    }
+
     public override void Operation(RobotBase operatingRobotBase)
     {
     }

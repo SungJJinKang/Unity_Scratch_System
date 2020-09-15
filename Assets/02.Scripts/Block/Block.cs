@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-/// <summary>
+﻿/// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
+/// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
 /// </summary>
 [System.Serializable]
 public abstract class Block
@@ -57,6 +57,13 @@ public abstract class Block
 
 public interface FlowBlockType
 {
+    /// <summary>
+    /// Get Block DurationTime
+    /// </summary>
+    /// <returns>The time.</returns>
+    /// <param name="operatingRobotBase">Operating robot base.</param>
+    float GetDurationTime(RobotBase operatingRobotBase);
+
     /// <summary>
     /// Start Flow
     /// </summary>

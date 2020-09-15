@@ -9,7 +9,12 @@
 public sealed class CallNoParameterCustomBlock : CallCustomBlock
 {
     private DefinitionNoParameterCustomBlock definitionNoParameterCustomBlock;
+    public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionNoParameterCustomBlock as DefinitionCustomBlock; }
 
+    public CallNoParameterCustomBlock(string customBlockName, DefinitionNoParameterCustomBlock definitionNoParameterCustomBlock) : base(customBlockName)
+    {
+        this.definitionNoParameterCustomBlock = definitionNoParameterCustomBlock;
+    }
     sealed public override void Operation(RobotBase operatingRobotBase)
     {
         base.Operation(operatingRobotBase);

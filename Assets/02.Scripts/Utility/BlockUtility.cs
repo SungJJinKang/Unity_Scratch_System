@@ -1,11 +1,12 @@
 ﻿public static class BlockUtility
 {
+    static float cachedFloatVariable;
     public static float ConvertStringToFloat(this string str)
     {
-        float f;
-        if (float.TryParse(str, out f) == true)
+
+        if (float.TryParse(str, out cachedFloatVariable) == true)
         {
-            return f;
+            return cachedFloatVariable;
         }
         else
         {//In Scratch, if convert string to number, return 0

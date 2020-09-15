@@ -19,22 +19,73 @@ public class RobotSystem : MonoBehaviour
         instance = this;
 
         this.SpawnedRobotDictionary = new Dictionary<string, RobotBase>();
+        this.SpawnedRobotList = new List<RobotBase>();
     }
+
+    private void Start()
+    {
+        StartExecuteRobotsWaitingBlockCoroutine();
+    }
+
+    #region ExecuteRobotsWaitingBlock
+
+    private void StartExecuteRobotsWaitingBlockCoroutine()
+    {
+        StopExecuteRobotsWaitingBlockCoroutine();
+        ExecuteRobotsWaitingBlockCoroutine = StartCoroutine(ExecuteRobotsWaitingBlockIEnumerator());
+    }
+
+    private void StopExecuteRobotsWaitingBlockCoroutine()
+    {
+        if (ExecuteRobotsWaitingBlockCoroutine != null)
+            StopCoroutine(ExecuteRobotsWaitingBlockCoroutine);
+
+        ExecuteRobotsWaitingBlockCoroutine = null;
+    }
+
+    private Coroutine ExecuteRobotsWaitingBlockCoroutine ;
+    private IEnumerator ExecuteRobotsWaitingBlockIEnumerator()
+    {
+        while(true)
+        {
+
+            this.ExecuteRobotsWaitingBlock();
+
+            // WaitForSeconds works as scaledTime(deltaTime, not RealTime)
+            // So You don't need 
+            yield return new WaitForSeconds(ExecuteRobotsWaitingBlockRate); 
+        }
+    }
+
+    /// <summary>
+    /// Set Proper Value
+    /// This affects to game performance
+    /// too small rate can cause jitter
+    /// </summary>
+    private const float ExecuteRobotsWaitingBlockRate = 0.2f;
+
+    /// <summary>
+    /// Executes all spawned the robot's waiting block.
+    /// </summary>
+    private void ExecuteRobotsWaitingBlock()
+    {
+        for (int i = 0; i < this.SpawnedRobotList.Count; i++)
+        {
+            if (this.SpawnedRobotList[i] != null)
+                this.SpawnedRobotList[i].ExecuteWaitingBlock(ExecuteRobotsWaitingBlockRate);
+        }
+    }
+
+    #endregion
+
+    #region SpawnedRobotList
 
     /// <summary>
     /// The spawned robot list.
     /// This is updated when SpawnedRobotDictionary is dirty For Performance!!!!!
     /// </summary>
-    private RobotBase[] SpawnedRobotList;
+    private List<RobotBase> SpawnedRobotList;
 
-    private void StartLoopedBlockForAllSpawnedRobot()
-    {
-        for (int i = 0; i < this.SpawnedRobotList.Length; i++)
-        {
-            if (this.SpawnedRobotList[i] != null)
-                this.SpawnedRobotList[i].StartLoopedBlock();
-        }
-    }
     private Dictionary<string, RobotBase> SpawnedRobotDictionary;
 
     public void AddToSpawnedRobotList(RobotBase robot)
@@ -42,22 +93,40 @@ public class RobotSystem : MonoBehaviour
         if (robot == null)
             return;
 
+        /*
         if (this.SpawnedRobotDictionary.ContainsKey(robot.UniqueRobotId) == false)
         {
             this.SpawnedRobotDictionary.Add(robot.UniqueRobotId, robot);
             SpawnedRobotList = SpawnedRobotDictionary.Values.ToArray(); // SpawnedRobotList is updated when SpawnedRobotDictionary is dirty
         }
+        */
 
+        if (this.SpawnedRobotDictionary.ContainsKey(robot.UniqueRobotId) == false)
+        {
+            this.SpawnedRobotDictionary.Add(robot.UniqueRobotId, robot);
+        }
 
-       
+        if(this.SpawnedRobotList.Contains(robot) == false)
+        {
+            this.SpawnedRobotList.Add(robot);
+        }
+     
     }
 
     public void RemoveFromSpawnedRobotList(RobotBase robot)
     {
+        if (robot == null)
+            return;
+
+        /*
         if(this.SpawnedRobotDictionary.Remove(robot.UniqueRobotId))
         {
             SpawnedRobotList = SpawnedRobotDictionary.Values.ToArray(); // SpawnedRobotList is updated when SpawnedRobotDictionary is dirty
         }
+        */
+
+        this.SpawnedRobotDictionary.Remove(robot.UniqueRobotId);
+        this.SpawnedRobotList.Remove(robot);
 
     }
 
@@ -73,6 +142,8 @@ public class RobotSystem : MonoBehaviour
         }
 
     }
+
+    #endregion
 
     #region RobotSourceCodeTemplate
     private Dictionary<string, RobotSourceCodeTemplate> StoredRobotSourceCodeTemplate;

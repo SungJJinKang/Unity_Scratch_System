@@ -6,6 +6,13 @@
 public sealed class CallOneParameterCustomBlock : CallCustomBlock, IContainingParameter<ReporterBlock>
 {
     private DefinitionOneParameterCustomBlock definitionOneParameterCustomBlock;
+    public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionOneParameterCustomBlock as DefinitionCustomBlock; }
+
+    public CallOneParameterCustomBlock(string customBlockName, DefinitionOneParameterCustomBlock definitionOneParameterCustomBlock, ReporterBlock input1) : base(customBlockName)
+    {
+        this.definitionOneParameterCustomBlock = definitionOneParameterCustomBlock;
+        Input1 = input1;
+    }
 
     public ReporterBlock Input1 { get; set; }
 

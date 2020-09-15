@@ -20,7 +20,7 @@ public interface CustomBlockType { }
 
 public interface ICallCustomBlockType : CustomBlockType
 {
-    DefinitionCustomBlock CustomBlockDefinitionBlock { get; set; }
+    DefinitionCustomBlock CustomBlockDefinitionBlock { get; }
 }
 
 public interface IDefinitionCustomBlockType : CustomBlockType

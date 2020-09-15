@@ -13,30 +13,13 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
         this.CustomBlockName = customBlockName;
     }
 
-    private DefinitionCustomBlock customBlockDefinitionBlock;
-    public DefinitionCustomBlock CustomBlockDefinitionBlock
-    {
-        get
-        {
-            return this.customBlockDefinitionBlock;
-        }
-        set
-        {
-            if (customBlockDefinitionBlock != null)
-            {
-                Debug.LogError("customBlockDefinitionBlock is already set");
-                return;
-            }
-
-            this.customBlockDefinitionBlock = value;
-        }
-    }
+    public abstract DefinitionCustomBlock CustomBlockDefinitionBlock { get; }
 
     protected abstract void OnSetCustomBlockDefinitionBlock(DefinitionCustomBlock customBlockDefinitionBlock);
 
     public override void Operation(RobotBase operatingRobotBase)
     {
-        if(this.customBlockDefinitionBlock == null)
+        if(this.CustomBlockDefinitionBlock == null)
         {
             Debug.LogError("customBlockDefinitionBlock is null");
             return;
@@ -44,6 +27,6 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
 
         // Operation Of CallCustomFunctionBlock is Passsing Parameters To CustomBlockDefinitionBlock And Starting Flow Of CustomBlockDefinitionBlock CustomBlockDefinitionBlock
         // Passing Parameter is called at child method
-        this.customBlockDefinitionBlock.StartFlowBlock(operatingRobotBase);
+        this.CustomBlockDefinitionBlock.StartFlowBlock(operatingRobotBase);
     }
 }

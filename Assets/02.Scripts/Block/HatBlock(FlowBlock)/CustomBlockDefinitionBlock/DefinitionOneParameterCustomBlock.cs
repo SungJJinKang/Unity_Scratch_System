@@ -8,6 +8,8 @@ public sealed class DefinitionOneParameterCustomBlock : DefinitionCustomBlock, I
     public DefinitionOneParameterCustomBlock(string customBlockName, string input1Name) : base(customBlockName)
     {
         this.Input1Name = input1Name;
+
+        ParameterNames = new string[] { this.Input1Name };
     }
 
 

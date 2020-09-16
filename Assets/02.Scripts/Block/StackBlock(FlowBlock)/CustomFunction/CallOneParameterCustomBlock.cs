@@ -23,7 +23,7 @@ public sealed class CallOneParameterCustomBlock : CallCustomBlock, IContainingPa
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionOneParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionOneParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
         base.Operation(operatingRobotBase);
     }

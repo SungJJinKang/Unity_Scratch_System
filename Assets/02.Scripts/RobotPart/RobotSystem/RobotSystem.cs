@@ -62,7 +62,7 @@ public class RobotSystem : MonoBehaviour
     /// This affects to game performance
     /// too small rate can cause jitter
     /// </summary>
-    private const float ExecuteRobotsWaitingBlockRate = 0.2f;
+    public const float ExecuteRobotsWaitingBlockRate = 0.2f;
 
     /// <summary>
     /// Executes all spawned the robot's waiting block.

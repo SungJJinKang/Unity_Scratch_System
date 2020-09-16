@@ -1,19 +1,25 @@
-﻿[System.Serializable]
+﻿using System.Runtime.InteropServices.WindowsRuntime;
+
+[System.Serializable]
 public abstract class FlowBlock : Block, FlowBlockType
 {
    
 
     public virtual float GetDurationTime(RobotBase operatingRobotBase)
     {
-        return 0;
+        return RobotSystem.ExecuteRobotsWaitingBlockRate;
     }
 
     public enum FlowBlockState
     {
         WaitDurationTime,
         StartNextBlockAfterOperation,
+
+        /// <summary>
+        /// There is no Next Block
+        /// </summary>
         ExitFlowAfterOperation
-    
+
     }
 
 
@@ -27,8 +33,6 @@ public abstract class FlowBlock : Block, FlowBlockType
     /// </returns>
     public FlowBlockState StartFlowBlock(RobotBase operatingRobotBase)
     {
-        operatingRobotBase.SetWaitingBlock(this);
-
         float durationTime = this.GetDurationTime(operatingRobotBase);
         if (operatingRobotBase.WaitingTime > durationTime)
         {
@@ -71,4 +75,25 @@ public abstract class FlowBlock : Block, FlowBlockType
     public abstract bool EndFlowBlock(RobotBase operatingRobotBase);
 
     public abstract void Operation(RobotBase operatingRobotBase);
+
+
+    private FlowBlock GetRootBlock(FlowBlock flowBlock)
+    {
+        UpNotchBlock upNotchBlock = this as UpNotchBlock;
+        if (upNotchBlock == null || upNotchBlock.PreviousBlock == null)
+        {
+            return this;
+        }
+        else
+        {
+            return this.GetRootBlock(flowBlock);
+        }
+    }
+
+    public FlowBlock GetRootBlock()
+    {
+        return GetRootBlock(this);
+
+    }
+
 }

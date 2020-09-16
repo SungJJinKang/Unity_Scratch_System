@@ -1,4 +1,5 @@
-﻿/// <summary>
+﻿using UnityEngine;
+/// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
 /// </summary>
@@ -55,7 +56,7 @@ public abstract class Block
  
 }
 
-public interface FlowBlockType
+public interface FlowBlockType 
 {
     /// <summary>
     /// Get Block DurationTime
@@ -85,15 +86,16 @@ public interface FlowBlockType
     /// otherwise, return false
     /// </returns>
     bool EndFlowBlock(RobotBase operatingRobotBase);
+
 }
 
 /// <summary>
+/// This Block can have PreviousBlock
 /// StackBlock, C Block, CapBlock
 /// </summary>
 public interface UpNotchBlock : FlowBlockType
 {
     DownBumpBlock PreviousBlock { get; set; }
-
 
 }
 

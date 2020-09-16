@@ -32,13 +32,13 @@ public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContaining
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionThreeParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionThreeParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
         if (this.Input2 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionThreeParameterCustomBlock.Input2Name, this.Input2.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionThreeParameterCustomBlock.Input2Name, this.Input2.GetReporterStringValue(operatingRobotBase));
 
         if (this.Input3 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionThreeParameterCustomBlock.Input3Name, this.Input3.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionThreeParameterCustomBlock.Input3Name, this.Input3.GetReporterStringValue(operatingRobotBase));
 
       
         base.Operation(operatingRobotBase);

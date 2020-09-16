@@ -26,10 +26,10 @@ public sealed class CallTwoParameterCustomBlock : CallCustomBlock, IContainingPa
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionTwoParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionTwoParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
         if (this.Input2 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionTwoParameterCustomBlock.Input2Name, this.Input2.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionTwoParameterCustomBlock.Input2Name, this.Input2.GetReporterStringValue(operatingRobotBase));
 
       
         base.Operation(operatingRobotBase);

@@ -11,6 +11,8 @@ public sealed class DefinitionThreeParameterCustomBlock : DefinitionCustomBlock,
         this.Input1Name = inputName1;
         this.Input2Name = inputName2;
         this.Input3Name = inputName3;
+
+        ParameterNames = new string[] { this.Input1Name, this.Input2Name, this.Input3Name };
     }
 
     public LiteralBlock Input1 { get; set; }

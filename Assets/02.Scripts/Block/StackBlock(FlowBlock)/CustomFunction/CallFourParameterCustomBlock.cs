@@ -38,16 +38,16 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionFourParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionFourParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
         if (this.Input2 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionFourParameterCustomBlock.Input2Name, this.Input2.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionFourParameterCustomBlock.Input2Name, this.Input2.GetReporterStringValue(operatingRobotBase));
 
         if (this.Input3 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionFourParameterCustomBlock.Input3Name, this.Input3.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionFourParameterCustomBlock.Input3Name, this.Input3.GetReporterStringValue(operatingRobotBase));
 
         if (this.Input4 != null)
-            operatingRobotBase.SetCustomBlockLocalVariables(definitionFourParameterCustomBlock.Input4Name, this.Input4.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionFourParameterCustomBlock.Input4Name, this.Input4.GetReporterStringValue(operatingRobotBase));
 
         base.Operation(operatingRobotBase);
     }

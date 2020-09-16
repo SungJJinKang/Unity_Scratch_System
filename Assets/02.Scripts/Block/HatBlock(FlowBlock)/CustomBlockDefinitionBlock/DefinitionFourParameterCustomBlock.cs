@@ -11,6 +11,8 @@ public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, 
         this.Input2Name = inputName2;
         this.Input3Name = inputName3;
         this.Input4Name = inputName4;
+
+        ParameterNames = new string[] { this.Input1Name, this.Input2Name, this.Input3Name, this.Input4Name };
     }
 
     public LiteralBlock Input1 { get; set; }
@@ -24,6 +26,8 @@ public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, 
 
     public LiteralBlock Input4 { get; set; }
     public string Input4Name;
+
+    
 
     /// <summary>
     /// Parameter Of Custom Block is Just LiteralBlock

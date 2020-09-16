@@ -9,9 +9,10 @@ public abstract class StackBlock : FlowBlock, UpNotchBlock, DownBumpBlock
     /// <value>The next block.</value>
     public UpNotchBlock NextBlock { get ; set ; }
 
-    
+
     /// <summary>
     /// EndFlowBlock
+    /// And Start NextBlock
     /// </summary>
     /// <param name="operatingRobotBase"></param>
     /// <returns>
@@ -20,16 +21,16 @@ public abstract class StackBlock : FlowBlock, UpNotchBlock, DownBumpBlock
     /// </returns>
     public override bool EndFlowBlock(RobotBase operatingRobotBase)
     {
-        if (NextBlock != null)
+        if (this.NextBlock != null && this.NextBlock is FlowBlock)
         {
-            NextBlock.StartFlowBlock(operatingRobotBase);
+            operatingRobotBase.SetWaitingBlock(this.NextBlock as FlowBlock);
             return true;
         }
         else
         {
             return false;
         }
-            
+
     }
 
 }

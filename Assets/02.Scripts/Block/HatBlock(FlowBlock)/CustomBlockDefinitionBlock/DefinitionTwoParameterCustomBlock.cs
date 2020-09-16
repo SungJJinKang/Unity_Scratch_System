@@ -9,6 +9,8 @@ public sealed class DefinitionTwoParameterCustomBlock : DefinitionCustomBlock, I
     {
         this.Input1Name = inputName1;
         this.Input2Name = inputName2;
+
+        ParameterNames = new string[] { this.Input1Name, this.Input2Name };
     }
 
     public LiteralBlock Input1 { get ; set ; }

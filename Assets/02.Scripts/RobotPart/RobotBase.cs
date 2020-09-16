@@ -157,67 +157,76 @@ public sealed class RobotBase : RobotPart
 
     #endregion
 
-    #region FunctionLocalVariable
+    #region CustomBlockParameterVariables
 
     /// <summary>
-    /// Memory Variable
-    /// You can access to this variable through CustomBlock
+    /// CustomBlock Parameter Vaiable ( Parameter )
+    /// You can access to this variable through DefinitionCustomBlock, Parameter Name
     /// </summary>
-    private Dictionary<string, string> CustomBlockLocalVariables;
+    private Dictionary<DefinitionCustomBlock, Dictionary<string, string>> CustomBlockParameterVariables;
 
     /// <summary>
     /// Init this.CustomBlockLocalVariable
     /// </summary>
     /// <param name="CustomBlockLocalVariableKeyArray"></param>
     /// <param name="maintainOriginalValue">If MemoryVariable have same key with FunctionLocalVariableKeyArray, </param>
-    private void InitCustomBlockLocalVariables(List<string> CustomBlockLocalVariableKeyArray, bool maintainOriginalValue = false)
+    private void InitCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock)
     { 
-        if(CustomBlockLocalVariableKeyArray == null)
+        if(customBlockDefinitionBlock == null)
         {
-            Debug.LogError("CustomBlockLocalVariable is null");
+            Debug.LogError("customBlockDefinitionBlock is null");
             return;
         }
 
-        if (CustomBlockLocalVariables == null)
+        if (CustomBlockParameterVariables == null)
         {
-            this.CustomBlockLocalVariables = new Dictionary<string, string>();
+            this.CustomBlockParameterVariables = new Dictionary<DefinitionCustomBlock, Dictionary<string, string>>();
         }
         else
         {
-            this.CustomBlockLocalVariables.Clear();
+            this.CustomBlockParameterVariables.Clear();
         }
-           
 
-        for (int i = 0; i < CustomBlockLocalVariableKeyArray.Count; i++)
+        this.CustomBlockParameterVariables.Add(customBlockDefinitionBlock, new Dictionary<string, string>());
+
+        for (int i = 0; i < customBlockDefinitionBlock.ParameterNames.Length; i++)
         {
-            this.CustomBlockLocalVariables.Add(CustomBlockLocalVariableKeyArray[i], ""); // Add Key with FunctionLocalVariableKeyArray
+            this.CustomBlockParameterVariables[customBlockDefinitionBlock].Add(customBlockDefinitionBlock.ParameterNames[i], ""); // Init Parameter Keys with customBlockDefinitionBlock;
         }
         
     }
 
-    public void SetCustomBlockLocalVariables(string key, string text)
+    /// <summary>
+    /// Set Value To Parameter Variable ( Parameter ) Of CustomBlock 
+    /// 
+    /// Should Be Called From CallCustomBlock
+    /// 
+    /// </summary>
+    /// <param name="customBlockDefinitionBlock"></param>
+    /// <param name="parameterName"></param>
+    /// <param name="value"></param>
+    public void SetCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock, string parameterName, string value)
     {
-        if (this.CustomBlockLocalVariables.ContainsKey(key) == false)
+        if (this.CustomBlockParameterVariables.ContainsKey(customBlockDefinitionBlock) == false || this.CustomBlockParameterVariables[customBlockDefinitionBlock].ContainsKey(parameterName) == false)
         {
-            Debug.LogError("CustomBlockLocalVariable Dont Have Key : " + key);
+            Debug.LogError("Plesae InitCustomBlockLocalVariables : " + customBlockDefinitionBlock.CustomBlockName + ",  Parameter Name : " + parameterName);
         }
 
-        this.CustomBlockLocalVariables[key] = text;
-        this.OnUpdateMemoryVariable(key);
+        this.CustomBlockParameterVariables[customBlockDefinitionBlock][parameterName] = value;
+        this.OnUpdateMemoryVariable(parameterName);
     }
 
-    public string GetCustomBlockLocalVariables(string key)
+    public string GetCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock, string parameterName)
     {
-        if (this.CustomBlockLocalVariables.ContainsKey(key) == false)
+        if (this.CustomBlockParameterVariables.ContainsKey(customBlockDefinitionBlock) == false || this.CustomBlockParameterVariables[customBlockDefinitionBlock].ContainsKey(parameterName) == false)
         {
-            Debug.LogError("CustomBlockLocalVariable Dont Have Key : " + key);
-            return "";
+            Debug.LogError("Plesae InitCustomBlockLocalVariables : " + customBlockDefinitionBlock.CustomBlockName + ",  Parameter Name : " + parameterName);
         }
 
-        return string.Copy(this.CustomBlockLocalVariables[key]);
+        return string.Copy(this.CustomBlockParameterVariables[customBlockDefinitionBlock][parameterName]);
     }
 
-    private void OnUpdateCustomBlockLocalVariables(string key)
+    private void OnUpdateCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock, string key)
     {
 
     }
@@ -231,7 +240,15 @@ public sealed class RobotBase : RobotPart
 
     public void StartEventBlock(string eventName)
     {
-        this.RobotSourceCode.StartEventBlock(this, eventName);
+        if(this.RobotSourceCode.IsEventBlockExist(eventName))
+        {
+            this.BlockCallStack.Push(this.WaitingBlock); // Push Current WaitingBlock To BlockCallStack
+
+            EventBlock eventBlock = this.RobotSourceCode.GetEventBlock(eventName); // Set EventBlock To WaitingBlock
+            if (eventBlock != null)
+                this.SetWaitingBlock(eventBlock);
+        }
+    
     }
 
     #endregion
@@ -258,33 +275,37 @@ public sealed class RobotBase : RobotPart
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// </summary>
-    public Stack<FlowBlock> ComeBackFlowBlockStack;
+    public Stack<FlowBlock> BlockCallStack;
 
 
     public void SetWaitingBlock(FlowBlock flowBlock)
     {
         this.WaitingBlock = flowBlock;
     }
-    public void ExecuteWaitingBlock(float waitTime)
+    public void ExecuteWaitingBlock(float deltaTime)
     {
-        this.WaitingTime += waitTime;
-        if(this.WaitingBlock != null)
+        this.WaitingTime += deltaTime; // Add WaitingTime
+
+        if (this.WaitingBlock == null)
+            SetWaitingBlock(this.RobotSourceCode.LoopedBlock); // If There is no WaitingBlock, Set LoopedBlock To WaitingBlock
+
+
+        FlowBlock.FlowBlockState flowBlockState = this.WaitingBlock.StartFlowBlock(this); // Start WaitingBlock
+
+        switch (flowBlockState)
         {
-
-            FlowBlock.FlowBlockState flowBlockState = this.WaitingBlock.StartFlowBlock(this);
-
-            switch (flowBlockState)
-            {
-                case FlowBlock.FlowBlockState.ExitFlowAfterOperation:
-
-                    SetWaitingBlock(this.ComeBackFlowBlockStack.Pop());
-
-                    break;
-            }
-
+            case FlowBlock.FlowBlockState.ExitFlowAfterOperation:
+                // If Exit Flow ( There is no more NextBlock )
+                // Set Top Block Of BlockCallStack To WaitingBlock newly
+                if(this.BlockCallStack.Count > 0)
+                {
+                    SetWaitingBlock(this.BlockCallStack.Pop()); 
+                }
+                break;
         }
     }
 
+    private bool IsInitBlockCalled = false;
     public void SetInitBlockToWaitingBlock()
     {
         if (this.RobotSourceCode.InitBlock == null)
@@ -292,7 +313,9 @@ public sealed class RobotBase : RobotPart
             Debug.LogError("this.RobotSourceCode.InitBlock is null");
             return;
         }
-        this.RobotSourceCode.InitBlock.StartFlowBlock(this);
+
+        IsInitBlockCalled = true;
+        this.SetWaitingBlock(this.RobotSourceCode.InitBlock);
     }
 
     public void SetLoopedBlockToWaitingBlock()
@@ -303,7 +326,7 @@ public sealed class RobotBase : RobotPart
             return;
         }
 
-        this.WaitingBlock = this.RobotSourceCode.LoopedBlock;
+        this.SetWaitingBlock(this.RobotSourceCode.LoopedBlock);
     }
 
     #endregion
@@ -347,7 +370,16 @@ public sealed class RobotBase : RobotPart
     private void OnSetRobotSourceCode(RobotSourceCodeTemplate robotSourceCodeTemplate)
     {
         this.InitMemoryVariable(robotSourceCodeTemplate.GetDeepCopyOfMemoryVariableTemplate());  // Deep copy MemoryVariable
-        this.InitCustomBlockLocalVariables(robotSourceCodeTemplate.CustomBlockLocalVariableParameterNames);
+
+        DefinitionCustomBlock[] definitionCustomBlocks = robotSourceCodeTemplate.StoredCustomBlockDefinitionBlockArray;
+        for (int i = 0; i < definitionCustomBlocks.Length; i++)
+        {
+            this.InitCustomBlockParameterVariables(definitionCustomBlocks[i]); 
+        }
+
+        this.BlockCallStack.Push(this.RobotSourceCode.LoopedBlock); // After Init Block, 
+        this.SetInitBlockToWaitingBlock();
+        
 
     }
     #endregion

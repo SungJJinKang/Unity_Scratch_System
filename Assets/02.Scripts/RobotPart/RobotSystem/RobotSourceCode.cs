@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -15,7 +16,7 @@ public class RobotSourceCode
         this.sourceCodeName = "";
         this.initBlock = null;
         this.loopedBlock = null;
-        this.StoredCustomBlockDefinitionBlock = new Dictionary<string, DefinitionCustomBlock>();
+        this.StoredCustomBlockDefinitionBlockList = new List<DefinitionCustomBlock>();
         this.MemoryVariableTemplateList = new Dictionary<string, string>();
 
     }
@@ -115,16 +116,19 @@ public class RobotSourceCode
         return true;
     }
 
-    public void StartEventBlock(RobotBase robotBase, string eventName)
+    public EventBlock GetEventBlock(string eventName)
     {
-        if (robotBase == null)
-            return;
-
-        if (this.StoredEventBlockList.ContainsKey(eventName) == false)
-            return;
-
-        this.StoredEventBlockList[eventName].StartFlowBlock(robotBase);
+        if (this.StoredEventBlockList.ContainsKey(eventName) == true)
+            return StoredEventBlockList[eventName];
+        else
+            return null;
     }
+
+    public bool IsEventBlockExist(string eventName)
+    {
+        return this.StoredEventBlockList.ContainsKey(eventName);
+    }
+
 
     #endregion
 
@@ -134,15 +138,14 @@ public class RobotSourceCode
     /// Please Check if Same Function Name is existing In Block
     /// This can be called InternetAntenna_SendCommandThroughInternet!!!!!
     /// </summary>
-    private Dictionary<string, DefinitionCustomBlock> StoredCustomBlockDefinitionBlock;
-    /// <summary>
-    /// Parameter List Of DefinitionCustomBlocks
-    /// </summary>
-    public List<string> CustomBlockLocalVariableParameterNames
+    private List<DefinitionCustomBlock> StoredCustomBlockDefinitionBlockList;
+    public DefinitionCustomBlock[] StoredCustomBlockDefinitionBlockArray
     {
-        private set;
-        get;
+        get { return this.StoredCustomBlockDefinitionBlockList.ToArray(); }
     }
+    
+
+
 
     public bool AddToStoredCustomBlockDefinitionBlock(DefinitionCustomBlock definitionCustomBlock)
     {
@@ -156,14 +159,7 @@ public class RobotSourceCode
             return false;
 
         RemoveFromStoredCustomBlockDefinitionBlockt(definitionCustomBlock);
-        this.StoredCustomBlockDefinitionBlock.Add(definitionCustomBlock.CustomBlockName, definitionCustomBlock);
-
-
-
-        if (this.CustomBlockLocalVariableParameterNames == null)
-            this.CustomBlockLocalVariableParameterNames = new List<string>();
-
-        this.CustomBlockLocalVariableParameterNames.Add(definitionCustomBlock.CustomBlockName);
+        this.StoredCustomBlockDefinitionBlockList.Add(definitionCustomBlock);
         return true;
 
     }
@@ -179,14 +175,7 @@ public class RobotSourceCode
         if (definitionCustomBlock == null)
             return false;
 
-        this.StoredCustomBlockDefinitionBlock.Remove(definitionCustomBlock.CustomBlockName);
-
-
-
-        if (this.CustomBlockLocalVariableParameterNames == null)
-            this.CustomBlockLocalVariableParameterNames = new List<string>();
-
-        this.CustomBlockLocalVariableParameterNames.RemoveAll(x => x == definitionCustomBlock.CustomBlockName);
+        this.StoredCustomBlockDefinitionBlockList.Remove(definitionCustomBlock);
         return true;
     }
 

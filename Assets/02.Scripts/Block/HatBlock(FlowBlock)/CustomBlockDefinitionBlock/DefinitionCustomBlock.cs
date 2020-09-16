@@ -47,4 +47,11 @@ public abstract class DefinitionCustomBlock : HatBlock, IDefinitionCustomBlockTy
 
     //Parameter Of Custom Block is Just LiteralBlock
     //Parameter Of Custom Block is set to passed String Value of ReporterBlock
+
+    public string[] ParameterNames
+    {
+        protected set;
+        get;
+    }
+
 }

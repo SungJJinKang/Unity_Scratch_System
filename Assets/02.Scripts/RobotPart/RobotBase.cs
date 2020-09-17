@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,6 +22,7 @@ public sealed class RobotBase : RobotPart
         base.Start();
     }
 
+    [SerializeField]
     public string UniqueRobotId
     {
         private set;
@@ -92,70 +93,75 @@ public sealed class RobotBase : RobotPart
 
     #endregion
 
-    #region MemoryVariable
+
+    #region RobotGlobalVariable
     /// <summary>
     /// Memory Variable
     /// You can access to this variable through Block.Memory_SetValue Class or Momory_ChangeValue Class
     /// </summary>
-    private Dictionary<string, string> MemoryVariable;
+    [SerializeField]
+    private Dictionary<string, string> RobotGlobalVariable;
 
+    /*
     /// <summary>
     /// Clean Only Value Of Dictionary
     /// </summary>
-    private void CleanMemoryVariableValue()
+    private void CleanRobotGlobalVariableValue()
     {
-        this.MemoryVariable.Keys.ToList().ForEach(x => this.MemoryVariable[x] = "");
+        this.RobotGlobalVariable.Keys.ToList().ForEach(x => this.RobotGlobalVariable[x] = "");
     }
+    */
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="deepCopiedMemoryVariableTamplate"></param>
+    /// <param name="deepCopiedRobotGlobalVariableTamplate"></param>
     /// <param name="maintainOriginalValue">If MemoryVariable have same key with deepCopiedMemoryVariableTamplate, </param>
-    private void InitMemoryVariable(Dictionary<string, string> deepCopiedMemoryVariableTamplate, bool maintainOriginalValue = false)
+    private void InitRobotGlobalVariable(Dictionary<string, string> deepCopiedRobotGlobalVariableTamplate, bool maintainOriginalValue = false)
     {
         if(maintainOriginalValue == true)
         {//Copy this.MemoryVariable Value To deepCopiedMemoryVariableTamplate
-            this.MemoryVariable.Keys.ToList().ForEach(x =>
+            this.RobotGlobalVariable.Keys.ToList().ForEach(x =>
             {
-                if (deepCopiedMemoryVariableTamplate.ContainsKey(x))
+                if (deepCopiedRobotGlobalVariableTamplate.ContainsKey(x))
                 {
-                    deepCopiedMemoryVariableTamplate[x] = this.MemoryVariable[x];
+                    deepCopiedRobotGlobalVariableTamplate[x] = this.RobotGlobalVariable[x];
                 }
             });
         }
 
-        this.MemoryVariable = deepCopiedMemoryVariableTamplate;
+        this.RobotGlobalVariable = deepCopiedRobotGlobalVariableTamplate;
     }
 
-    public void SetMemoryVariable(string key, string text)
+    public void SetRobotGlobalVariable(string key, string text)
     {
-        if (this.MemoryVariable.ContainsKey(key) == false)
+        if (this.RobotGlobalVariable.ContainsKey(key) == false)
         {
-            Debug.LogError("VariableTemplate Dont Have Key : " + key);
+            Debug.LogError("RobotGlobalVariableTemplate Dont Have Key : " + key);
         }
 
-        this.MemoryVariable[key] = text;
-        this.OnUpdateMemoryVariable(key);
+        this.RobotGlobalVariable[key] = text;
+        this.OnUpdateRobotGlobalVariable(key);
     }
 
-    public string GetMemoryVariable(string key)
+    public string GetRobotGlobalVariable(string key)
     {
-        if (this.MemoryVariable.ContainsKey(key) == false)
+        if (this.RobotGlobalVariable.ContainsKey(key) == false)
         {
-            Debug.LogError("VariableTemplate Dont Have Key : " + key);
+            Debug.LogError("Robot Global Variable Dont Have Key : " + key);
             return "";
         }
 
-        return string.Copy(this.MemoryVariable[key]);
+        return string.Copy(this.RobotGlobalVariable[key]);
     }
 
-    private void OnUpdateMemoryVariable(string key)
+    private void OnUpdateRobotGlobalVariable(string key)
     {
 
     }
 
     #endregion
+
 
     #region CustomBlockParameterVariables
 
@@ -163,6 +169,7 @@ public sealed class RobotBase : RobotPart
     /// CustomBlock Parameter Vaiable ( Parameter )
     /// You can access to this variable through DefinitionCustomBlock, Parameter Name
     /// </summary>
+    [SerializeField]
     private Dictionary<DefinitionCustomBlock, Dictionary<string, string>> CustomBlockParameterVariables;
 
 
@@ -220,7 +227,7 @@ public sealed class RobotBase : RobotPart
         }
 
         this.CustomBlockParameterVariables[customBlockDefinitionBlock][parameterName] = value;
-        this.OnUpdateMemoryVariable(parameterName);
+        this.OnUpdateRobotGlobalVariable(parameterName);
     }
 
     public string GetCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock, string parameterName)
@@ -248,9 +255,7 @@ public sealed class RobotBase : RobotPart
     #endregion
 
 
-    
-
-    #region Event
+    #region EventBlock
 
     public void StartEventBlock(string eventName)
     {
@@ -268,8 +273,10 @@ public sealed class RobotBase : RobotPart
 
     #endregion
 
+
     #region WaitBlock
 
+    [SerializeField]
     public float WaitingTime = 0;
 
     private FlowBlock WaitingBlock;
@@ -325,11 +332,15 @@ public sealed class RobotBase : RobotPart
 
     }
 
-    public void SetWaitingBlock(FlowBlock flowBlock)
+    private void SetWaitingBlock(FlowBlock flowBlock)
     {
         this.WaitingBlock = flowBlock;
     }
 
+    /// <summary>
+    /// Should called only From RobotSystem
+    /// </summary>
+    /// <param name="deltaTime"></param>
     public void ExecuteWaitingBlock(float deltaTime)
     {
         this.WaitingTime += deltaTime; // Add WaitingTime
@@ -351,18 +362,12 @@ public sealed class RobotBase : RobotPart
             return;
         }
             
-
-        FlowBlock.FlowBlockState flowBlockState = this.WaitingBlock.StartFlowBlock(this, out FlowBlock nextBlock); // Start WaitingBlock
-        switch (flowBlockState)
+        bool isOperationCalled = this.WaitingBlock.StartFlowBlock(this, out FlowBlock nextBlock); // Start WaitingBlock
+        if(isOperationCalled == true)
         {
-            case FlowBlock.FlowBlockState.WaitDurationTime:
-                break;
-
-
-            case FlowBlock.FlowBlockState.OperationExecuted: 
-                this.SetWaitingBlock(nextBlock);
-                break;
+            this.SetWaitingBlock(nextBlock); // set next block to waiting block, If null, Maybe PopBlockCallStack will be set to waitingBlock
         }
+
     }
 
     private bool IsInitBlockCalled = false;
@@ -384,22 +389,23 @@ public sealed class RobotBase : RobotPart
 
     #endregion
 
+
     #region RobotSourceCode
     /// <summary>
     /// Installed Robot Source Code On Thie Robot Instance
     /// Should Reference From RobotSystem.instance.StoredRobotSourceCode
     /// 
     /// 
-    /// 
-    /// 
     /// If RobotSourceCodeTemplate is changed or RobotSourceCode is set newly, WaitingBlock is cleaned, ReStart SourceCode Newly From InitBlock To LoopedBlcok
     /// </summary>
-    private RobotSourceCode RobotSourceCode; 
+    private RobotSourceCode RobotSourceCode;
+    public string RobotSourceCodeName => this.RobotSourceCode.SourceCodeName;
+  
 
-    public bool CopyFromRobotSourceCodeTemplate(string robotSourceCodeName)
+    public bool SetRobotSourceCodeWithName(string robotSourceCodeName)
     {
-        RobotSourceCodeTemplate robotSourceCodeTemplate = RobotSystem.instance.GetRobotSourceCodeTemplate(robotSourceCodeName);
-        if(robotSourceCodeTemplate == null)
+        RobotSourceCode robotSourceCode = RobotSystem.instance.GetRobotSourceCodeTemplate(robotSourceCodeName);
+        if(robotSourceCode == null)
         {
             Debug.LogError("Cant Find Robot SourceCode : " + robotSourceCodeName);
             return false;
@@ -407,33 +413,35 @@ public sealed class RobotBase : RobotPart
 
         if(this.RobotSourceCode != null)
         {
-            this.RobotSourceCode._OriginalRobotSourceCodeTemplate.RemoveFromInstalledRobotList(this);
+            this.RobotSourceCode.RemoveFromInstalledRobotList(this);
             this.RobotSourceCode = null; // Clear Reference Of Installed Robot Source Code
         }
 
-        this.RobotSourceCode = robotSourceCodeTemplate; //shallow Copy
-        this.RobotSourceCode._OriginalRobotSourceCodeTemplate = robotSourceCodeTemplate; // Store Ref To Original RobotSourceCodeTemplate
-        this.RobotSourceCode._OriginalRobotSourceCodeTemplate.AddToInstalledRobotList(this);
+        this.RobotSourceCode = robotSourceCode; //shallow Copy
+        this.RobotSourceCode.AddToInstalledRobotList(this);
 
-        OnSetRobotSourceCode(robotSourceCodeTemplate);
+        OnSetRobotSourceCode(robotSourceCode);
 
         return true;
     }
 
-    private void OnSetRobotSourceCode(RobotSourceCodeTemplate robotSourceCodeTemplate)
+    private void OnSetRobotSourceCode(RobotSourceCode robotSourceCode)
     {
-        this.InitMemoryVariable(robotSourceCodeTemplate.GetDeepCopyOfMemoryVariableTemplate());  // Deep copy MemoryVariable
+        this.InitRobotGlobalVariable(robotSourceCode.GetDeepCopyOfRobotGlobalVariableTemplate());  // Deep copy MemoryVariable
 
-        DefinitionCustomBlock[] definitionCustomBlocks = robotSourceCodeTemplate.StoredCustomBlockDefinitionBlockArray;
-        for (int i = 0; i < definitionCustomBlocks.Length; i++)
+        DefinitionCustomBlock[] definitionCustomBlocks = robotSourceCode.StoredCustomBlockDefinitionBlockArray;
+
+        if(definitionCustomBlocks != null && definitionCustomBlocks.Length > 0)
         {
-            this.InitCustomBlockParameterVariables(definitionCustomBlocks[i]); 
+            for (int i = 0; i < definitionCustomBlocks.Length; i++)
+            {
+                this.InitCustomBlockParameterVariables(definitionCustomBlocks[i]);
+            }
         }
-
-        this.BlockCallStack.Push(this.RobotSourceCode.LoopedBlock); // After Init Block, 
+       
+        this.BlockCallStack.Push(this.RobotSourceCode.LoopedBlock); // After Init Block, Call LoopedBlock
         this.SetInitBlockToWaitingBlock();
-        
-
     }
     #endregion
+
 }

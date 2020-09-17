@@ -35,7 +35,7 @@
 
     public void RecieveDataThroughInternet(string variableKey, string text)
     {
-        base.MotherRobotBase.SetMemoryVariable(variableKey, text);
+        base.MotherRobotBase.SetRobotGlobalVariable(variableKey, text);
     }
     #endregion
 

@@ -1,36 +1,35 @@
 ﻿using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEngine;
 
 [System.Serializable]
 public abstract class FlowBlock : Block, FlowBlockType
 {
    
+    /// <summary>
+    /// Should greater than 0
+    /// </summary>
+    public virtual float DurationTime => RobotSystem.ExecuteRobotsWaitingBlockRate;
+    
 
+    /*
     public virtual float GetDurationTime(RobotBase operatingRobotBase)
     {
         return RobotSystem.ExecuteRobotsWaitingBlockRate;
     }
-
-    public enum FlowBlockState
-    {
-        WaitDurationTime,
-
-        OperationExecuted,
-
-    }
-
+    */
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="operatingRobotBase"></param>
     /// <returns>
-    /// After Operating This Block, If There is NextBlock , return true.
-    /// otherwise, return false
+    /// If Robot should wait more, return false
+    /// otherwise, return true
     /// </returns>
-    public FlowBlockState StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock)
+    public bool StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock)
     {
-        float durationTime = this.GetDurationTime(operatingRobotBase);
-        if (operatingRobotBase.WaitingTime > durationTime)
+        float durationTime = DurationTime;
+        if (operatingRobotBase.WaitingTime >= durationTime - Mathf.Epsilon)
         {
             //RobotBase wait more than DurationTime
             //Can operate Block!!!!
@@ -40,12 +39,12 @@ public abstract class FlowBlock : Block, FlowBlockType
         {
             //RobotBase should wait more
             NextBlock = null;
-            return FlowBlock.FlowBlockState.WaitDurationTime;
+            return false;
         }
 
         this.Operation(operatingRobotBase); // Operate Block Work
         NextBlock = this.EndFlowBlock(operatingRobotBase);
-        return FlowBlock.FlowBlockState.OperationExecuted;
+        return true;
        
         
     }
@@ -62,7 +61,18 @@ public abstract class FlowBlock : Block, FlowBlockType
     /// If There is NextBlock , return true.
     /// otherwise, return false
     /// </returns>
-    public abstract FlowBlock EndFlowBlock(RobotBase operatingRobotBase);
+    public virtual FlowBlock EndFlowBlock(RobotBase operatingRobotBase)
+    {
+        DownBumpBlock downBumpBlock = this as DownBumpBlock;
+        if (downBumpBlock == null)
+        {
+            return null;
+        }
+        else
+        {
+            return downBumpBlock?.NextBlock;
+        }
+    }
 
     public abstract void Operation(RobotBase operatingRobotBase);
 

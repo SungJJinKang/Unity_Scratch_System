@@ -21,7 +21,7 @@ public sealed class VariableBlock : ReporterBlock, IVariableBlockType
     {//Think How To Robotbase.StoredVariableBlock
         if (operatingRobotBase != null)
         {
-            return operatingRobotBase.GetMemoryVariable(this.VariableName);
+            return operatingRobotBase.GetRobotGlobalVariable(this.VariableName);
         }
         else
         {

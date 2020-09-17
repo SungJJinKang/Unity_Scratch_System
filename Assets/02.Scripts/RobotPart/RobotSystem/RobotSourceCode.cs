@@ -2,22 +2,26 @@
 using System.Linq;
 using UnityEngine;
 
+
 /// <summary>
-/// Robot Source Code
-/// And Each Robot Instance sould copy shallow this instance(just reference instnace of this class)
+/// Robot source code Template.
+/// Instance Of This Class should exist just one thing!!!!!!!!
+/// Instance Of This Class is stored In Robot System
+/// This Class shouldn't have 
 /// </summary>
+[System.Serializable]
 public class RobotSourceCode 
 {
-    public RobotSourceCodeTemplate _OriginalRobotSourceCodeTemplate;
-
     public RobotSourceCode()
     {
         this.IsEditing = false;
         this.sourceCodeName = "";
+
         this.initBlock = null;
         this.loopedBlock = null;
         this.StoredCustomBlockDefinitionBlockList = new List<DefinitionCustomBlock>();
-        this.MemoryVariableTemplateList = new Dictionary<string, string>();
+        this.RobotGlobalVariableTemplateList = new Dictionary<string, string>();
+        this.InstalledRobotList = new List<RobotBase>();
 
     }
 
@@ -29,6 +33,7 @@ public class RobotSourceCode
     /// </summary>
     public bool IsEditing = false;
 
+    [SerializeField]
     private string sourceCodeName;
     public string SourceCodeName
     {
@@ -39,12 +44,18 @@ public class RobotSourceCode
         set
         {
             if (this.IsEditing == false)
+            {
+                Debug.LogError("You can't set SourceCodeName for editing");
                 return; // Can Change Only When IsEditing is true
+            }
+               
 
             this.sourceCodeName = value;
         }
     }
 
+    
+    [SerializeField]
     private HatBlock initBlock;
     public HatBlock InitBlock
     {
@@ -61,6 +72,7 @@ public class RobotSourceCode
         }
     }
 
+    [SerializeField]
     private HatBlock loopedBlock;
     public HatBlock LoopedBlock
     {
@@ -139,11 +151,17 @@ public class RobotSourceCode
     /// This can be called InternetAntenna_SendCommandThroughInternet!!!!!
     /// </summary>
     private List<DefinitionCustomBlock> StoredCustomBlockDefinitionBlockList;
+
+    private DefinitionCustomBlock[] StoredCustomBlockDefinitionBlockListCache;
+    private void SetStoredCustomBlockDefinitionBlockListCache()
+    {
+        this.StoredCustomBlockDefinitionBlockListCache = this.StoredCustomBlockDefinitionBlockList.ToArray();
+    }
     public DefinitionCustomBlock[] StoredCustomBlockDefinitionBlockArray
     {
-        get { return this.StoredCustomBlockDefinitionBlockList.ToArray(); }
+        get { return StoredCustomBlockDefinitionBlockListCache; }
     }
-    
+
 
 
 
@@ -160,6 +178,8 @@ public class RobotSourceCode
 
         RemoveFromStoredCustomBlockDefinitionBlockt(definitionCustomBlock);
         this.StoredCustomBlockDefinitionBlockList.Add(definitionCustomBlock);
+
+        SetStoredCustomBlockDefinitionBlockListCache();
         return true;
 
     }
@@ -176,14 +196,16 @@ public class RobotSourceCode
             return false;
 
         this.StoredCustomBlockDefinitionBlockList.Remove(definitionCustomBlock);
+
+        SetStoredCustomBlockDefinitionBlockListCache();
         return true;
     }
 
-   
+
 
     #endregion
 
-    #region MemoryVariableTemplate
+    #region RobotGlobalVariableTemplate
     /// <summary>
     /// MemoryVariable List
     /// This Variable is just template
@@ -194,7 +216,7 @@ public class RobotSourceCode
     /// 
     /// Variable Can Have Init Value
     /// </summary>
-    private Dictionary<string, string> MemoryVariableTemplateList;
+    private Dictionary<string, string> RobotGlobalVariableTemplateList;
 
     /// <summary>
     /// Sets to MemoryVariable template.
@@ -203,37 +225,7 @@ public class RobotSourceCode
     /// <returns><c>true</c>, if to variable template was set succesfully, <c>false</c> otherwise.</returns>
     /// <param name="key">Key.</param>
     /// <param name="text">Text.</param>
-    public bool SetToMemoryVariableTemplateList(string key, string text)
-    {
-        if(this.IsEditing == false)
-        {
-            Debug.LogError("Cant Change MemoryVariableTemplateList, Because Source Code Editing Completely Finished");
-            return false;
-        }
-
-
-        if(this.MemoryVariableTemplateList.ContainsKey(key) == true)
-        {// If MemoryVariableTemplate Already Have Key
-            Debug.Log("MemoryVariableTemplateList Already Have Key : " + key + " So Changed Value");
-            this.MemoryVariableTemplateList[key] = text;
-        }
-        else
-        {// If MemoryVariableTemplate Dont Have Key Yet
-            Debug.Log("MemoryVariableTemplateList Dont Have Key Yet : " + key + " So Add new item");
-            this.MemoryVariableTemplateList.Add(key, text);
-        }
-
-      
-        return true;
-    }
-
-    /// <summary>
-    /// Removes from MemoryVariable template.
-    /// This Should Called From Block Editor
-    /// </summary>
-    /// <returns><c>true</c>, if item of MemoryVariable template was removed succesfully, <c>false</c> otherwise.</returns>
-    /// <param name="key">Key.</param>
-    public bool RemoveFromMemoryVariableTemplateList(string key)
+    public bool AddToRobotGlobalVariableTemplateList(string key, string text)
     {
         if (this.IsEditing == false)
         {
@@ -242,62 +234,83 @@ public class RobotSourceCode
         }
 
 
-        if (this.MemoryVariableTemplateList.ContainsKey(key) == true)
+        if (this.RobotGlobalVariableTemplateList.ContainsKey(key) == true)
+        {// If MemoryVariableTemplate Already Have Key
+            Debug.Log("MemoryVariableTemplateList Already Have Key : " + key + " So Changed Value");
+            this.RobotGlobalVariableTemplateList[key] = text;
+        }
+        else
+        {// If MemoryVariableTemplate Dont Have Key Yet
+            Debug.Log("MemoryVariableTemplateList Dont Have Key Yet : " + key + " So Add new item");
+            this.RobotGlobalVariableTemplateList.Add(key, text);
+        }
+
+
+        return true;
+    }
+
+    /// <summary>
+    /// Removes from RobotGlobalVariableTemplateList
+    /// This Should Called From Block Editor
+    /// </summary>
+    /// <returns><c>true</c>, if item of RobotGlobalVariableTemplateList was removed succesfully, <c>false</c> otherwise.</returns>
+    /// <param name="key">Key.</param>
+    public bool RemoveFromRobotGlobalVariableTemplateList(string key)
+    {
+        if (this.IsEditing == false)
+        {
+            Debug.LogError("Cant Change RobotGlobalVariableTemplateList, Because Source Code Editing Completely Finished");
+            return false;
+        }
+
+
+        if (this.RobotGlobalVariableTemplateList.ContainsKey(key) == true)
         {// If MemoryVariableTemplate Have Key
-            Debug.Log("MemoryVariableTemplateList Have Key : " + key + " So Remove Item with key");
-            this.MemoryVariableTemplateList.Remove(key);;
+            Debug.Log("RobotGlobalVariableTemplateList Have Key : " + key + " So Remove Item with key");
+            this.RobotGlobalVariableTemplateList.Remove(key); ;
             return false;
         }
         else
         {// If MemoryVariableTemplate Dont Have Key Yet
-            Debug.Log("MemoryVariableTemplateList Dont Have Key Yet : " + key);
+            Debug.Log("RobotGlobalVariableTemplateList Dont Have Key Yet : " + key);
             return false;
         }
 
     }
 
-    public bool GetMemoryVariableTemplateValue(string key, ref string text)
+    /// <summary>
+    /// This Should Called From Block Editor
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public bool GetRobotGlobalVariableTemplateValue(string key, ref string text)
     {
-        if (this.MemoryVariableTemplateList.ContainsKey(key) == false)
+        if (this.RobotGlobalVariableTemplateList.ContainsKey(key) == false)
         {
-            Debug.LogError("MemoryVariableTemplateList Dont Have Key : " + key);
+            Debug.LogError("RobotGlobalVariableTemplateList Dont Have Key : " + key);
             return false;
         }
         else
         {//MemoryVariableTemplate Have Key 
-            text = string.Copy(this.MemoryVariableTemplateList[key]);
+            text = string.Copy(this.RobotGlobalVariableTemplateList[key]);
             return true;
         }
     }
 
-    public Dictionary<string, string> GetDeepCopyOfMemoryVariableTemplate()
+    public Dictionary<string, string> GetDeepCopyOfRobotGlobalVariableTemplate()
     {
-        Dictionary<string, string> deepCopiedMemoryVariableTemplate = new Dictionary<string, string>();
-        foreach (KeyValuePair<string, string> pair in this.MemoryVariableTemplateList)
+        Dictionary<string, string> deepCopiedRobotGlobalVariableTemplate = new Dictionary<string, string>();
+        foreach (KeyValuePair<string, string> pair in this.RobotGlobalVariableTemplateList)
         {
-            deepCopiedMemoryVariableTemplate.Add(pair.Key, string.Copy(pair.Value)); // deep copy string ( string is referce type )
+            deepCopiedRobotGlobalVariableTemplate.Add(pair.Key, string.Copy(pair.Value)); // deep copy string ( string is referce type )
         }
 
-        return deepCopiedMemoryVariableTemplate;
+        return deepCopiedRobotGlobalVariableTemplate;
     }
 
     #endregion
 
- 
-
-}
-
-/// <summary>
-/// Robot source code Template.
-/// Instance Of This Class should exist just one thing!!!!!!!!
-/// Instance Of This Class is stored In Robot System
-/// </summary>
-public class RobotSourceCodeTemplate : RobotSourceCode
-{
-    public RobotSourceCodeTemplate() : base()
-    {
-        InstalledRobotList = new List<RobotBase>();
-    }
 
     #region InstalledRobotList
 
@@ -320,4 +333,6 @@ public class RobotSourceCodeTemplate : RobotSourceCode
     }
 
     #endregion
+
+
 }

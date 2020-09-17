@@ -10,10 +10,10 @@ public class BlockSystem : MonoBehaviour
     {
         instance = this;
 
-        this.StoredRobotSourceCodeTemplate = new List<RobotSourceCodeTemplate>();
+        this.StoredRobotSourceCodeList = new List<RobotSourceCode>();
     }
 
-    private List<RobotSourceCodeTemplate> StoredRobotSourceCodeTemplate;
+    private List<RobotSourceCode> StoredRobotSourceCodeList;
 
     // Start is called before the first frame update
     void Start()

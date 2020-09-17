@@ -146,23 +146,23 @@ public class RobotSystem : MonoBehaviour
     #endregion
 
     #region RobotSourceCodeTemplate
-    private Dictionary<string, RobotSourceCodeTemplate> StoredRobotSourceCodeTemplate;
-    public bool AddStoredRobotSourceCodeTemplate(RobotSourceCodeTemplate robotSourceCodeTemplate)
+    private Dictionary<string, RobotSourceCode> StoredRobotSourceCode;
+    public bool AddStoredRobotSourceCodeTemplate(RobotSourceCode robotSourceCode)
     {
-        if (robotSourceCodeTemplate == null || this.StoredRobotSourceCodeTemplate.ContainsKey(robotSourceCodeTemplate.SourceCodeName) == true)
+        if (robotSourceCode == null || this.StoredRobotSourceCode.ContainsKey(robotSourceCode.SourceCodeName) == true)
             return false;
 
-        this.StoredRobotSourceCodeTemplate.Add(robotSourceCodeTemplate.SourceCodeName, robotSourceCodeTemplate);
+        this.StoredRobotSourceCode.Add(robotSourceCode.SourceCodeName, robotSourceCode);
         return true;
     }
 
-    public RobotSourceCodeTemplate GetRobotSourceCodeTemplate(string sourceCodeTemplateName)
+    public RobotSourceCode GetRobotSourceCodeTemplate(string sourceCodeName)
     {
-        if (this.StoredRobotSourceCodeTemplate.ContainsKey(sourceCodeTemplateName) == false)
+        if (this.StoredRobotSourceCode.ContainsKey(sourceCodeName) == false)
             return null;
 
         
-        return this.StoredRobotSourceCodeTemplate[sourceCodeTemplateName];
+        return this.StoredRobotSourceCode[sourceCodeName];
     }
     #endregion
 

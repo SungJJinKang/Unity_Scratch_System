@@ -63,12 +63,14 @@ public interface FlowBlockType
     /// </summary>
     /// <returns>The time.</returns>
     /// <param name="operatingRobotBase">Operating robot base.</param>
-    float GetDurationTime(RobotBase operatingRobotBase);
+    //float GetDurationTime(RobotBase operatingRobotBase);
+
+    float DurationTime { get; }
 
     /// <summary>
     /// Start Flow
     /// </summary>
-    FlowBlock.FlowBlockState StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock);
+    bool StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock);
 
     /// <summary>
     /// Opeate Block Work
@@ -95,7 +97,7 @@ public interface FlowBlockType
 /// </summary>
 public interface UpNotchBlock : FlowBlockType
 {
-    DownBumpBlock PreviousBlock { get; set; }
+    FlowBlock PreviousBlock { get; set; }
 
 }
 
@@ -105,7 +107,7 @@ public interface UpNotchBlock : FlowBlockType
 /// </summary>
 public interface DownBumpBlock : FlowBlockType
 {
-    UpNotchBlock NextBlock { get; set; }
+    FlowBlock NextBlock { get; set; }
 
    
 }

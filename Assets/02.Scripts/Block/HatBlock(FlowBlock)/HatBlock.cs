@@ -17,17 +17,9 @@ public abstract class HatBlock : FlowBlock, DownBumpBlock
     /// If There is NextBlock , return true.
     /// otherwise, return false
     /// </returns>
-    sealed public override bool EndFlowBlock(RobotBase operatingRobotBase)
+    sealed public override FlowBlock EndFlowBlock(RobotBase operatingRobotBase)
     {
-        if (this.NextBlock != null && this.NextBlock is FlowBlock)
-        {
-            operatingRobotBase.SetWaitingBlock(this.NextBlock as FlowBlock);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return this.NextBlock as FlowBlock;
 
     }
 

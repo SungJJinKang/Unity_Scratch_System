@@ -13,12 +13,8 @@ public abstract class FlowBlock : Block, FlowBlockType
     public enum FlowBlockState
     {
         WaitDurationTime,
-        StartNextBlockAfterOperation,
 
-        /// <summary>
-        /// There is no Next Block
-        /// </summary>
-        ExitFlowAfterOperation
+        OperationExecuted,
 
     }
 
@@ -31,7 +27,7 @@ public abstract class FlowBlock : Block, FlowBlockType
     /// After Operating This Block, If There is NextBlock , return true.
     /// otherwise, return false
     /// </returns>
-    public FlowBlockState StartFlowBlock(RobotBase operatingRobotBase)
+    public FlowBlockState StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock)
     {
         float durationTime = this.GetDurationTime(operatingRobotBase);
         if (operatingRobotBase.WaitingTime > durationTime)
@@ -43,20 +39,14 @@ public abstract class FlowBlock : Block, FlowBlockType
         else
         {
             //RobotBase should wait more
-            return  FlowBlock.FlowBlockState.WaitDurationTime;
+            NextBlock = null;
+            return FlowBlock.FlowBlockState.WaitDurationTime;
         }
 
         this.Operation(operatingRobotBase); // Operate Block Work
-
-        //OnEndOperation
-        if (this.EndFlowBlock(operatingRobotBase) == true)
-        {// End Operation. Start Next Block
-            return FlowBlock.FlowBlockState.StartNextBlockAfterOperation;
-        }
-        else
-        {// End Operation. End FlowBlock, Because There is no Next Block
-            return FlowBlock.FlowBlockState.ExitFlowAfterOperation;
-        }
+        NextBlock = this.EndFlowBlock(operatingRobotBase);
+        return FlowBlock.FlowBlockState.OperationExecuted;
+       
         
     }
 
@@ -72,7 +62,7 @@ public abstract class FlowBlock : Block, FlowBlockType
     /// If There is NextBlock , return true.
     /// otherwise, return false
     /// </returns>
-    public abstract bool EndFlowBlock(RobotBase operatingRobotBase);
+    public abstract FlowBlock EndFlowBlock(RobotBase operatingRobotBase);
 
     public abstract void Operation(RobotBase operatingRobotBase);
 

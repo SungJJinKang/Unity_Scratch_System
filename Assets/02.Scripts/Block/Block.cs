@@ -68,7 +68,7 @@ public interface FlowBlockType
     /// <summary>
     /// Start Flow
     /// </summary>
-    FlowBlock.FlowBlockState StartFlowBlock(RobotBase operatingRobotBase);
+    FlowBlock.FlowBlockState StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock);
 
     /// <summary>
     /// Opeate Block Work
@@ -85,7 +85,7 @@ public interface FlowBlockType
     /// If There is NextBlock , return true.
     /// otherwise, return false
     /// </returns>
-    bool EndFlowBlock(RobotBase operatingRobotBase);
+    FlowBlock EndFlowBlock(RobotBase operatingRobotBase);
 
 }
 

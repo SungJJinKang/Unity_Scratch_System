@@ -28,7 +28,7 @@ public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContaining
     public ReporterBlock Input3 { get; set; }
 
 
-    sealed public override void Operation(RobotBase operatingRobotBase)
+    sealed protected override void PassParameterToOperatingRobotBase(RobotBase operatingRobotBase)
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
@@ -39,9 +39,7 @@ public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContaining
 
         if (this.Input3 != null)
             operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionThreeParameterCustomBlock.Input3Name, this.Input3.GetReporterStringValue(operatingRobotBase));
-
-      
-        base.Operation(operatingRobotBase);
+           
     }
 
    

@@ -14,7 +14,7 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
     public abstract DefinitionCustomBlock CustomBlockDefinitionBlock { get; }
 
   
-    public override void Operation(RobotBase operatingRobotBase)
+    sealed public override void Operation(RobotBase operatingRobotBase)
     {
         if(this.CustomBlockDefinitionBlock == null)
         {
@@ -23,42 +23,31 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
         }
 
 
-        //Pushing To NextBlock Of CallCustomBlock should be called before Start New Flow
-        //Pushing To NextBlock Of CallCustomBlock should be called before Start New Flow
-        //Pushing To NextBlock Of CallCustomBlock should be called before Start New Flow
-        FlowBlock nextFlowBlock = base.NextBlock as FlowBlock;
-        if (nextFlowBlock != null)
-        {
-            //Add NextBlock To ComeBackFlowBlockStack
-            operatingRobotBase.BlockCallStack.Push(nextFlowBlock); // Set NextBlockAfterExitFlow to NextBlock Of This CallCustomBlock
-        }
 
+        //Pass Paramter To 
+        this.PassParameterToOperatingRobotBase(operatingRobotBase);
 
-
-        // Operation Of CallCustomFunctionBlock is Passsing Parameters To CustomBlockDefinitionBlock And Starting Flow Of CustomBlockDefinitionBlock CustomBlockDefinitionBlock
-        // Passing Parameter is called at child method !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // Passing Parameter is called at child method !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // Passing Parameter is called at child method !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-        // You should Set CustomBlockLocalVariables before Start CustomBlockDefinitionBlock
-        // Maybe CustomBlockLocalVariables was set in child method
-        //
-        // Add this.CustomBlockDefinitionBlock To WaitingBlock
-        operatingRobotBase.SetWaitingBlock(this.CustomBlockDefinitionBlock);
+        // Push NextBlock Of CallCustomBlock(Returned Block After End Subroutine(DefinitionCustomBlock) ) To Block Call Stack
+        operatingRobotBase.PushToBlockCallStack(this.NextBlock as FlowBlock); 
     }
+
+    /// <summary>
+    /// Pass Parameter Of CallCustomBlock To OperatingRobotBase
+    /// </summary>
+    /// <param name="operatingRobotBase">Operating robot base.</param>
+    protected virtual void PassParameterToOperatingRobotBase(RobotBase operatingRobotBase)
+    { }
 
     /// <summary>
     /// EndFlowBlock
     /// </summary>
     /// <param name="operatingRobotBase"></param>
     /// <returns>
-    /// If There is NextBlock , return true.
-    /// otherwise, return false
+    /// Next Block
     /// </returns>
-    sealed public override bool EndFlowBlock(RobotBase operatingRobotBase)
+    sealed public override FlowBlock EndFlowBlock(RobotBase operatingRobotBase)
     {
-        return true;
+        return this.CustomBlockDefinitionBlock;
     }
 
 

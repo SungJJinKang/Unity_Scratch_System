@@ -34,7 +34,7 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
 
 
    
-    sealed public override void Operation(RobotBase operatingRobotBase)
+    sealed protected override void PassParameterToOperatingRobotBase(RobotBase operatingRobotBase)
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
@@ -49,7 +49,6 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
         if (this.Input4 != null)
             operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionFourParameterCustomBlock.Input4Name, this.Input4.GetReporterStringValue(operatingRobotBase));
 
-        base.Operation(operatingRobotBase);
     }
 
     

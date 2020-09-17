@@ -118,7 +118,7 @@ public class RobotSourceCode
 
     public EventBlock GetEventBlock(string eventName)
     {
-        if (this.StoredEventBlockList.ContainsKey(eventName) == true)
+        if (IsEventBlockExist(eventName) == true)
             return StoredEventBlockList[eventName];
         else
             return null;

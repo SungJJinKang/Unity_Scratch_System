@@ -19,13 +19,12 @@ public sealed class CallOneParameterCustomBlock : CallCustomBlock, IContainingPa
     public ReporterBlock Input1 { get; set; }
 
 
-    sealed public override void Operation(RobotBase operatingRobotBase)
+    sealed protected override void PassParameterToOperatingRobotBase(RobotBase operatingRobotBase)
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
             operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionOneParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
-        base.Operation(operatingRobotBase);
     }
    
 }

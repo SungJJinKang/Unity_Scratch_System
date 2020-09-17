@@ -19,18 +19,9 @@ public abstract class StackBlock : FlowBlock, UpNotchBlock, DownBumpBlock
     /// If There is NextBlock , return true.
     /// otherwise, return false
     /// </returns>
-    public override bool EndFlowBlock(RobotBase operatingRobotBase)
+    public override FlowBlock EndFlowBlock(RobotBase operatingRobotBase)
     {
-        if (this.NextBlock != null && this.NextBlock is FlowBlock)
-        {
-            operatingRobotBase.SetWaitingBlock(this.NextBlock as FlowBlock);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
+        return this.NextBlock as FlowBlock;
     }
 
 }

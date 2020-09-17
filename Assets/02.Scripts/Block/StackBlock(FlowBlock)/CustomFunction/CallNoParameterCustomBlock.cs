@@ -15,10 +15,6 @@ public sealed class CallNoParameterCustomBlock : CallCustomBlock
     {
         this.definitionNoParameterCustomBlock = definitionNoParameterCustomBlock;
     }
-    sealed public override void Operation(RobotBase operatingRobotBase)
-    {
-        base.Operation(operatingRobotBase);
-    }
-
+   
    
 }

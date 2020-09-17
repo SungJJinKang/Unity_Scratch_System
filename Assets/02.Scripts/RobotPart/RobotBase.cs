@@ -165,11 +165,11 @@ public sealed class RobotBase : RobotPart
     /// </summary>
     private Dictionary<DefinitionCustomBlock, Dictionary<string, string>> CustomBlockParameterVariables;
 
+
     /// <summary>
-    /// Init this.CustomBlockLocalVariable
+    /// Init CustomBlockParameterVariables
     /// </summary>
-    /// <param name="CustomBlockLocalVariableKeyArray"></param>
-    /// <param name="maintainOriginalValue">If MemoryVariable have same key with FunctionLocalVariableKeyArray, </param>
+    /// <param name="customBlockDefinitionBlock">Custom block definition block.</param>
     private void InitCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock)
     { 
         if(customBlockDefinitionBlock == null)
@@ -207,9 +207,16 @@ public sealed class RobotBase : RobotPart
     /// <param name="value"></param>
     public void SetCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock, string parameterName, string value)
     {
+        if (this.CustomBlockParameterVariables == null)
+        {
+            Debug.LogError("Plesae InitCustomBlockLocalVariables");
+            return;
+        }
+
         if (this.CustomBlockParameterVariables.ContainsKey(customBlockDefinitionBlock) == false || this.CustomBlockParameterVariables[customBlockDefinitionBlock].ContainsKey(parameterName) == false)
         {
-            Debug.LogError("Plesae InitCustomBlockLocalVariables : " + customBlockDefinitionBlock.CustomBlockName + ",  Parameter Name : " + parameterName);
+            Debug.LogError("Plesae Add DefinitionCustomBlock : " + customBlockDefinitionBlock.CustomBlockName + ",  Parameter Name : " + parameterName);
+            return;
         }
 
         this.CustomBlockParameterVariables[customBlockDefinitionBlock][parameterName] = value;
@@ -218,9 +225,16 @@ public sealed class RobotBase : RobotPart
 
     public string GetCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock, string parameterName)
     {
+        if (this.CustomBlockParameterVariables == null)
+        {
+            Debug.LogError("Plesae InitCustomBlockLocalVariables");
+            return "";
+        }
+
         if (this.CustomBlockParameterVariables.ContainsKey(customBlockDefinitionBlock) == false || this.CustomBlockParameterVariables[customBlockDefinitionBlock].ContainsKey(parameterName) == false)
         {
-            Debug.LogError("Plesae InitCustomBlockLocalVariables : " + customBlockDefinitionBlock.CustomBlockName + ",  Parameter Name : " + parameterName);
+            Debug.LogError("Plesae Add DefinitionCustomBlock : " + customBlockDefinitionBlock.CustomBlockName + ",  Parameter Name : " + parameterName);
+            return "";
         }
 
         return string.Copy(this.CustomBlockParameterVariables[customBlockDefinitionBlock][parameterName]);
@@ -242,11 +256,12 @@ public sealed class RobotBase : RobotPart
     {
         if(this.RobotSourceCode.IsEventBlockExist(eventName))
         {
-            this.BlockCallStack.Push(this.WaitingBlock); // Push Current WaitingBlock To BlockCallStack
-
             EventBlock eventBlock = this.RobotSourceCode.GetEventBlock(eventName); // Set EventBlock To WaitingBlock
             if (eventBlock != null)
+            {
+                this.PushToBlockCallStack(this.WaitingBlock);
                 this.SetWaitingBlock(eventBlock);
+            }
         }
     
     }
@@ -275,32 +290,77 @@ public sealed class RobotBase : RobotPart
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// </summary>
-    public Stack<FlowBlock> BlockCallStack;
+    private Stack<FlowBlock> BlockCallStack;
 
+    public void PushToBlockCallStack(FlowBlock returnedFlowBlock)
+    {
+        if (this.BlockCallStack == null)
+        {
+            this.BlockCallStack = new Stack<FlowBlock>();
+        }
+
+        if (returnedFlowBlock == null)
+            return;
+
+        this.BlockCallStack.Push(returnedFlowBlock);
+
+    }
+
+
+    public FlowBlock PopBlockCallStack()
+    {
+        if (this.BlockCallStack == null)
+        {
+            this.BlockCallStack = new Stack<FlowBlock>();
+        }
+
+        if(this.BlockCallStack.Count > 0)
+        {
+            return this.BlockCallStack.Pop();
+        }
+        else
+        {
+            return null;
+        }
+
+    }
 
     public void SetWaitingBlock(FlowBlock flowBlock)
     {
         this.WaitingBlock = flowBlock;
     }
+
     public void ExecuteWaitingBlock(float deltaTime)
     {
         this.WaitingTime += deltaTime; // Add WaitingTime
 
         if (this.WaitingBlock == null)
-            SetWaitingBlock(this.RobotSourceCode.LoopedBlock); // If There is no WaitingBlock, Set LoopedBlock To WaitingBlock
+        {
+            //If WaitingBlock is null, Set Top Of BlockCallStack ( Popped ) To WaitingBlock
+            this.SetWaitingBlock(this.PopBlockCallStack()); 
+        }
 
+        if (this.WaitingBlock == null)
+        {
+            //Still WaitingBlock is null, Set Top Of LoopedBlock To WaitingBlock
+            this.SetWaitingBlock(this.RobotSourceCode.LoopedBlock);
+        }
 
-        FlowBlock.FlowBlockState flowBlockState = this.WaitingBlock.StartFlowBlock(this); // Start WaitingBlock
+        if (this.WaitingBlock == null)
+        {
+            return;
+        }
+            
 
+        FlowBlock.FlowBlockState flowBlockState = this.WaitingBlock.StartFlowBlock(this, out FlowBlock nextBlock); // Start WaitingBlock
         switch (flowBlockState)
         {
-            case FlowBlock.FlowBlockState.ExitFlowAfterOperation:
-                // If Exit Flow ( There is no more NextBlock )
-                // Set Top Block Of BlockCallStack To WaitingBlock newly
-                if(this.BlockCallStack.Count > 0)
-                {
-                    SetWaitingBlock(this.BlockCallStack.Pop()); 
-                }
+            case FlowBlock.FlowBlockState.WaitDurationTime:
+                break;
+
+
+            case FlowBlock.FlowBlockState.OperationExecuted: 
+                this.SetWaitingBlock(nextBlock);
                 break;
         }
     }
@@ -314,20 +374,13 @@ public sealed class RobotBase : RobotPart
             return;
         }
 
-        IsInitBlockCalled = true;
+        this.IsInitBlockCalled = true;
+
+        this.PushToBlockCallStack(this.WaitingBlock);
         this.SetWaitingBlock(this.RobotSourceCode.InitBlock);
     }
 
-    public void SetLoopedBlockToWaitingBlock()
-    {
-        if (this.RobotSourceCode.LoopedBlock == null)
-        {
-            Debug.LogError("this.RobotSourceCode.LoopedBlock is null");
-            return;
-        }
-
-        this.SetWaitingBlock(this.RobotSourceCode.LoopedBlock);
-    }
+  
 
     #endregion
 

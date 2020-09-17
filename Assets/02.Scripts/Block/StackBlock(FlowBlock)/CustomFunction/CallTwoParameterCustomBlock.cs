@@ -22,7 +22,7 @@ public sealed class CallTwoParameterCustomBlock : CallCustomBlock, IContainingPa
     /// </summary>
     public ReporterBlock Input2 { get; set; }
 
-    sealed public override void Operation(RobotBase operatingRobotBase)
+    sealed protected override void PassParameterToOperatingRobotBase(RobotBase operatingRobotBase)
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
         if (this.Input1 != null)
@@ -31,8 +31,6 @@ public sealed class CallTwoParameterCustomBlock : CallCustomBlock, IContainingPa
         if (this.Input2 != null)
             operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionTwoParameterCustomBlock.Input2Name, this.Input2.GetReporterStringValue(operatingRobotBase));
 
-      
-        base.Operation(operatingRobotBase);
     }
 
    

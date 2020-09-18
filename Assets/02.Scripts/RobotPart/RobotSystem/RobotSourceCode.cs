@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 
@@ -15,7 +14,7 @@ public class RobotSourceCode
     public RobotSourceCode()
     {
         this.IsEditing = false;
-        this.sourceCodeName = "";
+        this.sourceCodeName = System.String.Empty;
 
         this.initBlock = null;
         this.loopedBlock = null;

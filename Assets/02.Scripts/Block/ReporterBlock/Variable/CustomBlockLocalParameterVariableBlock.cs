@@ -27,7 +27,7 @@ public sealed class CustomBlockLocalParameterVariableBlock : ReporterBlock
         }
         else
         {
-            return "";
+            return System.String.Empty;
         }
     }
 }

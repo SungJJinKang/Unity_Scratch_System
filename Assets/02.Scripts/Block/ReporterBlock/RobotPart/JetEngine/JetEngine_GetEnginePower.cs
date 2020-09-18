@@ -10,7 +10,7 @@ public sealed class JetEngine_GetEnginePower : ReporterBlock, IJetEngineBlockTyp
         }
         else
         {
-            return "";
+            return System.String.Empty;
         }   
     }
 }

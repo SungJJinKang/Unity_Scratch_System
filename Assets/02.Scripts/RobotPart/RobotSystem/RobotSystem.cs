@@ -149,8 +149,14 @@ public class RobotSystem : MonoBehaviour
     private Dictionary<string, RobotSourceCode> StoredRobotSourceCode;
     public bool AddStoredRobotSourceCodeTemplate(RobotSourceCode robotSourceCode)
     {
-        if (robotSourceCode == null || this.StoredRobotSourceCode.ContainsKey(robotSourceCode.SourceCodeName) == true)
+        if (robotSourceCode == null)
             return false;
+
+        if(this.StoredRobotSourceCode.ContainsKey(robotSourceCode.SourceCodeName) == true)
+        {
+            Debug.LogError("Try AddStoredRobotSourceCodeTemplate. SourceCodeName : " + robotSourceCode.SourceCodeName);
+            return false;
+        }
 
         this.StoredRobotSourceCode.Add(robotSourceCode.SourceCodeName, robotSourceCode);
         return true;

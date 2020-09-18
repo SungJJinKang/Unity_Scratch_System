@@ -2,8 +2,11 @@
 
 public sealed class LiteralBlock : ReporterBlock
 {
-    public LiteralBlock(string value = "")
+    public LiteralBlock(string value)
     {
+        if (String.IsNullOrEmpty(value))
+            value = System.String.Empty;
+
         this.LiteralValue = value;
     }
 

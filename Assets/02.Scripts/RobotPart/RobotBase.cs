@@ -149,7 +149,7 @@ public sealed class RobotBase : RobotPart
         if (this.RobotGlobalVariable.ContainsKey(key) == false)
         {
             Debug.LogError("Robot Global Variable Dont Have Key : " + key);
-            return "";
+            return String.Empty;
         }
 
         return string.Copy(this.RobotGlobalVariable[key]);
@@ -198,7 +198,7 @@ public sealed class RobotBase : RobotPart
 
         for (int i = 0; i < customBlockDefinitionBlock.ParameterNames.Length; i++)
         {
-            this.CustomBlockParameterVariables[customBlockDefinitionBlock].Add(customBlockDefinitionBlock.ParameterNames[i], ""); // Init Parameter Keys with customBlockDefinitionBlock;
+            this.CustomBlockParameterVariables[customBlockDefinitionBlock].Add(customBlockDefinitionBlock.ParameterNames[i], String.Empty); // Init Parameter Keys with customBlockDefinitionBlock;
         }
         
     }
@@ -235,13 +235,13 @@ public sealed class RobotBase : RobotPart
         if (this.CustomBlockParameterVariables == null)
         {
             Debug.LogError("Plesae InitCustomBlockLocalVariables");
-            return "";
+            return String.Empty;
         }
 
         if (this.CustomBlockParameterVariables.ContainsKey(customBlockDefinitionBlock) == false || this.CustomBlockParameterVariables[customBlockDefinitionBlock].ContainsKey(parameterName) == false)
         {
             Debug.LogError("Plesae Add DefinitionCustomBlock : " + customBlockDefinitionBlock.CustomBlockName + ",  Parameter Name : " + parameterName);
-            return "";
+            return String.Empty;
         }
 
         return string.Copy(this.CustomBlockParameterVariables[customBlockDefinitionBlock][parameterName]);

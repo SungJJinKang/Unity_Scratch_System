@@ -4,7 +4,7 @@ public sealed class RobotBase_GetRobotUniqueId : ReporterBlock, IJetEngineBlockT
     public override string GetReporterStringValue(RobotBase operatingRobotBase)
     {
         if (operatingRobotBase == null)
-            return "";
+            return System.String.Empty;
         else
             return operatingRobotBase.UniqueRobotId;
     }

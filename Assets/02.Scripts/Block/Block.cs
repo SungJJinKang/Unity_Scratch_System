@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-/// <summary>
+﻿/// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
 /// </summary>

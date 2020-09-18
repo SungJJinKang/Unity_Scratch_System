@@ -25,7 +25,7 @@ public sealed class VariableBlock : ReporterBlock, IVariableBlockType
         }
         else
         {
-            return "";
+            return System.String.Empty;
         }
     }
 }

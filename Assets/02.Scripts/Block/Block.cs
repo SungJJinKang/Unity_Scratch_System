@@ -5,7 +5,7 @@
 [System.Serializable]
 public abstract class Block
 {
-    
+    public byte BlockIndexInSouceCode;
 
     /// <summary>
     /// Check If All parameters is filled?
@@ -55,46 +55,12 @@ public abstract class Block
  
 }
 
-public interface FlowBlockType 
-{
-    /// <summary>
-    /// Get Block DurationTime
-    /// </summary>
-    /// <returns>The time.</returns>
-    /// <param name="operatingRobotBase">Operating robot base.</param>
-    //float GetDurationTime(RobotBase operatingRobotBase);
-
-    float DurationTime { get; }
-
-    /// <summary>
-    /// Start Flow
-    /// </summary>
-    bool StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock);
-
-    /// <summary>
-    /// Opeate Block Work
-    /// </summary>
-    void Operation(RobotBase operatingRobotBase);
-
-
-    /// <summary>
-    /// EndFlowBlock
-    /// And Start NextBlock
-    /// </summary>
-    /// <param name="operatingRobotBase"></param>
-    /// <returns>
-    /// If There is NextBlock , return true.
-    /// otherwise, return false
-    /// </returns>
-    FlowBlock EndFlowBlock(RobotBase operatingRobotBase);
-
-}
 
 /// <summary>
 /// This Block can have PreviousBlock
 /// StackBlock, C Block, CapBlock
 /// </summary>
-public interface UpNotchBlock : FlowBlockType
+public interface UpNotchBlock
 {
     FlowBlock PreviousBlock { get; set; }
 
@@ -104,7 +70,7 @@ public interface UpNotchBlock : FlowBlockType
 /// This Block can have NextBlock
 /// Hat Block, StackBlock, C Block
 /// </summary>
-public interface DownBumpBlock : FlowBlockType
+public interface DownBumpBlock
 {
     FlowBlock NextBlock { get; set; }
 

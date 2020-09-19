@@ -3,7 +3,7 @@
 
 /// </summary>
 [System.Serializable]
-public sealed class DefinitionOneParameterCustomBlock : DefinitionCustomBlock, IContainingParameter<LiteralBlock>
+public sealed class DefinitionOneParameterCustomBlock : DefinitionCustomBlock, IContainingParameter<LiteralReporterBlock>
 {
     public DefinitionOneParameterCustomBlock(string customBlockName, string input1Name) : base(customBlockName)
     {
@@ -13,7 +13,7 @@ public sealed class DefinitionOneParameterCustomBlock : DefinitionCustomBlock, I
     }
 
 
-    public LiteralBlock Input1 { get ; set ; }
+    public LiteralReporterBlock Input1 { get ; set ; }
     public string Input1Name;
 
     /// <summary>
@@ -23,7 +23,7 @@ public sealed class DefinitionOneParameterCustomBlock : DefinitionCustomBlock, I
     /// <param name="passedReporterBlock">Passed reporter block.</param>
     public void CopyParamter(RobotBase operatingRobotBase, ReporterBlock passedReporterBlock)
     {
-        this.Input1 = new LiteralBlock(passedReporterBlock.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input1 = new LiteralReporterBlock(passedReporterBlock.GetReporterStringValue(operatingRobotBase)); // 
     }
 
     public override void Operation(RobotBase operatingRobotBase)

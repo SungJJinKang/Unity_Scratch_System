@@ -13,7 +13,7 @@
       <ConstructorParameter1>Defination 커스톰 블록 CustomBlockName 넣으면 된다</ConstructorParameter1>
       
       <Input1>
-        <Block>
+        <Block type = >
           <BlockClassName>블록 클래스명</BlockClassName>
           <ConstructorParameter1></ConstructorParameter1>
           <ConstructorParameter2></ConstructorParameter2>
@@ -313,19 +313,11 @@
 
 
 
-  <VariableTemplateList>
-
-    <VariableTemplate>
-      <VariableKey>무조건 string으로 취급</VariableKey>
-      <VariableValue>무조건 string 취급</VariableValue>
-    </VariableTemplate>
-
-    <VariableTemplate>
-      <VariableKey>무조건 string으로 취급</VariableKey>
-      <VariableValue>무조건 string 취급</VariableValue>
-    </VariableTemplate>
-
-  </VariableTemplateList>
+  <Variables>
+        <variable key = "Please Enter Variable Key">Please Enter Variable Value</variable>
+        <variable key = "Please Enter Variable Key">Please Enter Variable Value</variable>
+        
+  </Variables>
 
 
 

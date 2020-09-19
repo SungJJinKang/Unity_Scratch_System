@@ -149,6 +149,7 @@ public class RobotSourceCode
     /// Please Check if Same Function Name is existing In Block
     /// This can be called InternetAntenna_SendCommandThroughInternet!!!!!
     /// </summary>
+    [SerializeField]
     private List<DefinitionCustomBlock> StoredCustomBlockDefinitionBlockList;
 
     private DefinitionCustomBlock[] StoredCustomBlockDefinitionBlockListCache;

@@ -3,7 +3,7 @@
 
 /// </summary>
 [System.Serializable]
-public sealed class DefinitionTwoParameterCustomBlock : DefinitionCustomBlock, IContainingParameter<LiteralBlock, LiteralBlock>
+public sealed class DefinitionTwoParameterCustomBlock : DefinitionCustomBlock, IContainingParameter<LiteralReporterBlock, LiteralReporterBlock>
 {
     public DefinitionTwoParameterCustomBlock(string customBlockName, string inputName1, string inputName2) : base(customBlockName)
     {
@@ -13,10 +13,10 @@ public sealed class DefinitionTwoParameterCustomBlock : DefinitionCustomBlock, I
         ParameterNames = new string[] { this.Input1Name, this.Input2Name };
     }
 
-    public LiteralBlock Input1 { get ; set ; }
+    public LiteralReporterBlock Input1 { get ; set ; }
     public string Input1Name;
 
-    public LiteralBlock Input2 { get; set; }
+    public LiteralReporterBlock Input2 { get; set; }
     public string Input2Name;
 
     /// <summary>
@@ -27,8 +27,8 @@ public sealed class DefinitionTwoParameterCustomBlock : DefinitionCustomBlock, I
     /// <param name="passedReporterBlock2">Passed reporter block2.</param>
     public void CopyParamter(RobotBase operatingRobotBase, ReporterBlock passedReporterBlock1, ReporterBlock passedReporterBlock2)
     {
-        this.Input1 = new LiteralBlock(passedReporterBlock1.GetReporterStringValue(operatingRobotBase)); // 
-        this.Input2 = new LiteralBlock(passedReporterBlock2.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input1 = new LiteralReporterBlock(passedReporterBlock1.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input2 = new LiteralReporterBlock(passedReporterBlock2.GetReporterStringValue(operatingRobotBase)); // 
     }
 
     public override void Operation(RobotBase operatingRobotBase)

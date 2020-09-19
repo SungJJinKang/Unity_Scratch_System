@@ -101,9 +101,9 @@ public class RobotSystem : MonoBehaviour
         }
         */
 
-        if (this.SpawnedRobotDictionary.ContainsKey(robot.UniqueRobotId) == false)
+        if (this.SpawnedRobotDictionary.ContainsKey(robot.RobotUniqueId) == false)
         {
-            this.SpawnedRobotDictionary.Add(robot.UniqueRobotId, robot);
+            this.SpawnedRobotDictionary.Add(robot.RobotUniqueId, robot);
         }
 
         if(this.SpawnedRobotList.Contains(robot) == false)
@@ -125,7 +125,7 @@ public class RobotSystem : MonoBehaviour
         }
         */
 
-        this.SpawnedRobotDictionary.Remove(robot.UniqueRobotId);
+        this.SpawnedRobotDictionary.Remove(robot.RobotUniqueId);
         this.SpawnedRobotList.Remove(robot);
 
     }

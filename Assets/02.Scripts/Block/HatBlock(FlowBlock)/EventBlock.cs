@@ -8,13 +8,13 @@
 /// 
 /// In Block Editor, Place EventBlock, And Set Event Name To Input1, And Attach next block To This Placed Event Block
 /// </summary>
-public sealed class EventBlock : HatBlock, IContainingParameter<LiteralBlock>
+public sealed class EventBlock : HatBlock, IContainingParameter<LiteralReporterBlock>
 {
     /// <summary>
     /// Event Name
     /// </summary>
     /// <value>The input1.</value>
-    public LiteralBlock Input1 { get ; set ; }
+    public LiteralReporterBlock Input1 { get ; set ; }
 
     sealed public override void Operation(RobotBase operatingRobotBase)
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-public sealed class LiteralBlock : ReporterBlock
+public sealed class LiteralReporterBlock : ReporterBlock
 {
-    public LiteralBlock(string value)
+    public LiteralReporterBlock(string value)
     {
         if (String.IsNullOrEmpty(value))
             value = System.String.Empty;

@@ -23,10 +23,18 @@ public sealed class RobotBase : RobotPart
     }
 
     [SerializeField]
-    public string UniqueRobotId
+    private string robotUniqueId;
+
+    public string RobotUniqueId
     {
-        private set;
-        get;
+        private set
+        {
+            this.robotUniqueId = value;
+        }
+        get
+        {
+            return this.robotUniqueId;
+        }
     }
 
     #region RobotPart
@@ -35,6 +43,8 @@ public sealed class RobotBase : RobotPart
     /// The attacehd robot parts.
     /// this can't contain RobotBase
     /// </summary>
+    [HideInInspector]
+    [SerializeField]
     private List<RobotPart> AttacehdRobotParts;
     public bool AttachRobotPart(RobotPart robotPart)
     {
@@ -102,6 +112,18 @@ public sealed class RobotBase : RobotPart
     [SerializeField]
     private Dictionary<string, string> RobotGlobalVariable;
 
+#if UNITY_EDITOR
+    public List<KeyValuePair<string,string>> RobotGlobalVariableKeyValuePair
+    {
+        get
+        {
+            if (RobotGlobalVariable == null)
+                return null;
+
+            return this.RobotGlobalVariable.ToList();
+        }
+    }
+#endif
     /*
     /// <summary>
     /// Clean Only Value Of Dictionary
@@ -171,7 +193,18 @@ public sealed class RobotBase : RobotPart
     /// </summary>
     [SerializeField]
     private Dictionary<DefinitionCustomBlock, Dictionary<string, string>> CustomBlockParameterVariables;
+#if UNITY_EDITOR
+    public List<KeyValuePair<DefinitionCustomBlock, Dictionary<string, string>>> CustomBlockParameterVariablesKeyValuePair
+    {
+        get
+        {
+            if (CustomBlockParameterVariables == null)
+                return null;
 
+            return this.CustomBlockParameterVariables.ToList();
+        }
+    }
+#endif
 
     /// <summary>
     /// Init CustomBlockParameterVariables
@@ -198,7 +231,7 @@ public sealed class RobotBase : RobotPart
 
         for (int i = 0; i < customBlockDefinitionBlock.ParameterNames.Length; i++)
         {
-            this.CustomBlockParameterVariables[customBlockDefinitionBlock].Add(customBlockDefinitionBlock.ParameterNames[i], String.Empty); // Init Parameter Keys with customBlockDefinitionBlock;
+            this.CustomBlockParameterVariables[customBlockDefinitionBlock].Add(customBlockDefinitionBlock.ParameterNames[i], string.Empty); // Init Parameter Keys with customBlockDefinitionBlock;
         }
         
     }
@@ -235,13 +268,13 @@ public sealed class RobotBase : RobotPart
         if (this.CustomBlockParameterVariables == null)
         {
             Debug.LogError("Plesae InitCustomBlockLocalVariables");
-            return String.Empty;
+            return string.Empty;
         }
 
         if (this.CustomBlockParameterVariables.ContainsKey(customBlockDefinitionBlock) == false || this.CustomBlockParameterVariables[customBlockDefinitionBlock].ContainsKey(parameterName) == false)
         {
             Debug.LogError("Plesae Add DefinitionCustomBlock : " + customBlockDefinitionBlock.CustomBlockName + ",  Parameter Name : " + parameterName);
-            return String.Empty;
+            return string.Empty;
         }
 
         return string.Copy(this.CustomBlockParameterVariables[customBlockDefinitionBlock][parameterName]);
@@ -279,7 +312,8 @@ public sealed class RobotBase : RobotPart
     [SerializeField]
     public float WaitingTime = 0;
 
-    private FlowBlock WaitingBlock;
+    [SerializeField]
+    private FlowBlock WaitingBlock = null;
 
     /// <summary>
     /// ex ) After Call CallCustomBlock And Finished CustomBlock operation
@@ -297,7 +331,22 @@ public sealed class RobotBase : RobotPart
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// </summary>
+    [SerializeField]
     private Stack<FlowBlock> BlockCallStack;
+
+#if UNITY_EDITOR
+
+    /*
+     *if you push 1, 2, 3, 4, 5 then ToList will give you 5, 4, 3, 2, 1. 
+     */
+    public List<FlowBlock> BlockCallStackList
+    {
+        get
+        {
+            return BlockCallStack.ToList();
+        }
+    }
+#endif
 
     public void PushToBlockCallStack(FlowBlock returnedFlowBlock)
     {

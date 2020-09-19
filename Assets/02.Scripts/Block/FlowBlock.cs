@@ -1,8 +1,7 @@
-﻿using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
-public abstract class FlowBlock : Block, FlowBlockType
+public abstract class FlowBlock : Block
 {
    
     /// <summary>
@@ -46,7 +45,6 @@ public abstract class FlowBlock : Block, FlowBlockType
         NextBlock = this.EndFlowBlock(operatingRobotBase);
         return true;
        
-        
     }
 
 

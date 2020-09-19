@@ -6,6 +6,6 @@ public sealed class RobotBase_GetRobotUniqueId : ReporterBlock, IJetEngineBlockT
         if (operatingRobotBase == null)
             return System.String.Empty;
         else
-            return operatingRobotBase.UniqueRobotId;
+            return operatingRobotBase.RobotUniqueId;
     }
 }

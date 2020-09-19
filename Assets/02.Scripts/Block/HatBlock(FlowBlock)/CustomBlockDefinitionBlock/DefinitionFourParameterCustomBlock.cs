@@ -3,7 +3,7 @@
 
 /// </summary>
 [System.Serializable]
-public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, IContainingParameter<LiteralBlock, LiteralBlock, LiteralBlock, LiteralBlock>
+public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, IContainingParameter<LiteralReporterBlock, LiteralReporterBlock, LiteralReporterBlock, LiteralReporterBlock>
 {
     public DefinitionFourParameterCustomBlock(string customBlockName, string inputName1, string inputName2, string inputName3, string inputName4) : base(customBlockName)
     {
@@ -15,16 +15,16 @@ public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, 
         ParameterNames = new string[] { this.Input1Name, this.Input2Name, this.Input3Name, this.Input4Name };
     }
 
-    public LiteralBlock Input1 { get; set; }
+    public LiteralReporterBlock Input1 { get; set; }
     public string Input1Name;
 
-    public LiteralBlock Input2 { get; set; }
+    public LiteralReporterBlock Input2 { get; set; }
     public string Input2Name;
 
-    public LiteralBlock Input3 { get; set; }
+    public LiteralReporterBlock Input3 { get; set; }
     public string Input3Name;
 
-    public LiteralBlock Input4 { get; set; }
+    public LiteralReporterBlock Input4 { get; set; }
     public string Input4Name;
 
     
@@ -39,10 +39,10 @@ public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, 
     /// <param name="passedReporterBlock4">Passed reporter block4.</param>
     public void CopyParamter(RobotBase operatingRobotBase, ReporterBlock passedReporterBlock1, ReporterBlock passedReporterBlock2, ReporterBlock passedReporterBlock3, ReporterBlock passedReporterBlock4)
     {
-        this.Input1 = new LiteralBlock(passedReporterBlock1.GetReporterStringValue(operatingRobotBase)); // 
-        this.Input2 = new LiteralBlock(passedReporterBlock2.GetReporterStringValue(operatingRobotBase)); // 
-        this.Input3 = new LiteralBlock(passedReporterBlock3.GetReporterStringValue(operatingRobotBase)); // 
-        this.Input4 = new LiteralBlock(passedReporterBlock4.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input1 = new LiteralReporterBlock(passedReporterBlock1.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input2 = new LiteralReporterBlock(passedReporterBlock2.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input3 = new LiteralReporterBlock(passedReporterBlock3.GetReporterStringValue(operatingRobotBase)); // 
+        this.Input4 = new LiteralReporterBlock(passedReporterBlock4.GetReporterStringValue(operatingRobotBase)); // 
     }
 
     public override void Operation(RobotBase operatingRobotBase)

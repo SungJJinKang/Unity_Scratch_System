@@ -1,7 +1,8 @@
-﻿/// <summary>
+﻿using System;
+/// <summary>
 /// Thie interface attached to Block that can be parameter
 /// </summary>
-public interface ICanBeParameter
+public interface ICanBeParameter : ICloneable
 {
 }
 
@@ -10,7 +11,7 @@ public interface ICanBeParameter
 /// If TwoParameter inherit OneParameter, 
 /// (TwoParameter Is Onparameter) return True . This cause bugs
 /// //
-public interface IContainingParameter
+public interface IContainingParameter 
 {
   
 }

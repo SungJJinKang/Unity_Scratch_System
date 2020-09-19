@@ -21,8 +21,6 @@ public class RobotBaseEditor : Editor
     SerializedProperty attacehdRobotPartsSP;
 
     SerializedProperty waitingTimeSP;
-    SerializedProperty waitingBlockSP;
-    SerializedProperty blockCallStackSP;
     private void Awake()
     {
 
@@ -50,8 +48,6 @@ public class RobotBaseEditor : Editor
         attacehdRobotPartsSP = robotBaseSO.FindProperty("AttacehdRobotParts");
 
         waitingTimeSP = robotBaseSO.FindProperty("WaitingTime");
-        waitingBlockSP = robotBaseSO.FindProperty("WaitingBlock");
-        blockCallStackSP = robotBaseSO.FindProperty("BlockCallStack");
     }
     /*
     TileBaseType selectedTileBaseType;
@@ -248,84 +244,7 @@ public class RobotBaseEditor : Editor
             EditorGUILayout.Space(10);
 
             ShowWaitBlockEditor();
-            /*
-            tileObject.TileObjectType = (TileObject.TileObjectTypes)EditorGUILayout.EnumPopup(tileObject.TileObjectType);
-            switch (tileObject.TileObjectType)
-            {
-                case TileObject.TileObjectTypes.TextureBasedTile:
 
-                    SerializedProperty tileBaseAssetSP = tileObjectSO.FindProperty("tileBaseAsset");
-                    UnityEngine.Object prevTileBase = tileBaseAssetSP.objectReferenceValue;
-                    EditorGUILayout.PropertyField(tileBaseAssetSP);
-
-                    TileBase nowTileBase = tileBaseAssetSP.objectReferenceValue as TileBase;
-                    if (prevTileBase != nowTileBase)
-                    {//TileBaseAsset is changed
-                        if (nowTileBase != null)
-                        {//TileBaseAsset is set
-                            SetTileBasePivot(nowTileBase); //If TIileBaseAsset is set newly, Set Pivot of TileBase Asset Sprite 
-                        }
-                    }
-
-                    ///Show Create TileBase Button If TileBaseAsset is null
-                    if (nowTileBase == null)
-                    {
-                        ShowCreateTileBaseButton(tileObject);
-                    }
-                    else
-                    {
-                        if (GUILayout.Button("Set Pivot Of Sprite"))
-                        {
-                            SetTileBasePivot(nowTileBase);
-                        }
-                    }
-                    tileBaseAssetSP.serializedObject.ApplyModifiedProperties();
-
-                    break;
-
-                case TileObject.TileObjectTypes.GameObjectBasedTile:
-                    SerializedProperty gameObjectBasedTileSP = tileObjectSO.FindProperty("gameObjectBasedTile");
-                    EditorGUILayout.PropertyField(gameObjectBasedTileSP);
-                    gameObjectBasedTileSP.serializedObject.ApplyModifiedProperties();
-                    break;
-            }
-
-            EditorGUILayout.Space(10);
-            EditorGUILayout.LabelField("TileObject Static Information", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField("Name : ", tileObject.TileObjectName);
-            EditorGUILayout.Space(5);
-
-            SerializedProperty multiplePosTileObjectSP = tileObjectSO.FindProperty("multiplePosTileObject");
-            EditorGUILayout.PropertyField(multiplePosTileObjectSP);
-            if (multiplePosTileObjectSP.boolValue == true)
-            {
-                if (tileObject.TileObjectWidth <= 1 && tileObject.TileObjectHeight <= 1)
-                {
-                    GUIStyle gUIStyle = new GUIStyle();
-                    gUIStyle.richText = true;
-
-                    EditorGUILayout.LabelField("<color=red>At Least One Of Width between Height is bigger than number 1</color>", gUIStyle);
-                }
-                tileObject.TileObjectWidth = EditorGUILayout.IntField("TileObjectWidth : ", tileObject.TileObjectWidth);
-                tileObject.TileObjectHeight = EditorGUILayout.IntField("TileObjectHeight : ", tileObject.TileObjectHeight);
-
-
-            }
-
-
-
-            multiplePosTileObjectSP.serializedObject.ApplyModifiedProperties();
-
-            EditorGUILayout.Space(5);
-            SerializedProperty tileFlagsSP = tileObjectSO.FindProperty("tileFlags");
-            EditorGUILayout.PropertyField(tileFlagsSP);
-            tileFlagsSP.serializedObject.ApplyModifiedProperties();
-
-            tileObject.DefaultDurability = (byte)EditorGUILayout.IntField("DefaultDurability : ", tileObject.DefaultDurability);
-
-            tileObjectSO.ApplyModifiedProperties();
-            EditorUtility.SetDirty(tileObject);
-            */
 
             robotBaseSO.ApplyModifiedProperties();
         }
@@ -338,10 +257,16 @@ public class RobotBaseEditor : Editor
         EditorGUI.indentLevel += 2;
 
         waitingTimeSP.floatValue = EditorGUILayout.FloatField("Waiting Time", waitingTimeSP.floatValue);
-
-        EditorGUILayout.Space(1);
-
-        EditorGUILayout.PropertyField(waitingBlockSP, new GUIContent("Waiting Block"));
+        string waitingBlockType;
+        if(robotBase.WaitingBlock != null)
+        {
+            waitingBlockType = robotBase.WaitingBlock.GetType().Name;
+        }
+        else
+        {
+            waitingBlockType = System.String.Empty;
+        }
+        EditorGUILayout.LabelField("Waiting Block", waitingBlockType);
 
         EditorGUILayout.LabelField("BlockCallStack", SubSubTitleGUIStyle);
         List<FlowBlock> robotGlobalVariableKeyValuePair = robotBase.BlockCallStackList;

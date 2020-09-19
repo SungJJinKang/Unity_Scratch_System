@@ -1,9 +1,10 @@
-﻿/// <summary>
+﻿using System;
+/// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
 /// </summary>
 [System.Serializable]
-public abstract class Block
+public abstract class Block : ICloneable
 {
     public byte BlockIndexInSouceCode;
 
@@ -51,8 +52,47 @@ public abstract class Block
     
     }
 
-  
- 
+
+    public virtual object Clone()
+    {
+        Block clonedBlock = (Block)this.MemberwiseClone();
+        clonedBlock.BlockIndexInSouceCode = this.BlockIndexInSouceCode;
+
+        if (this is IContainingParameter<ICanBeParameter>)
+        {
+            IContainingParameter<ICanBeParameter> clonedBlockContainingParameter = clonedBlock as IContainingParameter<ICanBeParameter>;
+            IContainingParameter<ICanBeParameter> blockContainingParameter = this as IContainingParameter<ICanBeParameter>;
+            clonedBlockContainingParameter.Input1 = blockContainingParameter.Input1.Clone() as ICanBeParameter;
+        }
+        else if (this is IContainingParameter<ICanBeParameter, ICanBeParameter>)
+        {
+            IContainingParameter<ICanBeParameter, ICanBeParameter> clonedBlockContainingParameter = clonedBlock as IContainingParameter<ICanBeParameter, ICanBeParameter>;
+            IContainingParameter<ICanBeParameter, ICanBeParameter> blockContainingParameter = this as IContainingParameter<ICanBeParameter, ICanBeParameter>;
+            clonedBlockContainingParameter.Input1 = blockContainingParameter.Input1.Clone() as ICanBeParameter;
+            clonedBlockContainingParameter.Input2 = blockContainingParameter.Input2.Clone() as ICanBeParameter;
+        }
+        else if (this is IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter>)
+        {
+            IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter> clonedBlockContainingParameter = clonedBlock as IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter>;
+            IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter> blockContainingParameter = this as IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter>;
+            clonedBlockContainingParameter.Input1 = blockContainingParameter.Input1.Clone() as ICanBeParameter;
+            clonedBlockContainingParameter.Input2 = blockContainingParameter.Input2.Clone() as ICanBeParameter;
+            clonedBlockContainingParameter.Input3 = blockContainingParameter.Input3.Clone() as ICanBeParameter;
+        }
+        else if (this is IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter>)
+        {
+            IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter> clonedBlockContainingParameter = clonedBlock as IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter>;
+            IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter> blockContainingParameter = this as IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter>;
+            clonedBlockContainingParameter.Input1 = blockContainingParameter.Input1.Clone() as ICanBeParameter;
+            clonedBlockContainingParameter.Input2 = blockContainingParameter.Input2.Clone() as ICanBeParameter;
+            clonedBlockContainingParameter.Input3 = blockContainingParameter.Input3.Clone() as ICanBeParameter;
+            clonedBlockContainingParameter.Input4 = blockContainingParameter.Input4.Clone() as ICanBeParameter;
+        }
+
+        return clonedBlock;
+    }
+
+   
 }
 
 

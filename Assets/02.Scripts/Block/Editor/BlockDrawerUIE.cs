@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 // IngredientDrawerUIE
 [CustomPropertyDrawer(typeof(Block), true)]
-public class BlockDrawerUIE : PropertyDrawer
+public class BlockDrawerUI : PropertyDrawer
 {
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {

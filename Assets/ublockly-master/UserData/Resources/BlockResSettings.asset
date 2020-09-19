@@ -1,0 +1,285 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25e0c2162fdf4072833530d6c74a579, type: 3}
+  m_Name: BlockResSettings
+  m_EditorClassIdentifier: 
+  m_LoadType: 1
+  m_I18nFiles:
+  - IndexName: en
+    ResName: en
+    TextFile: {fileID: 4900000, guid: fb2b240724f9d41aabcf2ca6e37be0b1, type: 3}
+  m_BlockJsonFiles:
+  - IndexName: color
+    ResName: color
+    TextFile: {fileID: 4900000, guid: de2eb98efd5db484d8cd9af05397d406, type: 3}
+  - IndexName: coroutine
+    ResName: coroutine
+    TextFile: {fileID: 4900000, guid: 14b3c4755696d4d309a9c679f2260cc9, type: 3}
+  - IndexName: lists
+    ResName: lists
+    TextFile: {fileID: 4900000, guid: 3bd2777606c104fe9b11adcc2909df57, type: 3}
+  - IndexName: logic
+    ResName: logic
+    TextFile: {fileID: 4900000, guid: 8bc51b8dd772e480d893ec34fadf6b9c, type: 3}
+  - IndexName: loops
+    ResName: loops
+    TextFile: {fileID: 4900000, guid: e7bdd662f11a14d169ef05449a00fc69, type: 3}
+  - IndexName: math
+    ResName: math
+    TextFile: {fileID: 4900000, guid: 3e6180f677b424798b49ead1f46d58f2, type: 3}
+  - IndexName: procedures
+    ResName: procedures
+    TextFile: {fileID: 4900000, guid: 8ebb0af9c438947cc9330560c52ebbc4, type: 3}
+  - IndexName: text
+    ResName: text
+    TextFile: {fileID: 4900000, guid: 7881ae29bb5c648b5abcb1f131ba8c8f, type: 3}
+  - IndexName: variables
+    ResName: variables
+    TextFile: {fileID: 4900000, guid: d0e6cc79a30de40e6ab2a13928a03d85, type: 3}
+  m_ToolboxFiles:
+  - IndexName: default
+    ResName: toolbox_default
+    TextFile: {fileID: 4900000, guid: 5c0bdd5df6d904a27af2a1b56125a6e0, type: 3}
+  m_BlockViewPrefabPath: Assets/UBlocklyData/BlockGenPrefabs/
+  m_BlockViewPrefabs:
+  - IndexName: colour_picker
+    ResName: Block_colour_picker
+    Prefab: {fileID: 1465611821804190, guid: 9c45cd753686049bea63954b59419ac3, type: 2}
+  - IndexName: colour_random
+    ResName: Block_colour_random
+    Prefab: {fileID: 1207310192966428, guid: 6b1029bd20c3c44a3adf0cb86b571d7e, type: 2}
+  - IndexName: colour_rgb
+    ResName: Block_colour_rgb
+    Prefab: {fileID: 1747634555384724, guid: f6184f0b6c595428c8ab7b9ead1bc9d8, type: 2}
+  - IndexName: colour_blend
+    ResName: Block_colour_blend
+    Prefab: {fileID: 1447619914940670, guid: becec1d944cfc44168f975e02d37778b, type: 2}
+  - IndexName: coroutine_wait_time
+    ResName: Block_coroutine_wait_time
+    Prefab: {fileID: 1906182309932522, guid: 14e86cd47f3564fd99a9327413dd9fbf, type: 2}
+  - IndexName: coroutine_wait_frame
+    ResName: Block_coroutine_wait_frame
+    Prefab: {fileID: 1264785283244642, guid: 50612eca9966f479fb1fa436abae152a, type: 2}
+  - IndexName: lists_create_empty
+    ResName: Block_lists_create_empty
+    Prefab: {fileID: 1356445554713334, guid: d74e7b63112d34ca1bb7540dade0fdfd, type: 2}
+  - IndexName: lists_create_with
+    ResName: Block_lists_create_with
+    Prefab: {fileID: 1746063873015370, guid: b157bfa4a9a8c41f7a56214426531211, type: 2}
+  - IndexName: lists_repeat
+    ResName: Block_lists_repeat
+    Prefab: {fileID: 1486938131998802, guid: 676a0b5c88bdb4a5fa5a3aa1b6dd617a, type: 2}
+  - IndexName: lists_reverse
+    ResName: Block_lists_reverse
+    Prefab: {fileID: 1205181602299900, guid: 2f67c6e645fc1433780505dff49b9da6, type: 2}
+  - IndexName: lists_isEmpty
+    ResName: Block_lists_isEmpty
+    Prefab: {fileID: 1435734670986254, guid: 899b1316a0cfa40c08053a77cae59ef4, type: 2}
+  - IndexName: lists_length
+    ResName: Block_lists_length
+    Prefab: {fileID: 1610791716515878, guid: 44079d4786fed4477925700a1e73c9d1, type: 2}
+  - IndexName: lists_indexOf
+    ResName: Block_lists_indexOf
+    Prefab: {fileID: 1830237123071312, guid: 475fdf887e692477d8bfef82cd5da08f, type: 2}
+  - IndexName: lists_getIndex
+    ResName: Block_lists_getIndex
+    Prefab: {fileID: 1834605631611536, guid: 1bfc8b14e071c435e9470c05b17756e7, type: 2}
+  - IndexName: lists_removeIndex
+    ResName: Block_lists_removeIndex
+    Prefab: {fileID: 1050037533785988, guid: 5c2d67c9d1aef4fcf9ce191a3626d2b0, type: 2}
+  - IndexName: lists_setIndex
+    ResName: Block_lists_setIndex
+    Prefab: {fileID: 1445419409564872, guid: e0825bdae2c434ed6b17442ae91a6967, type: 2}
+  - IndexName: lists_getSublist
+    ResName: Block_lists_getSublist
+    Prefab: {fileID: 1093988833334602, guid: bc1c0d3177a554d699511f1958a4fb02, type: 2}
+  - IndexName: lists_sort
+    ResName: Block_lists_sort
+    Prefab: {fileID: 1625130127866358, guid: 3181038caa57444448d8ed848740fd4c, type: 2}
+  - IndexName: lists_split_from_text
+    ResName: Block_lists_split_from_text
+    Prefab: {fileID: 1656579415642046, guid: a2b8d1cb0c385419195f954c49a672c3, type: 2}
+  - IndexName: lists_join_text
+    ResName: Block_lists_join_text
+    Prefab: {fileID: 1288326793138250, guid: 715f01a43178c49e59ad2a912e3eaf8d, type: 2}
+  - IndexName: logic_boolean
+    ResName: Block_logic_boolean
+    Prefab: {fileID: 1889864885661034, guid: d94d52bbe30cd492cb75ff1a5304c03e, type: 2}
+  - IndexName: controls_if
+    ResName: Block_controls_if
+    Prefab: {fileID: 1117074530480194, guid: 5e21ab7fa36f84de2a93c1925e3b8af8, type: 2}
+  - IndexName: controls_ifelse
+    ResName: Block_controls_ifelse
+    Prefab: {fileID: 1859121599962358, guid: 47d1673c927ff436c95c8710ad7c18bb, type: 2}
+  - IndexName: logic_compare
+    ResName: Block_logic_compare
+    Prefab: {fileID: 1036173318232484, guid: 52191d19a50ab4a2e848fa0f0bd6d208, type: 2}
+  - IndexName: logic_operation
+    ResName: Block_logic_operation
+    Prefab: {fileID: 1182232289505296, guid: a45b294f3eef84d678e15aa0ebca9b3f, type: 2}
+  - IndexName: logic_negate
+    ResName: Block_logic_negate
+    Prefab: {fileID: 1163769856543022, guid: 7b876e2268bf84909a1e3b6c104494d7, type: 2}
+  - IndexName: logic_null
+    ResName: Block_logic_null
+    Prefab: {fileID: 1229071823837708, guid: 6bb8101c042b040e6bdbdaf79aead418, type: 2}
+  - IndexName: logic_ternary
+    ResName: Block_logic_ternary
+    Prefab: {fileID: 1567908026003738, guid: 9148f87e28b6e41369868c33d2c9cbfc, type: 2}
+  - IndexName: controls_repeat
+    ResName: Block_controls_repeat
+    Prefab: {fileID: 1488537060117062, guid: 842babb131d954bd1886c4b2562f8047, type: 2}
+  - IndexName: controls_whileUntil
+    ResName: Block_controls_whileUntil
+    Prefab: {fileID: 1941226635886938, guid: 896d9c3818a354bed9d619ae3f4994d0, type: 2}
+  - IndexName: controls_for
+    ResName: Block_controls_for
+    Prefab: {fileID: 1756221992743088, guid: dd5ecffe1a2734195a035c6e13f25efe, type: 2}
+  - IndexName: controls_forEach
+    ResName: Block_controls_forEach
+    Prefab: {fileID: 1179652875403592, guid: a2b7a73ec5bc14aba9884188df75e8ff, type: 2}
+  - IndexName: controls_flow_statements
+    ResName: Block_controls_flow_statements
+    Prefab: {fileID: 1132891097103806, guid: e8d5fb553c104410a91f8a65b51fd8c5, type: 2}
+  - IndexName: math_number
+    ResName: Block_math_number
+    Prefab: {fileID: 1424812960617624, guid: a8b1994ebf42a46a29574a72d4554515, type: 2}
+  - IndexName: math_arithmetic
+    ResName: Block_math_arithmetic
+    Prefab: {fileID: 1916070265110536, guid: 4f8c7cfbb62814d6fa11c3a7a3e39a4f, type: 2}
+  - IndexName: math_single
+    ResName: Block_math_single
+    Prefab: {fileID: 1881503398575132, guid: 716203a331e1142c28d0d7a2041d901a, type: 2}
+  - IndexName: math_trig
+    ResName: Block_math_trig
+    Prefab: {fileID: 1932284454983986, guid: 4997515c627b447dbbcd2f914e4f14ee, type: 2}
+  - IndexName: math_constant
+    ResName: Block_math_constant
+    Prefab: {fileID: 1227596878529306, guid: a409c9013b6334fdc981675d2f3fe739, type: 2}
+  - IndexName: math_number_property
+    ResName: Block_math_number_property
+    Prefab: {fileID: 1149568487181330, guid: a6f18c6241ccc40da8b76ba629fa875d, type: 2}
+  - IndexName: math_round
+    ResName: Block_math_round
+    Prefab: {fileID: 1984057413273830, guid: dffbdf4bea33f44d1840513a484503fe, type: 2}
+  - IndexName: math_on_list
+    ResName: Block_math_on_list
+    Prefab: {fileID: 1258550170750042, guid: 4fd9f79eb7ed843adafcd66ebd9c9340, type: 2}
+  - IndexName: math_modulo
+    ResName: Block_math_modulo
+    Prefab: {fileID: 1317164812014122, guid: 0e2c1ea4d20cd457f9ba8342a193571d, type: 2}
+  - IndexName: math_constrain
+    ResName: Block_math_constrain
+    Prefab: {fileID: 1761770366740070, guid: 2a3224d094ec8433c913721fd1c5a6e8, type: 2}
+  - IndexName: math_random_int
+    ResName: Block_math_random_int
+    Prefab: {fileID: 1902112830022394, guid: e827092c3ee9746a2b519ea7da08fc66, type: 2}
+  - IndexName: math_random_float
+    ResName: Block_math_random_float
+    Prefab: {fileID: 1431553784808006, guid: 3cca0cf71716e4dd189733012a066b10, type: 2}
+  - IndexName: procedures_defnoreturn
+    ResName: Block_procedures_defnoreturn
+    Prefab: {fileID: 1184375846290498, guid: 32de926cd044140829562b30b1da30a5, type: 2}
+  - IndexName: procedures_defreturn
+    ResName: Block_procedures_defreturn
+    Prefab: {fileID: 1257183587294162, guid: ac241b3621273435ba4b2377a9b72068, type: 2}
+  - IndexName: procedures_callnoreturn
+    ResName: Block_procedures_callnoreturn
+    Prefab: {fileID: 1521319492238476, guid: 7d6136f95bede4efbb0660250354e660, type: 2}
+  - IndexName: procedures_callreturn
+    ResName: Block_procedures_callreturn
+    Prefab: {fileID: 1045983839824690, guid: 98f1a1d2f987f4adf914306e3f5ad383, type: 2}
+  - IndexName: text
+    ResName: Block_text
+    Prefab: {fileID: 1437298216979850, guid: 5af82a482b4c44919bf8519927c2bacc, type: 2}
+  - IndexName: text_join
+    ResName: Block_text_join
+    Prefab: {fileID: 1726639243243862, guid: 075ca71dd7d5f48f59682aabd3abcac8, type: 2}
+  - IndexName: text_append
+    ResName: Block_text_append
+    Prefab: {fileID: 1534662203106088, guid: 0bc98464f1efd407fb6f5bb38137f004, type: 2}
+  - IndexName: text_length
+    ResName: Block_text_length
+    Prefab: {fileID: 1540460851984384, guid: 4da047047f833401da8db83dfa485869, type: 2}
+  - IndexName: text_isEmpty
+    ResName: Block_text_isEmpty
+    Prefab: {fileID: 1854687852288310, guid: 4e1c708e9cc464862b346fe333aa829c, type: 2}
+  - IndexName: text_indexOf
+    ResName: Block_text_indexOf
+    Prefab: {fileID: 1020735046118422, guid: 7d4f5628354134cb19d2d4044f50ec4d, type: 2}
+  - IndexName: text_charAt
+    ResName: Block_text_charAt
+    Prefab: {fileID: 1695459437129032, guid: aeb82724fb6dd4739946e0793d4982f5, type: 2}
+  - IndexName: text_getSubstring
+    ResName: Block_text_getSubstring
+    Prefab: {fileID: 1988902698977030, guid: 2de7a8e2f6ca64fb9ba99a2c23410585, type: 2}
+  - IndexName: text_changeCase
+    ResName: Block_text_changeCase
+    Prefab: {fileID: 1131548772356786, guid: c756b6e1d083a4047bea34d484df61cd, type: 2}
+  - IndexName: text_trim
+    ResName: Block_text_trim
+    Prefab: {fileID: 1840219491679322, guid: 65f711cd8deb54b6e966a8d1b0ac957d, type: 2}
+  - IndexName: text_print
+    ResName: Block_text_print
+    Prefab: {fileID: 1263123965487940, guid: 30b70e695ed6d4d3793797ea7c496841, type: 2}
+  - IndexName: text_count
+    ResName: Block_text_count
+    Prefab: {fileID: 1617745472654242, guid: 50aa2ce7405f14eb1825467468667c7d, type: 2}
+  - IndexName: text_replace
+    ResName: Block_text_replace
+    Prefab: {fileID: 1839790546089576, guid: 2c51142cf5765483db42a73f609b5468, type: 2}
+  - IndexName: text_reverse
+    ResName: Block_text_reverse
+    Prefab: {fileID: 1016382612013442, guid: 444069bdb60da4828be05df12045ed43, type: 2}
+  - IndexName: variables_get
+    ResName: Block_variables_get
+    Prefab: {fileID: 1368543776704224, guid: ab6efa24c189e438fa0fb9c203b5fa53, type: 2}
+  - IndexName: variables_set
+    ResName: Block_variables_set
+    Prefab: {fileID: 1297235918507922, guid: ee91a48dfc7464ca091fd84d08f35a58, type: 2}
+  - IndexName: variables_change
+    ResName: Block_variables_change
+    Prefab: {fileID: 1407039769954274, guid: c890c06a8ba9741329a6ae445430f415, type: 2}
+  m_DialogPrefabs:
+  - IndexName: variable_name
+    ResName: Dialog_variable_name
+    Prefab: {fileID: 1697861216391924, guid: fee558f14cd3140b09a337b98d7d4bc3, type: 3}
+  - IndexName: controls_if_mutator
+    ResName: Dialog_mutator_ifelse
+    Prefab: {fileID: 1107725967878834, guid: d800445c59bfd49ae8d3ee24c36f26c3, type: 3}
+  - IndexName: text_join_mutator
+    ResName: Dialog_mutator_itemlist
+    Prefab: {fileID: 1888033037372908, guid: cbe6a830a9c15491eb42457c49f16a18, type: 3}
+  - IndexName: lists_create_with_item_mutator
+    ResName: Dialog_mutator_itemlist
+    Prefab: {fileID: 1888033037372908, guid: cbe6a830a9c15491eb42457c49f16a18, type: 3}
+  - IndexName: procedures_defnoreturn_mutator
+    ResName: Dialog_mutator_proceduredef
+    Prefab: {fileID: 1888033037372908, guid: f4d3a523aa9ab495a994965fc2e2c13f, type: 3}
+  - IndexName: procedures_defreturn_mutator
+    ResName: Dialog_mutator_proceduredef
+    Prefab: {fileID: 1888033037372908, guid: f4d3a523aa9ab495a994965fc2e2c13f, type: 3}
+  - IndexName: field_angle
+    ResName: Dialog_field_angle
+    Prefab: {fileID: 1107725967878834, guid: 68d5f6bc04264406d8b99ef763b753d6, type: 3}
+  - IndexName: field_colour
+    ResName: Dialog_field_color
+    Prefab: {fileID: 1107725967878834, guid: 112bb05fca88b4e6fbec63097a5b3d91, type: 3}
+  - IndexName: field_dropdown
+    ResName: Dialog_field_dropdown
+    Prefab: {fileID: 1107725967878834, guid: 70c883d37b9bb4399b7f2f55ba8de5a4, type: 3}
+  - IndexName: field_number
+    ResName: Dialog_field_number
+    Prefab: {fileID: 1107725967878834, guid: 06f0152adcb664067b8a4751865ed8e2, type: 3}
+  - IndexName: field_variable
+    ResName: Dialog_field_dropdown
+    Prefab: {fileID: 1107725967878834, guid: 70c883d37b9bb4399b7f2f55ba8de5a4, type: 3}

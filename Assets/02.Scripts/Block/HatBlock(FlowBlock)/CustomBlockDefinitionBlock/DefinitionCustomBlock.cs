@@ -38,7 +38,7 @@
 [System.Serializable]
 public abstract class DefinitionCustomBlock : HatBlock, IDefinitionCustomBlockType
 {
-    public readonly string CustomBlockName;
+    public string CustomBlockName;
 
     public DefinitionCustomBlock(string customBlockName)
     {
@@ -53,5 +53,7 @@ public abstract class DefinitionCustomBlock : HatBlock, IDefinitionCustomBlockTy
         protected set;
         get;
     }
+
+   
 
 }

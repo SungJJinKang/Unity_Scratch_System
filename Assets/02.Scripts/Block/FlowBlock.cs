@@ -3,11 +3,19 @@
 [System.Serializable]
 public abstract class FlowBlock : Block
 {
-   
+
     /// <summary>
     /// Should greater than 0
     /// </summary>
-    public virtual float DurationTime => RobotSystem.ExecuteRobotsWaitingBlockRate;
+    [SerializeField]
+    private float durationTime;
+    public float DurationTime
+    {
+        get
+        {
+            return this.durationTime;
+        }
+    }
     
 
     /*

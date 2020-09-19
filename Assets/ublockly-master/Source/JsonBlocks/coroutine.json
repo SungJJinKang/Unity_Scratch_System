@@ -1,0 +1,41 @@
+[
+    {
+      "type": "coroutine_wait_time",
+      "message0": "%{BKY_COROUTINE_WAIT_TITLE} %1 %2",
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "TIME",
+          "check": "Number"
+        },
+        {
+          "type": "field_dropdown",
+          "name": "UNIT",
+          "options": [
+            ["%{BKY_TIME_UNIT_MILLISECOND}", "MILLISECOND"],
+            ["%{BKY_TIME_UNIT_SECONDS}", "SECONDS"],
+            ["%{BKY_TIME_UNIT_MINUTES}", "MINUTES"],
+            ["%{BKY_TIME_UNIT_TOO_HIGH}", "TOOHIGH"]
+          ]
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "%{BKY_COROUTINE_HUE}"
+    },
+    {
+      "type": "coroutine_wait_frame",
+      "message0": "%{BKY_COROUTINE_WAIT_TITLE} %1 %{BKY_COROUTINE_FRAME}",
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "TIME",
+          "check": "Number"
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "%{BKY_COROUTINE_HUE}"
+    }
+  
+]

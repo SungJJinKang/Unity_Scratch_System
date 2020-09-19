@@ -20,4 +20,7 @@ public sealed class Memory_SetValue : StackBlock, IContainingParameter<VariableB
             operatingRobotBase.SetRobotGlobalVariable(Input1.VariableName, Input2.GetReporterStringValue(operatingRobotBase));
         }
     }
+
+ 
+
 }

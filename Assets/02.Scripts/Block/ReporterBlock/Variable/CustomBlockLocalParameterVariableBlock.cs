@@ -11,7 +11,7 @@ public sealed class CustomBlockLocalParameterVariableBlock : ReporterBlock
     /// VariableValue는 각 로봇마다 다른 값을 가질 수 있다.
     /// Sync this value to Key of RobotBase.MemoryVariable Dictionary
     /// </summary>
-    public readonly string LocalVariableName;
+    public string LocalVariableName;
 
     public CustomBlockLocalParameterVariableBlock(DefinitionCustomBlock definitionCustomBlock, string localVariableName)
     {
@@ -30,4 +30,13 @@ public sealed class CustomBlockLocalParameterVariableBlock : ReporterBlock
             return System.String.Empty;
         }
     }
+
+    public override object Clone()
+    {
+        var block = (CustomBlockLocalParameterVariableBlock)base.Clone();
+        block.LocalVariableName = this.LocalVariableName;
+
+        return block;
+    }
+
 }

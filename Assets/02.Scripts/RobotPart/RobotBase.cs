@@ -297,7 +297,7 @@ public sealed class RobotBase : RobotPart
             EventBlock eventBlock = this.RobotSourceCode.GetEventBlock(eventName); // Set EventBlock To WaitingBlock
             if (eventBlock != null)
             {
-                this.PushToBlockCallStack(this.WaitingBlock);
+                this.PushToBlockCallStack(this.waitingBlock);
                 this.SetWaitingBlock(eventBlock);
             }
         }
@@ -313,7 +313,16 @@ public sealed class RobotBase : RobotPart
     public float WaitingTime = 0;
 
     [SerializeField]
-    private FlowBlock WaitingBlock = null;
+    private FlowBlock waitingBlock = null;
+#if UNITY_EDITOR
+    public FlowBlock WaitingBlock
+    {
+        get
+        {
+            return this.waitingBlock;
+        }
+    }
+#endif
 
     /// <summary>
     /// ex ) After Call CallCustomBlock And Finished CustomBlock operation
@@ -343,7 +352,10 @@ public sealed class RobotBase : RobotPart
     {
         get
         {
-            return BlockCallStack.ToList();
+            if (BlockCallStack == null)
+                return null;
+            else
+                return BlockCallStack.ToList();
         }
     }
 #endif
@@ -383,7 +395,7 @@ public sealed class RobotBase : RobotPart
 
     private void SetWaitingBlock(FlowBlock flowBlock)
     {
-        this.WaitingBlock = flowBlock;
+        this.waitingBlock = flowBlock;
     }
 
     /// <summary>
@@ -394,24 +406,24 @@ public sealed class RobotBase : RobotPart
     {
         this.WaitingTime += deltaTime; // Add WaitingTime
 
-        if (this.WaitingBlock == null)
+        if (this.waitingBlock == null)
         {
             //If WaitingBlock is null, Set Top Of BlockCallStack ( Popped ) To WaitingBlock
             this.SetWaitingBlock(this.PopBlockCallStack()); 
         }
 
-        if (this.WaitingBlock == null)
+        if (this.waitingBlock == null)
         {
             //Still WaitingBlock is null, Set Top Of LoopedBlock To WaitingBlock
             this.SetWaitingBlock(this.RobotSourceCode.LoopedBlock);
         }
 
-        if (this.WaitingBlock == null)
+        if (this.waitingBlock == null)
         {
             return;
         }
             
-        bool isOperationCalled = this.WaitingBlock.StartFlowBlock(this, out FlowBlock nextBlock); // Start WaitingBlock
+        bool isOperationCalled = this.waitingBlock.StartFlowBlock(this, out FlowBlock nextBlock); // Start WaitingBlock
         if(isOperationCalled == true)
         {
             this.SetWaitingBlock(nextBlock); // set next block to waiting block, If null, Maybe PopBlockCallStack will be set to waitingBlock
@@ -430,7 +442,7 @@ public sealed class RobotBase : RobotPart
 
         this.IsInitBlockCalled = true;
 
-        this.PushToBlockCallStack(this.WaitingBlock);
+        this.PushToBlockCallStack(this.waitingBlock);
         this.SetWaitingBlock(this.RobotSourceCode.InitBlock);
     }
 

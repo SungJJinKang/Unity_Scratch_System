@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8f9cfbe84d04eb5961fba167ecbbb02, type: 3}
+  m_Name: BlockViewSettings
+  m_EditorClassIdentifier: 
+  BlockHeight: 60
+  MinUnitWidth: 36
+  ContentMargin:
+    m_Left: 10
+    m_Right: 10
+    m_Top: 10
+    m_Bottom: 10
+  ContentSpace: {x: 20, y: 0}
+  ColorFieldWidth: 80
+  MaskedInToolbox: 1
+  ConnectSearchRange: 60
+  BumpAwayOffset: {x: 40, y: -40}
+  ValueConnectPointRect:
+    serializedVersion: 2
+    x: 0
+    y: -30
+    width: 12
+    height: 26
+  StatementConnectPointRect:
+    serializedVersion: 2
+    x: 18
+    y: 0
+    width: 26
+    height: 12
+  PrefabRoot: {fileID: 1047204425220112, guid: f1adb66dc990b4a1dbd299062b2a0ec9, type: 3}
+  PrefabRootOutput: {fileID: 1134231384970150, guid: 566cbf92ddc3f4c749c5a18a1b825d17,
+    type: 3}
+  PrefabRootPrev: {fileID: 1921481130454984, guid: 3b4c65dcecc2948a8bac3dc380741aec,
+    type: 3}
+  PrefabRootPrevNext: {fileID: 1921481130454984, guid: d18515e97282947c5bb1a575bc1d6c4b,
+    type: 3}
+  PrefabInputValue: {fileID: 1689575840245040, guid: 4bddd5386383f4174b9515861e0d9795,
+    type: 3}
+  PrefabInputValueSlot: {fileID: 1689575840245040, guid: 54a08c68d4ce242939aefba6cdab0746,
+    type: 3}
+  PrefabInputStatement: {fileID: 1934188004793786, guid: 8903eee196199498a93f94df2b375754,
+    type: 3}
+  PrefabFieldLabel: {fileID: 1146115737712188, guid: f478b5a7e87f4481eb813d5d9be702b0,
+    type: 3}
+  PrefabFieldInput: {fileID: 1613573783897850, guid: ebce9f28eb312402f904656ea3c97104,
+    type: 3}
+  PrefabFieldImage: {fileID: 1389809442338248, guid: 2afd0454a388a4a11a897e5ac4d04cee,
+    type: 3}
+  PrefabFieldButton: {fileID: 1555843036000396, guid: f4f98c4342c754b71b1d362026344a6c,
+    type: 3}
+  PrefabFieldVariable: {fileID: 1942502511481434, guid: ddc51a3ac1c8f41ada1e5a5a4e835618,
+    type: 3}
+  PrefabFieldCheckbox: {fileID: 1960061488258664, guid: cfca79776c81248ca98cbf64bccb16a8,
+    type: 3}
+  PrefabBtnCreateVar: {fileID: 1572467333748272, guid: ed0194cfa5aed47369bf2a9fc37038c6,
+    type: 3}
+  PrefabConnectHighlight: {fileID: 1889621178904122, guid: b5033722b9d884932b0305692eb71801,
+    type: 3}
+  PrefabStatusLight: {fileID: 1988613726568988, guid: 5748e524f1f544e8a9ab7d8cfa71974d,
+    type: 3}

@@ -52,6 +52,39 @@ public abstract class Block : ICloneable
     
     }
 
+    public Type[] ParametersTypes
+    {
+        get
+        {
+            IContainingParameter blockParameter = this as IContainingParameter;
+            if (blockParameter != null)
+            {
+                if (blockParameter is IContainingParameter<ICanBeParameter>)
+                {//Have 1 Parameter
+                    IContainingParameter<ICanBeParameter> blockParameter1 = this as IContainingParameter<ICanBeParameter>;
+                    return new Type[] { blockParameter1.Input1.GetType() };
+                }
+                else if (blockParameter is IContainingParameter<ICanBeParameter, ICanBeParameter>)
+                {//Have 2 Parameter
+                    IContainingParameter<ICanBeParameter, ICanBeParameter> blockParameter2 = this as IContainingParameter<ICanBeParameter, ICanBeParameter>;
+                    return new Type[] { blockParameter2.Input1.GetType(), blockParameter2.Input2.GetType() };
+                }
+                else if (blockParameter is IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter>)
+                {//Have 3 Parameter
+                    IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter> blockParameter3 = this as IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter>;
+                    return new Type[] { blockParameter3.Input1.GetType(), blockParameter3.Input2.GetType(), blockParameter3.Input3.GetType() };
+                }
+                else if (blockParameter is IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter>)
+                {//Have 4 Parameter
+                    IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter> blockParameter4 = this as IContainingParameter<ICanBeParameter, ICanBeParameter, ICanBeParameter, ICanBeParameter>;
+                    return new Type[] { blockParameter4.Input1.GetType(), blockParameter4.Input2.GetType(), blockParameter4.Input3.GetType(), blockParameter4.Input4.GetType() };
+                }
+            }
+
+            return null;
+        }
+    }
+
 
     public virtual object Clone()
     {
@@ -102,7 +135,7 @@ public abstract class Block : ICloneable
 /// </summary>
 public interface UpNotchBlock
 {
-    FlowBlock PreviousBlock { get; set; }
+    DownBumpBlock PreviousBlock { get; set; }
 
 }
 
@@ -112,7 +145,7 @@ public interface UpNotchBlock
 /// </summary>
 public interface DownBumpBlock
 {
-    FlowBlock NextBlock { get; set; }
+    UpNotchBlock NextBlock { get; set; }
 
    
 }

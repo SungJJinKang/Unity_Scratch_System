@@ -3,7 +3,7 @@
 /// <summary>
 /// reference UnitTitleAttribute class in "Bolt" source code
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 public sealed class BlockTitleAttribute : Attribute
 {
 	public BlockTitleAttribute(string title)

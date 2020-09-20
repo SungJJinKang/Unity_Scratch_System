@@ -76,7 +76,7 @@ public abstract class FlowBlock : Block
         }
         else
         {
-            return downBumpBlock?.NextBlock;
+            return downBumpBlock?.NextBlock as FlowBlock;
         }
     }
 

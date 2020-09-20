@@ -5,7 +5,7 @@
 [System.Serializable]
 public abstract class HatBlock : FlowBlock, DownBumpBlock
 {
-    public FlowBlock NextBlock { get; set; }
+    public UpNotchBlock NextBlock { get; set; }
 
 
   

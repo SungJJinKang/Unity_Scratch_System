@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,11 +8,11 @@ using UnityEngine.UI;
 public class TextElementOfBlockUnit : ElementOfBlockUnit
 {
     [SerializeField]
-    private Text TextUI;
+    private Text _Text;
 
     public void SetText(string text)
     {
-        this.TextUI.text = text;
+        this._Text.text = text;
     }
 
     // Start is called before the first frame update
@@ -34,5 +35,16 @@ public class TextElementOfBlockUnit : ElementOfBlockUnit
     protected override void OnDisable()
     {
         base.OnDisable();
+    }
+
+    public override void SetElementContent(ElementContent elementContent)
+    {
+        base.SetElementContent(elementContent);
+
+        TextElementContent textElementContent = elementContent as TextElementContent;
+        if (textElementContent != null)
+        {
+            this.SetText(textElementContent.Text);
+        }
     }
 }

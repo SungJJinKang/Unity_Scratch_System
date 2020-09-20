@@ -32,6 +32,12 @@ TextureImporter:
   - first:
       213: -4549851024585993062
     second: Block1_9
+  - first:
+      213: -8546488456149388999
+    second: Block1_10
+  - first:
+      213: 6868262803919428679
+    second: Block1_11
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -61,7 +67,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
+    filterMode: 0
     aniso: -1
     mipBias: -100
     wrapU: 1
@@ -227,7 +233,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 256
-        width: 256
+        width: 128
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -248,7 +254,7 @@ TextureImporter:
         serializedVersion: 2
         x: 256
         y: 256
-        width: 256
+        width: 128
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -267,9 +273,9 @@ TextureImporter:
       name: Block1_7
       rect:
         serializedVersion: 2
-        x: 0
+        x: 128
         y: 0
-        width: 256
+        width: 128
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -288,9 +294,9 @@ TextureImporter:
       name: Block1_8
       rect:
         serializedVersion: 2
-        x: 256
+        x: 384
         y: 0
-        width: 256
+        width: 128
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -322,6 +328,48 @@ TextureImporter:
       bones: []
       spriteID: a94da9a699eabd0c0800000000000000
       internalID: -4549851024585993062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Block1_10
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 6, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9313d36c706c46980800000000000000
+      internalID: -8546488456149388999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Block1_11
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 6, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74c55ab61a8f05f50800000000000000
+      internalID: 6868262803919428679
       vertices: []
       indices: 
       edges: []

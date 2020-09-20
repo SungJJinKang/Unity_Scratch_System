@@ -1,10 +1,5 @@
 ﻿using System;
-/// <summary>
-/// Thie interface attached to Block that can be parameter
-/// </summary>
-public interface ICanBeParameter : ICloneable
-{
-}
+
 
 /// Why Make Seperately Each Class Have multipleParameter
 /// -> For Checking Type Check 
@@ -16,27 +11,27 @@ public interface IContainingParameter
   
 }
 
-public interface IContainingParameter<T0> : IContainingParameter where T0 : ICanBeParameter 
+public interface IContainingParameter<T0> : IContainingParameter where T0 : ValueBlock
 {
     T0 Input1 { get; set; }
 
 }
 
-public interface IContainingParameter<T0, T1> : IContainingParameter where T0 : ICanBeParameter where T1 : ICanBeParameter
+public interface IContainingParameter<T0, T1> : IContainingParameter where T0 : ValueBlock where T1 : ValueBlock
 {
     T0 Input1 { get; set; }
     T1 Input2 { get; set; }
 
 }
 
-public interface IContainingParameter<T0, T1, T2> : IContainingParameter where T0 : ICanBeParameter where T1 : ICanBeParameter where T2 : ICanBeParameter
+public interface IContainingParameter<T0, T1, T2> : IContainingParameter where T0 : ValueBlock where T1 : ValueBlock where T2 : ValueBlock
 {
     T0 Input1 { get; set; }
     T1 Input2 { get; set; }
     T2 Input3 { get; set; }
 }
 
-public interface IContainingParameter<T0, T1, T2, T3> : IContainingParameter where T0 : ICanBeParameter where T1 : ICanBeParameter where T2 : ICanBeParameter where T3 : ICanBeParameter
+public interface IContainingParameter<T0, T1, T2, T3> : IContainingParameter where T0 : ValueBlock where T1 : ValueBlock where T2 : ValueBlock where T3 : ValueBlock
 {
     T0 Input1 { get; set; }
     T1 Input2 { get; set; }

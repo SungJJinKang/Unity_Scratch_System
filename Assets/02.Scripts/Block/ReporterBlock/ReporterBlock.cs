@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public abstract class ReporterBlock : Block, ICanBeParameter
+public abstract class ReporterBlock : ValueBlock
 {
     /*
     public virtual string GetReporterStringValue()

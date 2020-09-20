@@ -124,8 +124,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4735740656283872609}
   - component: {fileID: 3771809393123909275}
-  - component: {fileID: 1700367016264633472}
-  - component: {fileID: 3068308624604328831}
+  - component: {fileID: 3689675221878922028}
+  - component: {fileID: 5873156212538921048}
   m_Layer: 5
   m_Name: GlobalVariableSelectorDropDown
   m_TagString: Untagged
@@ -161,7 +161,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2626194512813818093}
   m_CullTransparentMesh: 0
---- !u!114 &1700367016264633472
+--- !u!114 &3689675221878922028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,31 +170,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2626194512813818093}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Script: {fileID: 11500000, guid: a0e8b7910e20e46149e409779e882c28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 12800000, guid: c5de1106e7c63f74ebb46e5fb48793aa, type: 3}
-    m_FontSize: 50
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 93
-    m_Alignment: 3
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: '                     '
---- !u!114 &3068308624604328831
+--- !u!114 &5873156212538921048
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -203,10 +182,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 2626194512813818093}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58d5619c865d54684aa56ba090b0b6c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OwnerBlockEditorElement: {fileID: 0}
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 3
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
 --- !u!1 &2695589339663817624
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,8 +349,8 @@ RectTransform:
   m_Father: {fileID: 4735740656283872609}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 194.69, y: 62.9}
   m_Pivot: {x: 0.5, y: 0.5}

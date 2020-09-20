@@ -33,4 +33,9 @@ public class ElementOfBlockUnit : MonoBehaviour
     {
 
     }
+
+    public virtual void SetElementContent(ElementContent elementContent)
+    {
+
+    }
 }

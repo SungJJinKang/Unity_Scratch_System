@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7735933568256115305}
   - component: {fileID: 7735933568256115307}
-  - component: {fileID: 7735933568256115306}
-  - component: {fileID: -7226819228374854049}
+  - component: {fileID: 7023778121665784658}
+  - component: {fileID: 844396511137934044}
   m_Layer: 5
   m_Name: TextInBlockElement
   m_TagString: Untagged
@@ -46,7 +46,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7735933568256115304}
   m_CullTransparentMesh: 0
---- !u!114 &7735933568256115306
+--- !u!114 &7023778121665784658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7735933568256115304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed23e304a85b141e596ed244f08c22ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Text: {fileID: 844396511137934044}
+--- !u!114 &844396511137934044
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,36 +73,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_Maskable: 0
+  m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: c5de1106e7c63f74ebb46e5fb48793aa, type: 3}
-    m_FontSize: 42
+    m_FontSize: 35
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 93
+    m_MinSize: 3
+    m_MaxSize: 50
     m_Alignment: 3
-    m_AlignByGeometry: 0
+    m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ASDDS
---- !u!114 &-7226819228374854049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7735933568256115304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 735c6e52699a84ac39d2a0717688b677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OwnerBlockEditorElement: {fileID: 0}
-  TextUI: {fileID: 7735933568256115306}
+  m_Text: 

@@ -4,6 +4,7 @@
 /// </summary>
 [BlockTitle("Variable")]
 [System.Serializable]
+[NotAutomaticallyMadeOnBlockShop]
 public sealed class VariableBlock : ReporterBlock, IVariableBlockType
 {
     /// <summary>
@@ -17,9 +18,9 @@ public sealed class VariableBlock : ReporterBlock, IVariableBlockType
         this.VariableName = variableName;
     }
 
-    public override object Clone()
+    public override Block CloneDeepCopy()
     {
-        var block = (VariableBlock)base.Clone();
+        var block = (VariableBlock)base.CloneDeepCopy();
         block.VariableName = this.VariableName;
 
         return block;

@@ -1,5 +1,6 @@
 ﻿using System;
 
+[NotAutomaticallyMadeOnBlockShop]
 public sealed class LiteralReporterBlock : ReporterBlock
 {
     public LiteralReporterBlock(string value = "")
@@ -21,9 +22,9 @@ public sealed class LiteralReporterBlock : ReporterBlock
         return String.Copy(this.LiteralValue); // For Protecting LiteralValue, return cloned new string instnace
     }
 
-    public override object Clone()
+    public override Block CloneDeepCopy()
     {
-        var block = (LiteralReporterBlock)base.Clone();
+        var block = (LiteralReporterBlock)base.CloneDeepCopy();
         block.LiteralValue = this.LiteralValue;
 
         return block;

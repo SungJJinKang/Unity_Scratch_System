@@ -9,6 +9,7 @@
 /// Please Set Next to Next Block Of CallCustomBlock
 /// </summary>
 [System.Serializable]
+[NotAutomaticallyMadeOnBlockShopAttribute]
 public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
 {
     public abstract DefinitionCustomBlock CustomBlockDefinitionBlock { get; }

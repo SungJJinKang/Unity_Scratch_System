@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-public abstract class BlockEditorUnit : MonoBehaviour
+public abstract class BlockEditorUnit : BlockEdidtorElement
 {
     private Block targetBlock;
     public Block TargetBlock

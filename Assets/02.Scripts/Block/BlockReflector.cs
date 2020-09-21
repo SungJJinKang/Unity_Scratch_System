@@ -11,7 +11,7 @@ public static class BlockReflector
         return Assembly
    .GetAssembly(typeof(Block))
    .GetTypes()
-   .Where(t => t.IsClass && t.IsSealed && t.IsSubclassOf(typeof(Block)) && t.GetCustomAttribute<BlockTitleAttribute>() != null )
+   .Where(t => t.IsClass && t.IsSealed && t.IsSubclassOf(typeof(Block)) )
    .Select(t => t);
 
   

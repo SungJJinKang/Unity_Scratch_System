@@ -1,20 +1,20 @@
 ﻿
-[BlockCategoryAttribute("Event")]
+[BlockMainCategoryAttribute("Event")]
 public interface IEventBlockType
 {
 }
 
-[BlockCategoryAttribute("Operator")]
+[BlockMainCategoryAttribute("Operator")]
 public interface IOperatorBlockType
 { 
 }
 
-[BlockCategoryAttribute("Variable")]
+[BlockMainCategoryAttribute("Variable")]
 public interface IVariableBlockType
 {
 }
 
-[BlockCategoryAttribute("CustomFunction")]
+[BlockMainCategoryAttribute("CustomBlock")]
 public interface CustomBlockType { }
 
 
@@ -31,6 +31,7 @@ public interface IDefinitionCustomBlockType : CustomBlockType
 /// <summary>
 /// Robot part block type.
 /// </summary>
+[BlockMainCategoryAttribute("RobotPart")]
 public interface IRobotPartBlockType
 {
 }
@@ -39,41 +40,32 @@ public interface IRobotPartBlockType
 /// Look BlockCategoryAttribute Constructor
 /// "/" works for Root Category
 /// </summary>
-[BlockCategoryAttribute("RobotPart/RobotBase")] // Look BlockCategoryAttribute Constructor.  "/" works for Root Category
+[BlockSubCategoryAttribute("RobotBase")]
 public interface IRobotBaseBlockType : IRobotPartBlockType
 {
 }
 
-
-[BlockCategoryAttribute("RobotPart/JetEngine")]
+[BlockSubCategoryAttribute("JetEngine")]
 public interface IJetEngineBlockType : IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("RobotPart/Mining")]
+[BlockSubCategoryAttribute("Mining")]
 public interface IMiningBlockType : IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("RobotPart/Speak")]
+[BlockSubCategoryAttribute("Speaker")]
 public interface ISpeakerBlockType : IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("RobotPart/GPS")]
+[BlockSubCategoryAttribute("GPS")]
 public interface IGPSBlockType : IRobotPartBlockType
 {
 }
 
-[BlockCategoryAttribute("RobotPart/InternetAntenna")]
+[BlockSubCategoryAttribute("InternetAntenna")]
 public interface IInternetAntennaBlockType : IRobotPartBlockType
 {
 }
-
-///////
-
-// About All Robots
-public interface IRobotSystemType
-{
-}
-

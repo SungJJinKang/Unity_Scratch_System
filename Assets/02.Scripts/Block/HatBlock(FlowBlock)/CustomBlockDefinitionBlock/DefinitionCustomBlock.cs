@@ -36,6 +36,7 @@
 /// 
 /// </summary>
 [System.Serializable]
+[NotAutomaticallyMadeOnBlockShopAttribute]
 public abstract class DefinitionCustomBlock : HatBlock, IDefinitionCustomBlockType
 {
     public string CustomBlockName;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Reflection;
 
 public class BlockEditorManager : MonoBehaviour
 {
@@ -14,8 +15,13 @@ public class BlockEditorManager : MonoBehaviour
 
     private void Start()
     {
-        InitBlockEditorUnitPools();
-        InitElementOfBlockUnitPools();
+        InitBlockEditorSystem();
+    }
+
+    private void InitBlockEditorSystem()
+    {
+        WarmPoolBlockEditorUnit();
+        WarmPoolInitElementOfBlockUnit();
 
         InitBlockShop();
 
@@ -29,7 +35,18 @@ public class BlockEditorManager : MonoBehaviour
         foreach (Type type in BlockReflector.GetAllSealedBlockTypeContainingBlockTitleAttribute())
         {
             if (type.GetConstructor(Type.EmptyTypes) == null)
+            {
+                Debug.LogWarning(" \" " + type.Name + " \" Dont Have Default Constructor");
                 continue; // If Type don't have default constructor, continue loop
+            }
+
+            
+            if(type.GetCustomAttribute(typeof(NotAutomaticallyMadeOnBlockShopAttribute), true) != null)
+            {
+                Debug.LogWarning(" \" " + type.Name + " \" Containing NotAutomaticallyMadeOnBlockShopAttribute");
+                continue;
+            }
+               
 
             Block block = Activator.CreateInstance(type) as Block;
             BlockEditorUnit blockEditorUnit = CreateBlockEditorUnit(type);
@@ -48,7 +65,7 @@ public class BlockEditorManager : MonoBehaviour
     #region BlockEditorElement
 
     private const int BlockEditorUnitPoolCount = 3;
-    private void InitBlockEditorUnitPools()
+    private void WarmPoolBlockEditorUnit()
     {
         PoolManager.WarmPool(booleanBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
         PoolManager.WarmPool(capBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
@@ -115,7 +132,7 @@ public class BlockEditorManager : MonoBehaviour
     #region ElementOfBlockUnit
 
     private const int ElementOfBlockUnitPoolCount = 3;
-    private void InitElementOfBlockUnitPools()
+    private void WarmPoolInitElementOfBlockUnit()
     {
         PoolManager.WarmPool(booleanBlockInputInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
         PoolManager.WarmPool(globalVariableSelectorDropDownInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);

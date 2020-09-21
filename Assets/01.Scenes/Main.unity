@@ -515,7 +515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 430d968e63581624e84fc43c08982663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logStatus: 1
+  logStatus: 0
   root: {fileID: 308504765}
 --- !u!4 &308504765
 Transform:

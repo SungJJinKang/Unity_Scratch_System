@@ -4,6 +4,7 @@
 /// </summary>
 [BlockTitle("CustomBlockLocalVariable")]
 [System.Serializable]
+[NotAutomaticallyMadeOnBlockShop]
 public sealed class CustomBlockLocalParameterVariableBlock : ReporterBlock
 {
     public DefinitionCustomBlock DefinitionCustomBlock;
@@ -31,9 +32,9 @@ public sealed class CustomBlockLocalParameterVariableBlock : ReporterBlock
         }
     }
 
-    public override object Clone()
+    public override Block CloneDeepCopy()
     {
-        var block = (CustomBlockLocalParameterVariableBlock)base.Clone();
+        var block = (CustomBlockLocalParameterVariableBlock)base.CloneDeepCopy();
         block.LocalVariableName = this.LocalVariableName;
 
         return block;

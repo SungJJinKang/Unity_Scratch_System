@@ -2269,6 +2269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BlockShopContentTransform: {fileID: 1800445524}
+  BlockWorkSpaceContentTransform: {fileID: 0}
   booleanBlockEditorUnit: {fileID: -105569658993342339, guid: 2fd1355999d5fa146bd18c071a5762b5,
     type: 3}
   capBlockEditorUnit: {fileID: 304028824464289061, guid: fb696f11a25c2654fa44bb0c5779c0bb,

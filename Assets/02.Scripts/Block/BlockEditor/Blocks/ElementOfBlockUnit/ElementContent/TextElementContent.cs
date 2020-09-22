@@ -1,4 +1,4 @@
-﻿public class TextElementContent : ElementContent
+﻿public sealed class TextElementContent : ElementContent
 {
     public string Text;
     public TextElementContent(string text)

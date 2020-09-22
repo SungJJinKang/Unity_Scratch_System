@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -11,15 +12,15 @@ using UnityEngine;
 [System.Serializable]
 public class RobotSourceCode 
 {
-    public RobotSourceCode()
+    public RobotSourceCode(string sourceCodeName)
     {
         this.IsEditing = false;
-        this.sourceCodeName = System.String.Empty;
+        this.sourceCodeName = sourceCodeName;
 
-        this.initBlock = null;
-        this.loopedBlock = null;
+        this.initBlock = new InitHatBlock();
+        this.loopedBlock = new LoopedHatBlock();
         this.StoredCustomBlockDefinitionBlockList = new List<DefinitionCustomBlock>();
-        this.RobotGlobalVariableTemplateList = new Dictionary<string, string>();
+        this.RobotGlobalVariableTemplateDictionary = new Dictionary<string, string>();
         this.InstalledRobotList = new List<RobotBase>();
 
     }
@@ -94,7 +95,11 @@ public class RobotSourceCode
     /// The stored event block list.
     /// Command is Event
     /// </summary>
-    private Dictionary<string, EventBlock> StoredEventBlockList;
+    private Dictionary<string, EventBlock> StoredEventBlockDictonary;
+    public EventBlock[] StoredEventBlocks
+    {
+        get => this.StoredEventBlockDictonary.Values.ToArray();
+    }
     public bool AddToStoredEventBlockList(EventBlock eventBlock)
     {
         if (this.IsEditing == false)
@@ -107,7 +112,7 @@ public class RobotSourceCode
             return false;
 
         RemoveFromStoredEventBlockList(eventBlock);
-        this.StoredEventBlockList.Add(eventBlock.Input1.GetReporterStringValue(), eventBlock);
+        this.StoredEventBlockDictonary.Add(eventBlock.Input1.GetReporterStringValue(), eventBlock);
         return true;
 
     }
@@ -123,21 +128,21 @@ public class RobotSourceCode
         if (eventBlock == null)
             return false;
 
-        this.StoredEventBlockList.Remove(eventBlock.Input1.GetReporterStringValue());
+        this.StoredEventBlockDictonary.Remove(eventBlock.Input1.GetReporterStringValue());
         return true;
     }
 
     public EventBlock GetEventBlock(string eventName)
     {
         if (IsEventBlockExist(eventName) == true)
-            return StoredEventBlockList[eventName];
+            return StoredEventBlockDictonary[eventName];
         else
             return null;
     }
 
     public bool IsEventBlockExist(string eventName)
     {
-        return this.StoredEventBlockList.ContainsKey(eventName);
+        return this.StoredEventBlockDictonary.ContainsKey(eventName);
     }
 
 
@@ -216,7 +221,7 @@ public class RobotSourceCode
     /// 
     /// Variable Can Have Init Value
     /// </summary>
-    private Dictionary<string, string> RobotGlobalVariableTemplateList;
+    private Dictionary<string, string> RobotGlobalVariableTemplateDictionary;
 
     /// <summary>
     /// Sets to MemoryVariable template.
@@ -234,15 +239,15 @@ public class RobotSourceCode
         }
 
 
-        if (this.RobotGlobalVariableTemplateList.ContainsKey(key) == true)
+        if (this.RobotGlobalVariableTemplateDictionary.ContainsKey(key) == true)
         {// If MemoryVariableTemplate Already Have Key
             Debug.Log("MemoryVariableTemplateList Already Have Key : " + key + " So Changed Value");
-            this.RobotGlobalVariableTemplateList[key] = text;
+            this.RobotGlobalVariableTemplateDictionary[key] = text;
         }
         else
         {// If MemoryVariableTemplate Dont Have Key Yet
             Debug.Log("MemoryVariableTemplateList Dont Have Key Yet : " + key + " So Add new item");
-            this.RobotGlobalVariableTemplateList.Add(key, text);
+            this.RobotGlobalVariableTemplateDictionary.Add(key, text);
         }
 
 
@@ -264,10 +269,10 @@ public class RobotSourceCode
         }
 
 
-        if (this.RobotGlobalVariableTemplateList.ContainsKey(key) == true)
+        if (this.RobotGlobalVariableTemplateDictionary.ContainsKey(key) == true)
         {// If MemoryVariableTemplate Have Key
             Debug.Log("RobotGlobalVariableTemplateList Have Key : " + key + " So Remove Item with key");
-            this.RobotGlobalVariableTemplateList.Remove(key); ;
+            this.RobotGlobalVariableTemplateDictionary.Remove(key); ;
             return false;
         }
         else
@@ -286,14 +291,14 @@ public class RobotSourceCode
     /// <returns></returns>
     public bool GetRobotGlobalVariableTemplateValue(string key, ref string text)
     {
-        if (this.RobotGlobalVariableTemplateList.ContainsKey(key) == false)
+        if (this.RobotGlobalVariableTemplateDictionary.ContainsKey(key) == false)
         {
             Debug.LogError("RobotGlobalVariableTemplateList Dont Have Key : " + key);
             return false;
         }
         else
         {//MemoryVariableTemplate Have Key 
-            text = string.Copy(this.RobotGlobalVariableTemplateList[key]);
+            text = string.Copy(this.RobotGlobalVariableTemplateDictionary[key]);
             return true;
         }
     }
@@ -301,7 +306,7 @@ public class RobotSourceCode
     public Dictionary<string, string> GetDeepCopyOfRobotGlobalVariableTemplate()
     {
         Dictionary<string, string> deepCopiedRobotGlobalVariableTemplate = new Dictionary<string, string>();
-        foreach (KeyValuePair<string, string> pair in this.RobotGlobalVariableTemplateList)
+        foreach (KeyValuePair<string, string> pair in this.RobotGlobalVariableTemplateDictionary)
         {
             deepCopiedRobotGlobalVariableTemplate.Add(pair.Key, string.Copy(pair.Value)); // deep copy string ( string is referce type )
         }

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HatBlockEditorUnit : FlowBlockEditorUnit
+[BlockEditorUnitAttribute(typeof(HatBlock))]
+public sealed class HatBlockEditorUnit : FlowBlockEditorUnit
 {
     // Start is called before the first frame update
     void Start()

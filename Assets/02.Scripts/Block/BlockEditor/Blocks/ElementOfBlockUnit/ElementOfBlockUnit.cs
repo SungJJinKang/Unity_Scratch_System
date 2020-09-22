@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class ElementOfBlockUnit : BlockEdidtorElement
+public abstract class ElementOfBlockUnit : BlockEdidtorElement
 {
     [SerializeField]
     public BlockEditorUnit OwnerBlockUnit

@@ -145,9 +145,21 @@ public class RobotSystem : MonoBehaviour
 
     #endregion
 
-    #region RobotSourceCodeTemplate
+    #region RobotSourceCode
     private Dictionary<string, RobotSourceCode> StoredRobotSourceCode;
-    public bool AddStoredRobotSourceCodeTemplate(RobotSourceCode robotSourceCode)
+
+    public RobotSourceCode CreateRobotSourceCode(string sourceCodeName)
+    {
+        RobotSourceCode createdRobotSourceCode = new RobotSourceCode(sourceCodeName);
+
+        if(createdRobotSourceCode != null)
+        {
+            this.AddStoredRobotSourceCodeTemplate(createdRobotSourceCode);
+        }
+        return createdRobotSourceCode;
+    }
+
+    private bool AddStoredRobotSourceCodeTemplate(RobotSourceCode robotSourceCode)
     {
         if (robotSourceCode == null)
             return false;

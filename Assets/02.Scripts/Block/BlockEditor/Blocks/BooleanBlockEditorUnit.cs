@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BooleanBlockEditorUnit : BlockEditorUnit
+[BlockEditorUnitAttribute(typeof(BooleanBlock))]
+public sealed class BooleanBlockEditorUnit : BlockEditorUnit
 {
     // Start is called before the first frame update
     void Start()

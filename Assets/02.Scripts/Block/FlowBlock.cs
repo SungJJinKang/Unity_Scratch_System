@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public abstract class FlowBlock : Block
@@ -16,14 +17,81 @@ public abstract class FlowBlock : Block
             return this.durationTime;
         }
     }
-    
 
-    /*
-    public virtual float GetDurationTime(RobotBase operatingRobotBase)
+    
+    /// <summary>
+    /// PreviousBlock
+    /// </summary>
+    private FlowBlock previousBlock;
+    public bool IsHavePreviousBlock => this is IUpNotchBlock;
+    public FlowBlock PreviousBlock
     {
-        return RobotSystem.ExecuteRobotsWaitingBlockRate;
+        get
+        {
+            if(this.IsHavePreviousBlock == true)
+            {
+                return this.previousBlock;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
+        set
+        {
+            //Don't Set this.previousBlock.NextBlock ~~~
+            if (this.IsHavePreviousBlock == true)
+            {
+                this.previousBlock = value;
+            }
+
+        }
     }
-    */
+
+   
+
+    /// <summary>
+    /// NextBlock
+    /// </summary>
+    private FlowBlock nextBlock;
+    public bool IsHaveNextBlock => this is IDownBumpBlock;
+    public FlowBlock NextBlock
+    {
+        get
+        {
+            if (this.IsHaveNextBlock == true)
+            {
+                return this.nextBlock;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+        set
+        {
+            //Never Set Value Of BlockEditorUnit From This Class
+            // FlowBlock -> BlockEditorUnit XXXXXX
+            // BlockEditorUnit -> FLowBlock OOOOOOO
+            if (this.IsHaveNextBlock == true)
+            {
+                if (this.nextBlock != null)
+                    this.nextBlock.PreviousBlock = null;
+
+                this.nextBlock = value;
+
+                if(this.nextBlock != null)
+                {
+                    this.nextBlock.PreviousBlock = this;
+                }
+            }
+
+        }
+    }
+
+
 
     /// <summary>
     /// 
@@ -55,7 +123,7 @@ public abstract class FlowBlock : Block
        
     }
 
-
+   
 
 
     /// <summary>
@@ -69,15 +137,7 @@ public abstract class FlowBlock : Block
     /// </returns>
     public virtual FlowBlock EndFlowBlock(RobotBase operatingRobotBase)
     {
-        DownBumpBlock downBumpBlock = this as DownBumpBlock;
-        if (downBumpBlock == null)
-        {
-            return null;
-        }
-        else
-        {
-            return downBumpBlock?.NextBlock as FlowBlock;
-        }
+        return this.NextBlock;
     }
 
     public abstract void Operation(RobotBase operatingRobotBase);
@@ -85,8 +145,7 @@ public abstract class FlowBlock : Block
 
     private FlowBlock GetRootBlock(FlowBlock flowBlock)
     {
-        UpNotchBlock upNotchBlock = this as UpNotchBlock;
-        if (upNotchBlock == null || upNotchBlock.PreviousBlock == null)
+        if (this.PreviousBlock == null)
         {
             return this;
         }
@@ -101,5 +160,27 @@ public abstract class FlowBlock : Block
         return GetRootBlock(this);
 
     }
+
+
+
+}
+
+
+/// <summary>
+/// This Block can have PreviousBlock
+/// StackBlock, C Block, CapBlock
+/// </summary>
+public interface IUpNotchBlock
+{
+
+}
+
+/// <summary>
+/// This Block can have NextBlock
+/// Hat Block, StackBlock, C Block
+/// </summary>
+public interface IDownBumpBlock
+{
+
 
 }

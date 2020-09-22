@@ -3,11 +3,10 @@
 /// This Can be used as InitBlock, LoopBlock
 /// </summary>
 [System.Serializable]
-public abstract class HatBlock : FlowBlock, DownBumpBlock
+public abstract class HatBlock : FlowBlock, IDownBumpBlock
 {
-    public UpNotchBlock NextBlock { get; set; }
+    
 
 
-  
 
 }

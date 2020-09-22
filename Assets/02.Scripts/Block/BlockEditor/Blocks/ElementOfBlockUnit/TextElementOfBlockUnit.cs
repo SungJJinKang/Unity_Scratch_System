@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class TextElementOfBlockUnit : ElementOfBlockUnit
+public sealed class TextElementOfBlockUnit : ElementOfBlockUnit
 {
     [SerializeField]
     private Text _Text;

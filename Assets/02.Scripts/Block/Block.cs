@@ -1,15 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Reflection;
 /// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
 /// </summary>
 [System.Serializable]
-public abstract class Block 
+public abstract class Block
 {
+
+    public static Block CreatBlock(Type type)
+    {
+        if (type.IsSubclassOf(typeof(Block)) == false)
+            return null;
+
+        return Activator.CreateInstance(type) as Block;
+    }
+
+    public static Block CreatBlock<T>() where T : Block
+    {
+        return Activator.CreateInstance(typeof(T)) as Block;
+    }
+
     public byte BlockIndexInSouceCode;
 
+    private PropertyInfo[] ParametersPropertyInfosCache;
     /// <summary>
     /// Check If All parameters is filled?
     /// This is called just one time when modify sourrcede, so this expensive performance is accepted
@@ -25,11 +42,22 @@ public abstract class Block
             }
             else
             {
-                for (int i = 1; i <= parametersTypes.Length; i++)
+                if(this.ParametersPropertyInfosCache == null)
                 {
-                    if (this.GetType().GetProperty("Input" + i.ToString()).GetValue(this) == null) // Please Test !!!!!!!!!!!!!!!!
+                    this.ParametersPropertyInfosCache = new PropertyInfo[parametersTypes.Length];
+
+                    for (int i = 1; i <= parametersTypes.Length; i++)
+                    {
+                        this.ParametersPropertyInfosCache[i - 1] = this.GetType().GetProperty("Input" + i.ToString()); // Set Cache Variable
+                    }
+                }
+
+                for (int i = 0; i < this.ParametersPropertyInfosCache.Length; i++)
+                {
+                    if (this.ParametersPropertyInfosCache[i].GetValue(this) == null) // Please Test !!!!!!!!!!!!!!!!
                         return false;
                 }
+
             }
 
             return true;
@@ -96,24 +124,3 @@ public abstract class Block
    
 }
 
-
-/// <summary>
-/// This Block can have PreviousBlock
-/// StackBlock, C Block, CapBlock
-/// </summary>
-public interface UpNotchBlock
-{
-    DownBumpBlock PreviousBlock { get; set; }
-
-}
-
-/// <summary>
-/// This Block can have NextBlock
-/// Hat Block, StackBlock, C Block
-/// </summary>
-public interface DownBumpBlock
-{
-    UpNotchBlock NextBlock { get; set; }
-
-   
-}

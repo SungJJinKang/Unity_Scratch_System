@@ -1,4 +1,4 @@
-﻿public class ReporterBlockInputContent : ElementContent
+﻿public sealed class ReporterBlockInputContent : ElementContent
 {
 
 }

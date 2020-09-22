@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class BooleanBlockInputOfBlockUnit : ElementOfBlockUnit
+public sealed class BooleanBlockInputOfBlockUnit : ElementOfBlockUnit
 {
     // Start is called before the first frame update
     protected override void Start()

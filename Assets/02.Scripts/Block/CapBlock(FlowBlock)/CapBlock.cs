@@ -1,8 +1,8 @@
 ﻿[System.Serializable]
 [NotAutomaticallyMadeOnBlockShopAttribute]
-public abstract class CapBlock : FlowBlock, UpNotchBlock
+public abstract class CapBlock : FlowBlock, IUpNotchBlock
 {
-    public DownBumpBlock PreviousBlock { get; set; }
+ 
 
 
 

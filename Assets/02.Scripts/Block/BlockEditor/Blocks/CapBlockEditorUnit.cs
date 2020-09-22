@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CapBlockEditorUnit : FlowBlockEditorUnit
+[BlockEditorUnitAttribute(typeof(CapBlock))]
+public sealed class CapBlockEditorUnit : FlowBlockEditorUnit
 {
     // Start is called before the first frame update
     void Start()

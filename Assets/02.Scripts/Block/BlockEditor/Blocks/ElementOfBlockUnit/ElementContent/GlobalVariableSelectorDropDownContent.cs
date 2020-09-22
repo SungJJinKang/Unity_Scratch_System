@@ -1,4 +1,4 @@
-﻿public class GlobalVariableSelectorDropDownContent : ElementContent
+﻿public sealed class GlobalVariableSelectorDropDownContent : ElementContent
 {
 
 }

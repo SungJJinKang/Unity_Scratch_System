@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReporterBlockEditorUnit : BlockEditorUnit
+[BlockEditorUnitAttribute(typeof(ReporterBlock))]
+public sealed class ReporterBlockEditorUnit : BlockEditorUnit
 {
     // Start is called before the first frame update
     void Start()

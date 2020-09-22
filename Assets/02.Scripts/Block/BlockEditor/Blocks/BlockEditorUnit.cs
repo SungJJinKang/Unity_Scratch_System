@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public abstract class BlockEditorUnit : BlockEdidtorElement
 {
@@ -14,12 +15,38 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         }
         set
         {
-            this.CleanBlockEditorUnit();
+            if(BlockEditorUnitAttribute == null)
+            {
+                Debug.LogError("blockEditorUnitAttribute is null, Fail Set TargetBlock");
+            }    
+            else
+            {
+                if (value.GetType().IsSubclassOf(BlockEditorUnitAttribute.BlockEditorUnitType) || BlockEditorUnitAttribute.BlockEditorUnitType.IsSubclassOf(value.GetType()))
+                {// if type of value(TargetBlock) equal with blockEditorUnitAttribute.BlockEditorUnitType
+                    this.CleanBlockEditorUnit();
+                    this.targetBlock = value;
+                    this.OnSetTargetBlock();
+                }
+            }
 
-            this.targetBlock = value;
-            OnSetTargetBlock();
+            
         }
     }
+
+    private BlockEditorUnitAttribute blockEditorUnitAttributeCache;
+    protected BlockEditorUnitAttribute BlockEditorUnitAttribute
+    { 
+        get
+        {
+            if(this.blockEditorUnitAttributeCache == null)
+            {
+                this.blockEditorUnitAttributeCache = this.GetType().GetAttribute<BlockEditorUnitAttribute>();
+            }
+
+            return this.blockEditorUnitAttributeCache;
+        }
+    }
+
 
     protected virtual void OnSetTargetBlock()
     {
@@ -36,7 +63,10 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
 
         for (int i = 0; i < this.ElementOfBlockUnitList.Count; i++)
         {
-            //this.ElementOfBlockUnitList[i]
+            //Remove this.ElementOfBlockUnitList
+            //Release Pool this.ElementOfBlockUnitList[i] sssss
+            //Please Use Object Pool system.
+            //
         }
     }
 
@@ -52,16 +82,32 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
 
     private void InitElementsOfBlockUnit()
     {
-        ElementContentAttribute elementContentAttribute = this.targetBlock.GetType().GetCustomAttribute<ElementContentAttribute>();
-        if (elementContentAttribute != null)
+        ElementContentContainerAttribute elementContentContainerAttribute = this.targetBlock.GetType().GetCustomAttribute<ElementContentContainerAttribute>();
+        if (elementContentContainerAttribute != null)
         {//If Block class have ElementContentAttribute
 
-            ElementContent[] elementContents = elementContentAttribute.ElementContents;
+            string[] elementContents = elementContentContainerAttribute.ElementContents;
             for (int i = 0; i < elementContents.Length; i++)
             {
                 if(elementContents[i] != null)
                 {
-                    this.AddElementOfBlockUnit(elementContents[i]);
+                    if(elementContents[i] == typeof(BooleanBlockInputContent).Name)
+                    {
+                        this.AddElementOfBlockUnit(new BooleanBlockInputContent());
+                    }
+                    else if (elementContents[i] == typeof(GlobalVariableSelectorDropDownContent).Name)
+                    {
+                        this.AddElementOfBlockUnit(new GlobalVariableSelectorDropDownContent());
+                    }
+                    else if (elementContents[i] == typeof(ReporterBlockInputContent).Name)
+                    {
+                        this.AddElementOfBlockUnit(new ReporterBlockInputContent());
+                    }
+                    else
+                    {// if elementContents[i] is just text
+                        AddElementOfBlockUnit(new TextElementContent(elementContents[i]));
+                    }
+
                 }
             }
         }

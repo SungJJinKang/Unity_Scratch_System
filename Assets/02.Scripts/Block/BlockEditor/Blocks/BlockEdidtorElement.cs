@@ -5,6 +5,6 @@ using UnityEngine;
 /// <summary>
 /// All Objects On Block Editor
 /// </summary>
-public class BlockEdidtorElement : MonoBehaviour
+public abstract class BlockEdidtorElement : MonoBehaviour
 {   
 }

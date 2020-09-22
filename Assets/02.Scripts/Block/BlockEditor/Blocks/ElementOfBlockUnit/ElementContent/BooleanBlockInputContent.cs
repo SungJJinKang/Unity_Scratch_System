@@ -1,5 +1,5 @@
 ﻿
-public class BooleanBlockInputContent : ElementContent
+public sealed class BooleanBlockInputContent : ElementContent
 {
 
 }

@@ -5,7 +5,7 @@
 [System.Serializable]
 public abstract class HatBlock : FlowBlock, IDownBumpBlock
 {
-    
+
 
 
 

@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public abstract class InputElementOfBlockUnit : ElementOfBlockUnit
+public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit
 {
     /// <summary>
     /// 1 ~ 4

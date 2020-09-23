@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 /// <summary>
@@ -9,12 +6,15 @@ using UnityEngine;
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
 /// </summary>
 [System.Serializable]
-public abstract class Block
+public abstract class Block 
 {
     public byte BlockIndexInSouceCode;
 
     public static Block CreatBlock(Type type)
     {
+        if (type == null)
+            return null;
+
         if (type.IsSubclassOf(typeof(Block)) == false)
             return null;
 
@@ -31,7 +31,7 @@ public abstract class Block
     /// Deep Copy!!
     /// </summary>
     /// <returns></returns>
-    public virtual Block CloneDeepCopy()
+    public virtual Block Clone()
     {
 
         Block clonedBlock = (Block)this.MemberwiseClone();
@@ -52,10 +52,35 @@ public abstract class Block
         return clonedBlock;
     }
 
-  
+
 
 
     #region Parameter
+
+
+    private bool IsCachedParametersPropertyInfos = false;
+    private void CachingParametersPropertyInfos()
+    {
+        int paramaterCount = this.ParamaterCount;
+
+        if (paramaterCount == 0)
+        {
+            this.parametersPropertyInfosCache = null;
+        }
+        else
+        {
+            this.parametersPropertyInfosCache = new PropertyInfo[paramaterCount];
+
+            for (int i = 1; i <= paramaterCount; i++)
+            {
+                this.parametersPropertyInfosCache[i - 1] = this.GetType().GetProperty("Input" + i.ToString()); // Set Cache Variable
+            }
+        }
+
+        this.IsCachedParametersPropertyInfos = true;
+    }
+
+
     private PropertyInfo[] parametersPropertyInfosCache;
     private PropertyInfo[] ParametersPropertyInfos
     {
@@ -96,27 +121,6 @@ public abstract class Block
     }
 
 
-    private bool IsCachedParametersPropertyInfos = false;
-    private void CachingParametersPropertyInfos()
-    {
-        int paramaterCount = this.ParamaterCount;
-
-        if (paramaterCount == 0)
-        {
-            this.parametersPropertyInfosCache = null;
-        }
-        else
-        {
-            this.parametersPropertyInfosCache = new PropertyInfo[paramaterCount];
-
-            for (int i = 1; i <= paramaterCount; i++)
-            {
-                this.parametersPropertyInfosCache[i - 1] = this.GetType().GetProperty("Input" + i.ToString()); // Set Cache Variable
-            }
-        }
-        IsCachedParametersPropertyInfos = true;
-    }
-
 
     /// <summary>
     /// Passes the parameter to block
@@ -126,7 +130,7 @@ public abstract class Block
     public void PassParameter(int inputIndex, ValueBlock valueBlock)
     {
         PropertyInfo parameterPropertyInfo = GetParameterPropertyInfo(inputIndex);
-        if(parameterPropertyInfo != null)
+        if (parameterPropertyInfo != null)
         {
             parameterPropertyInfo.SetValue(this, valueBlock);
         }
@@ -151,7 +155,7 @@ public abstract class Block
             parameterValue = null;
             return false;
         }
-    } 
+    }
     /// <summary>
     /// Check If All parameters is filled?
     /// This is called just one time when modify sourrcede, so this expensive performance is accepted
@@ -187,8 +191,8 @@ public abstract class Block
         }
     }
 
-   
 
+    private bool IsParametersTypesCached = false;
     private Type[] parametersTypes;
     /// <summary>
     /// Type of Parameters
@@ -198,7 +202,7 @@ public abstract class Block
     {
         get
         {
-            if (parametersTypes == null)
+            if (this.IsParametersTypesCached == false)
             {
                 Type t = this.GetType();
                 if (typeof(IContainingParameter).IsAssignableFrom(t))
@@ -213,10 +217,12 @@ public abstract class Block
                     }
                 }
 
-               
+                this.IsParametersTypesCached = true;
+
+
             }
 
-            
+
             return this.parametersTypes;
         }
     }
@@ -239,11 +245,11 @@ public abstract class Block
         if (pTypes == null)
             this.paramaterCountCache = 0;
         else
-            this.paramaterCountCache =  pTypes.Length;
+            this.paramaterCountCache = pTypes.Length;
     }
     #endregion
 
-   
-   
+
+
 }
 

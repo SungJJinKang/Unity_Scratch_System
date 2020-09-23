@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public sealed class BooleanBlockInputOfBlockUnit : InputElementOfBlockUnit
+public sealed class BooleanBlockInputOfBlockUnit : InputSpaceElementOfBlockUnit
 {
     public BooleanBlockEditorUnit InputtedBooleanBlockEditorUnit;
 

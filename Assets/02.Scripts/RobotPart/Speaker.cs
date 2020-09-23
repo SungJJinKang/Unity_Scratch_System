@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Speaker : RobotPart
+﻿public class Speaker : RobotPart
 {
     protected override void Awake()
     {

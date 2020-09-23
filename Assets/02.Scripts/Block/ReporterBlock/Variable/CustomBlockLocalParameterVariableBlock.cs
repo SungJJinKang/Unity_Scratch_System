@@ -32,9 +32,9 @@ public sealed class CustomBlockLocalParameterVariableBlock : ReporterBlock
         }
     }
 
-    public override Block CloneDeepCopy()
+    public override Block Clone()
     {
-        var block = (CustomBlockLocalParameterVariableBlock)base.CloneDeepCopy();
+        var block = (CustomBlockLocalParameterVariableBlock)base.Clone();
         block.LocalVariableName = this.LocalVariableName;
 
         return block;

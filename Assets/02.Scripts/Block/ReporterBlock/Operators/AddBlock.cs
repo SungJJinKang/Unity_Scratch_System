@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-[BlockTitle("Add")]
+﻿[BlockTitle("Add")]
 public sealed class AddBlock : ArithmeticBlock
 {
     sealed public override string GetReporterStringValue(RobotBase operatingRobotBase)

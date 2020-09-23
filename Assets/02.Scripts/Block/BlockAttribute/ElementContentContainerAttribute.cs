@@ -1,5 +1,4 @@
-﻿using Boo.Lang;
-using System;
+﻿using System;
 
 /// <summary>
 /// BlockEditorElementAttribute
@@ -12,12 +11,12 @@ using System;
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
 public sealed class ElementContentContainerAttribute : Attribute
 {
-	public ElementContentContainerAttribute(params string[] elementContents)
-	{
-         ElementContents = elementContents;
+    public ElementContentContainerAttribute(params string[] elementContents)
+    {
+        ElementContents = elementContents;
     }
 
-	public string[] ElementContents { get; private set; }
+    public string[] ElementContents { get; private set; }
 }
 
 

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-//Do Nothing
+﻿//Do Nothing
 //Just For Counting Number of Memory Attached To RobotBase
 public sealed class Memory : RobotPart
 {

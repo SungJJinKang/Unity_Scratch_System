@@ -11,10 +11,10 @@ public sealed class CallNoParameterCustomBlock : CallCustomBlock
     private DefinitionNoParameterCustomBlock definitionNoParameterCustomBlock;
     public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionNoParameterCustomBlock as DefinitionCustomBlock; }
 
-    public CallNoParameterCustomBlock(DefinitionNoParameterCustomBlock definitionNoParameterCustomBlock) 
+    public CallNoParameterCustomBlock(DefinitionNoParameterCustomBlock definitionNoParameterCustomBlock)
     {
         this.definitionNoParameterCustomBlock = definitionNoParameterCustomBlock;
     }
-   
-   
+
+
 }

@@ -74,7 +74,7 @@ public sealed class RobotBase : RobotPart
 
                 return true;
             }
-                 
+
         }
 
         return false;
@@ -113,7 +113,7 @@ public sealed class RobotBase : RobotPart
     private Dictionary<string, string> RobotGlobalVariable;
 
 #if UNITY_EDITOR
-    public List<KeyValuePair<string,string>> RobotGlobalVariableKeyValuePair
+    public List<KeyValuePair<string, string>> RobotGlobalVariableKeyValuePair
     {
         get
         {
@@ -141,7 +141,7 @@ public sealed class RobotBase : RobotPart
     /// <param name="maintainOriginalValue">If MemoryVariable have same key with deepCopiedMemoryVariableTamplate, </param>
     private void InitRobotGlobalVariable(Dictionary<string, string> deepCopiedRobotGlobalVariableTamplate, bool maintainOriginalValue = false)
     {
-        if(maintainOriginalValue == true)
+        if (maintainOriginalValue == true)
         {//Copy this.MemoryVariable Value To deepCopiedMemoryVariableTamplate
             this.RobotGlobalVariable.Keys.ToList().ForEach(x =>
             {
@@ -211,8 +211,8 @@ public sealed class RobotBase : RobotPart
     /// </summary>
     /// <param name="customBlockDefinitionBlock">Custom block definition block.</param>
     private void InitCustomBlockParameterVariables(DefinitionCustomBlock customBlockDefinitionBlock)
-    { 
-        if(customBlockDefinitionBlock == null)
+    {
+        if (customBlockDefinitionBlock == null)
         {
             Debug.LogError("customBlockDefinitionBlock is null");
             return;
@@ -233,7 +233,7 @@ public sealed class RobotBase : RobotPart
         {
             this.CustomBlockParameterVariables[customBlockDefinitionBlock].Add(customBlockDefinitionBlock.ParameterNames[i], string.Empty); // Init Parameter Keys with customBlockDefinitionBlock;
         }
-        
+
     }
 
     /// <summary>
@@ -292,7 +292,7 @@ public sealed class RobotBase : RobotPart
 
     public void StartEventBlock(string eventName)
     {
-        if(this.RobotSourceCode.IsEventBlockExist(eventName))
+        if (this.RobotSourceCode.IsEventBlockExist(eventName))
         {
             EventBlock eventBlock = this.RobotSourceCode.GetEventBlock(eventName); // Set EventBlock To WaitingBlock
             if (eventBlock != null)
@@ -301,7 +301,7 @@ public sealed class RobotBase : RobotPart
                 this.SetWaitingBlock(eventBlock);
             }
         }
-    
+
     }
 
     #endregion
@@ -382,7 +382,7 @@ public sealed class RobotBase : RobotPart
             this.BlockCallStack = new Stack<FlowBlock>();
         }
 
-        if(this.BlockCallStack.Count > 0)
+        if (this.BlockCallStack.Count > 0)
         {
             return this.BlockCallStack.Pop();
         }
@@ -409,7 +409,7 @@ public sealed class RobotBase : RobotPart
         if (this.waitingBlock == null)
         {
             //If WaitingBlock is null, Set Top Of BlockCallStack ( Popped ) To WaitingBlock
-            this.SetWaitingBlock(this.PopBlockCallStack()); 
+            this.SetWaitingBlock(this.PopBlockCallStack());
         }
 
         if (this.waitingBlock == null)
@@ -422,9 +422,9 @@ public sealed class RobotBase : RobotPart
         {
             return;
         }
-            
+
         bool isOperationCalled = this.waitingBlock.StartFlowBlock(this, out FlowBlock nextBlock); // Start WaitingBlock
-        if(isOperationCalled == true)
+        if (isOperationCalled == true)
         {
             this.SetWaitingBlock(nextBlock); // set next block to waiting block, If null, Maybe PopBlockCallStack will be set to waitingBlock
         }
@@ -446,7 +446,7 @@ public sealed class RobotBase : RobotPart
         this.SetWaitingBlock(this.RobotSourceCode.InitBlock);
     }
 
-  
+
 
     #endregion
 
@@ -461,18 +461,18 @@ public sealed class RobotBase : RobotPart
     /// </summary>
     private RobotSourceCode RobotSourceCode;
     public string RobotSourceCodeName => this.RobotSourceCode.SourceCodeName;
-  
+
 
     public bool SetRobotSourceCodeWithName(string robotSourceCodeName)
     {
         RobotSourceCode robotSourceCode = RobotSystem.instance.GetRobotSourceCodeTemplate(robotSourceCodeName);
-        if(robotSourceCode == null)
+        if (robotSourceCode == null)
         {
             Debug.LogError("Cant Find Robot SourceCode : " + robotSourceCodeName);
             return false;
         }
 
-        if(this.RobotSourceCode != null)
+        if (this.RobotSourceCode != null)
         {
             this.RobotSourceCode.RemoveFromInstalledRobotList(this);
             this.RobotSourceCode = null; // Clear Reference Of Installed Robot Source Code
@@ -492,14 +492,14 @@ public sealed class RobotBase : RobotPart
 
         DefinitionCustomBlock[] definitionCustomBlocks = robotSourceCode.StoredCustomBlockDefinitionBlockArray;
 
-        if(definitionCustomBlocks != null && definitionCustomBlocks.Length > 0)
+        if (definitionCustomBlocks != null && definitionCustomBlocks.Length > 0)
         {
             for (int i = 0; i < definitionCustomBlocks.Length; i++)
             {
                 this.InitCustomBlockParameterVariables(definitionCustomBlocks[i]);
             }
         }
-       
+
         this.BlockCallStack.Push(this.RobotSourceCode.LoopedBlock); // After Init Block, Call LoopedBlock
         this.SetInitBlockToWaitingBlock();
     }

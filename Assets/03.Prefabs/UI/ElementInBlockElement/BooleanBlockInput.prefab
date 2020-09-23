@@ -260,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e72fc29ba52a4d3484e23607feb807b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InputtedBooleanBlockEditorUnit: {fileID: 0}
 --- !u!222 &1695487423319045430
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public sealed class GlobalVariableSelectorDropDownOfBlockUnit : InputElementOfBlockUnit
+public sealed class GlobalVariableSelectorDropDownOfBlockUnit : InputSpaceElementOfBlockUnit
 {
     // Start is called before the first frame update
     protected override void Start()

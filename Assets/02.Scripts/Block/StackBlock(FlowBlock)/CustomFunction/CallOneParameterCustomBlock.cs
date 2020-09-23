@@ -26,5 +26,5 @@ public sealed class CallOneParameterCustomBlock : CallCustomBlock, IContainingPa
             operatingRobotBase.SetCustomBlockParameterVariables(this.CustomBlockDefinitionBlock, definitionOneParameterCustomBlock.Input1Name, this.Input1.GetReporterStringValue(operatingRobotBase));
 
     }
-   
+
 }

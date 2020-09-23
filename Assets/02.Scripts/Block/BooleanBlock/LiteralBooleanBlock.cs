@@ -1,5 +1,4 @@
-﻿using System;
-[NotAutomaticallyMadeOnBlockShop]
+﻿[NotAutomaticallyMadeOnBlockShop]
 public sealed class LiteralBooleanBlock : BooleanBlock
 {
     public LiteralBooleanBlock(bool value)
@@ -19,9 +18,9 @@ public sealed class LiteralBooleanBlock : BooleanBlock
         return this.BooleanValue;
     }
 
-    public override Block CloneDeepCopy()
+    public override Block Clone()
     {
-        var block = (LiteralBooleanBlock)base.CloneDeepCopy();
+        var block = (LiteralBooleanBlock)base.Clone();
         block.BooleanValue = this.BooleanValue;
 
         return block;

@@ -6,7 +6,7 @@ public interface IEventBlockType
 
 [BlockMainCategoryAttribute("Operator")]
 public interface IOperatorBlockType
-{ 
+{
 }
 
 [BlockMainCategoryAttribute("Variable")]

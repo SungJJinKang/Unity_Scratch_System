@@ -55,6 +55,6 @@ public abstract class DefinitionCustomBlock : HatBlock, IDefinitionCustomBlockTy
         get;
     }
 
-   
+
 
 }

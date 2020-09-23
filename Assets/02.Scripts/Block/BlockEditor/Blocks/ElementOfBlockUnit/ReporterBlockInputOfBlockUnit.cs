@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
-public sealed class ReporterBlockInputOfBlockUnit : InputElementOfBlockUnit
+public sealed class ReporterBlockInputOfBlockUnit : InputSpaceElementOfBlockUnit
 {
     public ReporterBlockEditorUnit InputtedReporterBlockEditorUnit;
 

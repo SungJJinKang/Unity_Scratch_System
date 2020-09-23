@@ -14,7 +14,7 @@ public sealed class EventBlock : HatBlock, IContainingParameter<LiteralReporterB
     /// Event Name
     /// </summary>
     /// <value>The input1.</value>
-    public LiteralReporterBlock Input1 { get ; set ; }
+    public LiteralReporterBlock Input1 { get; set; }
 
     sealed public override void Operation(RobotBase operatingRobotBase)
     {

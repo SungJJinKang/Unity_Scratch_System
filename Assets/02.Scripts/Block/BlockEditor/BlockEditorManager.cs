@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Reflection;
@@ -70,21 +69,25 @@ public class BlockEditorManager : MonoBehaviour
                 continue; // If Type don't have default constructor, continue loop
             }
 
-            
-            if(type.GetCustomAttribute(typeof(NotAutomaticallyMadeOnBlockShopAttribute), true) != null)
+
+            if (type.GetCustomAttribute(typeof(NotAutomaticallyMadeOnBlockShopAttribute), true) != null)
             {
                 Debug.LogWarning(" \" " + type.Name + " \" Containing NotAutomaticallyMadeOnBlockShopAttribute");
                 continue;
             }
-               
 
-          
-            this.CreateBlockEditorUnit(type, this.BlockShopContentTransform);
-            
-            
+
+
+            BlockEditorUnit createdBlockEditorUnit = this.CreateBlockEditorUnit(type, this.BlockShopContentTransform);
+            if (createdBlockEditorUnit != null)
+            {
+                createdBlockEditorUnit.gameObject.AddComponent<BlockTemplateInBlockShop>();
+            }
+
 
         }
     }
+
 
     private void InitCustomBlockOnBlockShop()
     {
@@ -129,9 +132,9 @@ public class BlockEditorManager : MonoBehaviour
         this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.InitBlock);
         this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.LoopedBlock);
 
-        foreach(var eventBlock in this.EditingRobotSourceCode.StoredEventBlocks)
+        foreach (var eventBlock in this.EditingRobotSourceCode.StoredEventBlocks)
         {
-            this.SpawnBlockEditorUnitOnBlockWorkSpace(eventBlock); 
+            this.SpawnBlockEditorUnitOnBlockWorkSpace(eventBlock);
         }
         //
     }
@@ -161,7 +164,7 @@ public class BlockEditorManager : MonoBehaviour
             return;
 
         FlowBlockEditorUnit parentBlockEditorUnit = null;
-        if(this.SpawnedBlockEditorUnitDictionary.ContainsKey(parentBlock) == false)
+        if (this.SpawnedBlockEditorUnitDictionary.ContainsKey(parentBlock) == false)
         {
             parentBlockEditorUnit = this.CreateBlockEditorUnit(parentBlock, this.BlockWorkSpaceContentTransform) as FlowBlockEditorUnit;
         }
@@ -186,7 +189,7 @@ public class BlockEditorManager : MonoBehaviour
         }
         else
         {
-            if(parentBlockEditorUnit == null)
+            if (parentBlockEditorUnit == null)
             {
                 Debug.LogError("parentBlockEditorUnit is null");
             }
@@ -205,7 +208,7 @@ public class BlockEditorManager : MonoBehaviour
 
     #region BlockEditorUnit
 
-  
+
 
 
     /// <summary>
@@ -214,10 +217,12 @@ public class BlockEditorManager : MonoBehaviour
     /// <param name="blockType"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    private BlockEditorUnit CreateBlockEditorUnit(Type blockType, Transform parent)
+    public BlockEditorUnit CreateBlockEditorUnit(Type blockType, Transform parent = null)
     {
-        Block block = Activator.CreateInstance(blockType) as Block;
-        return this.CreateBlockEditorUnit(block, parent);
+        if (blockType == null)
+            return null;
+
+        return this.CreateBlockEditorUnit(Block.CreatBlock(blockType), parent);
     }
 
     /// <summary>
@@ -226,9 +231,9 @@ public class BlockEditorManager : MonoBehaviour
     /// <param name="block"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    private BlockEditorUnit CreateBlockEditorUnit(Block block, Transform parent)
+    private BlockEditorUnit CreateBlockEditorUnit(Block block, Transform parent = null)
     {
-        if(block == null)
+        if (block == null)
         {
             Debug.LogError("block is null");
             return null;
@@ -241,7 +246,7 @@ public class BlockEditorManager : MonoBehaviour
             Debug.LogError(blockType.Name + " is not subclass of Block");
             return null;
         }
-          
+
 
         BlockEditorUnit blockEditorUnit = null;
         if (blockType.IsSubclassOf(typeof(BooleanBlock)))
@@ -286,7 +291,7 @@ public class BlockEditorManager : MonoBehaviour
 
             blockEditorUnit.TargetBlock = block;
 
-            if(blockEditorUnit.TargetBlock.IsAllParameterFilled)
+            if (blockEditorUnit.TargetBlock.IsAllParameterFilled)
             {
 
             }
@@ -301,35 +306,7 @@ public class BlockEditorManager : MonoBehaviour
 
     #endregion
 
-    #region ElementOfBlockUnit
 
-
-    public ElementOfBlockUnit CreateElementOfBlockUnit(Type t)
-    {
-        ElementOfBlockUnit elementOfBlockUnit = null;
-        if (t == typeof(BooleanBlockInputContent))
-        {
-            elementOfBlockUnit = PoolManager.SpawnObject(booleanBlockInputInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
-        }
-        else if (t == typeof(GlobalVariableSelectorDropDownContent))
-        {
-            elementOfBlockUnit = PoolManager.SpawnObject(globalVariableSelectorDropDownInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
-        }
-        else if (t == typeof(ReporterBlockInputContent))
-        {
-            elementOfBlockUnit = PoolManager.SpawnObject(reporterBlockInputInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
-        }
-        else if (t == typeof(TextElementContent))
-        {
-            elementOfBlockUnit = PoolManager.SpawnObject(textInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
-        }
-
-        if (elementOfBlockUnit == null)
-            Debug.LogError("Cant Find Proper Type : " + t.Name);
-
-        return elementOfBlockUnit;
-    }
-    #endregion
 
 
 
@@ -342,15 +319,14 @@ public class BlockEditorManager : MonoBehaviour
 
     #region BlockEdidtorElementObjectPool 
 
-    private const int BlockEditorUnitPoolCount = 3;
     private void WarmPoolBlockEditorUnit()
     {
-        PoolManager.WarmPool(booleanBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(capBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(cBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(hatBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(reporterBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(stackBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
+        PoolManager.WarmPool(booleanBlockEditorUnit?.gameObject, 20);
+        PoolManager.WarmPool(capBlockEditorUnit?.gameObject, 5);
+        PoolManager.WarmPool(cBlockEditorUnit?.gameObject, 10);
+        PoolManager.WarmPool(hatBlockEditorUnit?.gameObject, 10);
+        PoolManager.WarmPool(reporterBlockEditorUnit?.gameObject, 20);
+        PoolManager.WarmPool(stackBlockEditorUnit?.gameObject, 20);
     }
 
 
@@ -381,15 +357,38 @@ public class BlockEditorManager : MonoBehaviour
     [SerializeField]
     private TextElementOfBlockUnit textInBlockElement;
 
-    private const int ElementOfBlockUnitPoolCount = 3;
     private void WarmPoolInitElementOfBlockUnit()
     {
-        PoolManager.WarmPool(booleanBlockInputInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
-        PoolManager.WarmPool(globalVariableSelectorDropDownInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
-        PoolManager.WarmPool(reporterBlockInputInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
-        PoolManager.WarmPool(textInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
+        PoolManager.WarmPool(booleanBlockInputInBlockElement?.gameObject, 10);
+        PoolManager.WarmPool(globalVariableSelectorDropDownInBlockElement?.gameObject, 5);
+        PoolManager.WarmPool(reporterBlockInputInBlockElement?.gameObject, 20);
+        PoolManager.WarmPool(textInBlockElement?.gameObject, 20);
     }
 
+    public ElementOfBlockUnit SpawnElementOfBlockUnit(ElementContent elementContent)
+    {
+        if (elementContent is BooleanBlockInputContent)
+        {
+            return PoolManager.SpawnObject(booleanBlockInputInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
+        }
+        else if (elementContent is GlobalVariableSelectorDropDownContent)
+        {
+            return PoolManager.SpawnObject(globalVariableSelectorDropDownInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
+        }
+        else if (elementContent is ReporterBlockInputContent)
+        {
+            return PoolManager.SpawnObject(reporterBlockInputInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
+        }
+        else if (elementContent is TextElementContent)
+        {
+            return PoolManager.SpawnObject(textInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
+        }
+        else
+        {
+            Debug.LogError("Cant Find Proper Type : " + elementContent.GetType().Name);
+            return null;
+        }
+    }
 
     #endregion
 }
@@ -403,7 +402,7 @@ public class BlockEditorManagerEditor : Editor
 
         GUILayout.Space(30);
 
-        if(GUILayout.Button("Create RobotSourceCode"))
+        if (GUILayout.Button("Create RobotSourceCode"))
         {
             RobotSystem.instance.CreateRobotSourceCode(System.DateTime.Now.ToString());
         }

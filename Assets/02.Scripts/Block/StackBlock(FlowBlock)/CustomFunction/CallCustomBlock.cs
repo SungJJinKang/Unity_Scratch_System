@@ -14,10 +14,10 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
 {
     public abstract DefinitionCustomBlock CustomBlockDefinitionBlock { get; }
 
-  
+
     sealed public override void Operation(RobotBase operatingRobotBase)
     {
-        if(this.CustomBlockDefinitionBlock == null)
+        if (this.CustomBlockDefinitionBlock == null)
         {
             Debug.LogError("CustomBlockDefinitionBlock is null!!!!!!!!!!!!!");
             return;
@@ -29,7 +29,7 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
         this.PassParameterToOperatingRobotBase(operatingRobotBase);
 
         // Push NextBlock Of CallCustomBlock(Returned Block After End Subroutine(DefinitionCustomBlock) ) To Block Call Stack
-        operatingRobotBase.PushToBlockCallStack(this.NextBlock as FlowBlock); 
+        operatingRobotBase.PushToBlockCallStack(this.NextBlock);
     }
 
     /// <summary>

@@ -13,7 +13,7 @@ public sealed class DefinitionOneParameterCustomBlock : DefinitionCustomBlock, I
     }
 
 
-    public LiteralReporterBlock Input1 { get ; set ; }
+    public LiteralReporterBlock Input1 { get; set; }
     public string Input1Name;
 
     /// <summary>

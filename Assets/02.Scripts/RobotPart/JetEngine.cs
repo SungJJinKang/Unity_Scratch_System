@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public sealed class JetEngine : RobotPart
 {
@@ -8,7 +6,7 @@ public sealed class JetEngine : RobotPart
 
 
     Vector2 vec2Cache;
-    
+
 
     protected override void Awake()
     {

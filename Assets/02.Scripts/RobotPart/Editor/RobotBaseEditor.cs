@@ -218,7 +218,7 @@ public class RobotBaseEditor : Editor
        
     */
 
-   
+
     public override void OnInspectorGUI()
     {
 
@@ -259,7 +259,7 @@ public class RobotBaseEditor : Editor
 
         waitingTimeSP.floatValue = EditorGUILayout.FloatField("Waiting Time", waitingTimeSP.floatValue);
         string waitingBlockType;
-        if(robotBase.WaitingBlock != null)
+        if (robotBase.WaitingBlock != null)
         {
             waitingBlockType = robotBase.WaitingBlock.GetType().Name;
         }

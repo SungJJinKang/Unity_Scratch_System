@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using System.Linq;
 
 /// <summary>
 /// Robot system.
@@ -43,17 +41,17 @@ public class RobotSystem : MonoBehaviour
         ExecuteRobotsWaitingBlockCoroutine = null;
     }
 
-    private Coroutine ExecuteRobotsWaitingBlockCoroutine ;
+    private Coroutine ExecuteRobotsWaitingBlockCoroutine;
     private IEnumerator ExecuteRobotsWaitingBlockIEnumerator()
     {
-        while(true)
+        while (true)
         {
 
             this.ExecuteRobotsWaitingBlock(ExecuteRobotsWaitingBlockRate);
 
             // WaitForSeconds works as scaledTime(deltaTime, not RealTime)
             // So You don't need 
-            yield return new WaitForSeconds(ExecuteRobotsWaitingBlockRate); 
+            yield return new WaitForSeconds(ExecuteRobotsWaitingBlockRate);
         }
     }
 
@@ -106,11 +104,11 @@ public class RobotSystem : MonoBehaviour
             this.SpawnedRobotDictionary.Add(robot.RobotUniqueId, robot);
         }
 
-        if(this.SpawnedRobotList.Contains(robot) == false)
+        if (this.SpawnedRobotList.Contains(robot) == false)
         {
             this.SpawnedRobotList.Add(robot);
         }
-     
+
     }
 
     public void RemoveFromSpawnedRobotList(RobotBase robot)
@@ -132,7 +130,7 @@ public class RobotSystem : MonoBehaviour
 
     public RobotBase GetSpawnedRobot(string uniqueId)
     {
-        if(this.SpawnedRobotDictionary.ContainsKey(uniqueId) == false)
+        if (this.SpawnedRobotDictionary.ContainsKey(uniqueId) == false)
         {
             return null;
         }
@@ -152,7 +150,7 @@ public class RobotSystem : MonoBehaviour
     {
         RobotSourceCode createdRobotSourceCode = new RobotSourceCode(sourceCodeName);
 
-        if(createdRobotSourceCode != null)
+        if (createdRobotSourceCode != null)
         {
             this.AddStoredRobotSourceCodeTemplate(createdRobotSourceCode);
         }
@@ -164,7 +162,7 @@ public class RobotSystem : MonoBehaviour
         if (robotSourceCode == null)
             return false;
 
-        if(this.StoredRobotSourceCode.ContainsKey(robotSourceCode.SourceCodeName) == true)
+        if (this.StoredRobotSourceCode.ContainsKey(robotSourceCode.SourceCodeName) == true)
         {
             Debug.LogError("Try AddStoredRobotSourceCodeTemplate. SourceCodeName : " + robotSourceCode.SourceCodeName);
             return false;
@@ -179,7 +177,7 @@ public class RobotSystem : MonoBehaviour
         if (this.StoredRobotSourceCode.ContainsKey(sourceCodeName) == false)
             return null;
 
-        
+
         return this.StoredRobotSourceCode[sourceCodeName];
     }
     #endregion

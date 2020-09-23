@@ -6,10 +6,10 @@
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 public sealed class BlockTitleAttribute : Attribute
 {
-	public BlockTitleAttribute(string title)
-	{
-		this.title = title;
-	}
+    public BlockTitleAttribute(string title)
+    {
+        this.title = title;
+    }
 
-	public string title { get; private set; }
+    public string title { get; private set; }
 }

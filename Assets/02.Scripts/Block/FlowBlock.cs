@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UIElements;
 
 [System.Serializable]
 public abstract class FlowBlock : Block
@@ -18,7 +17,7 @@ public abstract class FlowBlock : Block
         }
     }
 
-    
+
     /// <summary>
     /// PreviousBlock
     /// </summary>
@@ -28,7 +27,7 @@ public abstract class FlowBlock : Block
     {
         get
         {
-            if(this.IsHavePreviousBlock == true)
+            if (this.IsHavePreviousBlock == true)
             {
                 return this.previousBlock;
             }
@@ -36,20 +35,28 @@ public abstract class FlowBlock : Block
             {
                 return null;
             }
-            
+
         }
         set
         {
             //Don't Set this.previousBlock.NextBlock ~~~
             if (this.IsHavePreviousBlock == true)
             {
+                if (this.PreviousBlock != null)
+                    this.PreviousBlock.NextBlock = null;
+
                 this.previousBlock = value;
+
+                if (this.PreviousBlock != null)
+                {
+                    this.PreviousBlock.NextBlock = this;
+                }
             }
 
         }
     }
 
-   
+
 
     /// <summary>
     /// NextBlock
@@ -77,14 +84,14 @@ public abstract class FlowBlock : Block
             // BlockEditorUnit -> FLowBlock OOOOOOO
             if (this.IsHaveNextBlock == true)
             {
-                if (this.nextBlock != null)
-                    this.nextBlock.PreviousBlock = null;
+                if (this.NextBlock != null)
+                    this.NextBlock.PreviousBlock = null;
 
                 this.nextBlock = value;
 
-                if(this.nextBlock != null)
+                if (this.NextBlock != null)
                 {
-                    this.nextBlock.PreviousBlock = this;
+                    this.NextBlock.PreviousBlock = this;
                 }
             }
 
@@ -120,10 +127,10 @@ public abstract class FlowBlock : Block
         this.Operation(operatingRobotBase); // Operate Block Work
         NextBlock = this.EndFlowBlock(operatingRobotBase);
         return true;
-       
+
     }
 
-   
+
 
 
     /// <summary>

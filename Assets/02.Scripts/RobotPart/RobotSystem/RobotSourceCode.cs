@@ -10,7 +10,7 @@ using UnityEngine;
 /// This Class shouldn't have 
 /// </summary>
 [System.Serializable]
-public class RobotSourceCode 
+public class RobotSourceCode
 {
     public RobotSourceCode(string sourceCodeName)
     {
@@ -48,13 +48,13 @@ public class RobotSourceCode
                 Debug.LogError("You can't set SourceCodeName for editing");
                 return; // Can Change Only When IsEditing is true
             }
-               
+
 
             this.sourceCodeName = value;
         }
     }
 
-    
+
     [SerializeField]
     private HatBlock initBlock;
     public HatBlock InitBlock

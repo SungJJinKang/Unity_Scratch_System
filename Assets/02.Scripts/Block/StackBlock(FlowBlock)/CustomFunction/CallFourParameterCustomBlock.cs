@@ -10,7 +10,7 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
 
     public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionFourParameterCustomBlock as DefinitionCustomBlock; }
 
-    public CallFourParameterCustomBlock(DefinitionFourParameterCustomBlock definitionFourParameterCustomBlock) 
+    public CallFourParameterCustomBlock(DefinitionFourParameterCustomBlock definitionFourParameterCustomBlock)
     {
         this.definitionFourParameterCustomBlock = definitionFourParameterCustomBlock;
     }
@@ -33,7 +33,7 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
     public ReporterBlock Input4 { get; set; }
 
 
-   
+
     sealed protected override void PassParameterToOperatingRobotBase(RobotBase operatingRobotBase)
     {
         //Set RobotBase.CustomBlockLocalVariables with Input String Value 
@@ -51,5 +51,5 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
 
     }
 
-    
+
 }

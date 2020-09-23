@@ -22,10 +22,10 @@
     public void SendDataThroughInternet(string robotUniqueId, string variableKey, string data)
     {
         RobotBase recieverRobotBase = RobotSystem.instance.GetSpawnedRobot(robotUniqueId);
-        if(recieverRobotBase != null)
+        if (recieverRobotBase != null)
         {
             InternetAntenna recieverRobotInternetAntenna = recieverRobotBase.GetRobotPart<InternetAntenna>();
-            if(recieverRobotInternetAntenna != null)
+            if (recieverRobotInternetAntenna != null)
             { // To Recieve Data from Other Robot through InternetAntenna, Receiver Robot Should have InternetAntenna Robot Part
                 recieverRobotInternetAntenna.RecieveDataThroughInternet(variableKey, data);
             }

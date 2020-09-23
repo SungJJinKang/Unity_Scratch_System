@@ -27,7 +27,7 @@ public sealed class DefinitionFourParameterCustomBlock : DefinitionCustomBlock, 
     public LiteralReporterBlock Input4 { get; set; }
     public string Input4Name;
 
-    
+
 
     /// <summary>
     /// Parameter Of Custom Block is Just LiteralBlock

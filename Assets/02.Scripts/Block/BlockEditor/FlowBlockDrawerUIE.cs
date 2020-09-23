@@ -14,7 +14,7 @@ public class FlowBlockDrawerUIE : PropertyDrawer
 
         // Create property fields.
         var DurationTimeField = new PropertyField(property.FindPropertyRelative("durationTime"));
-    
+
         // Add fields to the container.
         container.Add(DurationTimeField);
 

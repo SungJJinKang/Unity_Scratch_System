@@ -18,9 +18,9 @@ public sealed class VariableBlock : ReporterBlock, IVariableBlockType
         this.VariableName = variableName;
     }
 
-    public override Block CloneDeepCopy()
+    public override Block Clone()
     {
-        var block = (VariableBlock)base.CloneDeepCopy();
+        var block = (VariableBlock)base.Clone();
         block.VariableName = this.VariableName;
 
         return block;

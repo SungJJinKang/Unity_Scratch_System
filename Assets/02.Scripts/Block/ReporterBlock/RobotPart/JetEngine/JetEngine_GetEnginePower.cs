@@ -4,13 +4,13 @@ public sealed class JetEngine_GetEnginePower : ReporterBlock, IJetEngineBlockTyp
     public override string GetReporterStringValue(RobotBase operatingRobotBase)
     {
         JetEngine jetEngine = operatingRobotBase.GetRobotPart<JetEngine>();
-        if(jetEngine != null)
+        if (jetEngine != null)
         {
             return jetEngine.EnginePower.ToString();
         }
         else
         {
             return System.String.Empty;
-        }   
+        }
     }
 }

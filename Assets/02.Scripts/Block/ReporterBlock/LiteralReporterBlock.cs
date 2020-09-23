@@ -22,9 +22,9 @@ public sealed class LiteralReporterBlock : ReporterBlock
         return String.Copy(this.LiteralValue); // For Protecting LiteralValue, return cloned new string instnace
     }
 
-    public override Block CloneDeepCopy()
+    public override Block Clone()
     {
-        var block = (LiteralReporterBlock)base.CloneDeepCopy();
+        var block = (LiteralReporterBlock)base.Clone();
         block.LiteralValue = this.LiteralValue;
 
         return block;

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GPS : RobotPart
+﻿public class GPS : RobotPart
 {
     protected override void Awake()
     {

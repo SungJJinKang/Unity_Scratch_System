@@ -9,7 +9,7 @@ public sealed class CallTwoParameterCustomBlock : CallCustomBlock, IContainingPa
     public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionTwoParameterCustomBlock as DefinitionCustomBlock; }
 
     public CallTwoParameterCustomBlock(DefinitionTwoParameterCustomBlock definitionTwoParameterCustomBlock)
-    { 
+    {
         this.definitionTwoParameterCustomBlock = definitionTwoParameterCustomBlock;
     }
 
@@ -33,5 +33,5 @@ public sealed class CallTwoParameterCustomBlock : CallCustomBlock, IContainingPa
 
     }
 
-   
+
 }

@@ -1,14 +1,11 @@
-﻿using System;
-
-
-/// Why Make Seperately Each Class Have multipleParameter
+﻿/// Why Make Seperately Each Class Have multipleParameter
 /// -> For Checking Type Check 
 /// If TwoParameter inherit OneParameter, 
 /// (TwoParameter Is Onparameter) return True . This cause bugs
 /// //
-public interface IContainingParameter 
+public interface IContainingParameter
 {
-  
+
 }
 
 public interface IContainingParameter<T0> : IContainingParameter where T0 : ValueBlock

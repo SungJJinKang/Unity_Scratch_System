@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
-using System;
+using UnityEngine;
 
 public class WorldSystem : MonoBehaviour
 {
@@ -64,7 +64,7 @@ public class WorldSystem : MonoBehaviour
     private Coroutine UpdateWorldDateTimeCoroutine;
     IEnumerator UpdateWorldDateTimeIEnumerator()
     {
-        while(true)
+        while (true)
         {
             yield return new WaitForSeconds(ScaledTimeForADay);
 

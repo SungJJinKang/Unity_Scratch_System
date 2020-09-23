@@ -1,20 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class FlowBlockEditorUnit : BlockEditorUnit
+public abstract class FlowBlockEditorUnit : BlockEditorUnit
 {
     protected FlowBlock targetFlowBlock { get => base.TargetBlock as FlowBlock; }
 
 
     [SerializeField]
     private FlowBlockEditorUnit previousFlowBlockEditorUnit;
-    public bool IsHavePreviousBlockEditorUnit => typeof(IUpNotchBlock).IsAssignableFrom(base.BlockEditorUnitAttribute.BlockEditorUnitType);
+    public bool IsHavePreviousBlockEditorUnit => typeof(IUpNotchBlock).IsAssignableFrom(base.TargetBlockType);
     public FlowBlockEditorUnit PreviousFlowBlockEditorUnit
     {
         get
         {
-            if(this.IsHavePreviousBlockEditorUnit)
+            if (this.IsHavePreviousBlockEditorUnit)
             {
                 return this.previousFlowBlockEditorUnit;
             }
@@ -28,7 +26,18 @@ public class FlowBlockEditorUnit : BlockEditorUnit
             if (this.IsHavePreviousBlockEditorUnit)
             {
                 //Don't Set this.previousFlowBlockEditorUnit.NextFlowBlockEditorUnit ~~~
+                if (this.PreviousFlowBlockEditorUnit != null)
+                {
+                    this.PreviousFlowBlockEditorUnit.NextFlowBlockEditorUnit = null;
+                }
+
                 this.previousFlowBlockEditorUnit = value;
+                this.targetFlowBlock.PreviousBlock = value.targetFlowBlock; // Set To FlowBlock.NextBlock
+
+                if (this.PreviousFlowBlockEditorUnit != null)
+                {
+                    this.PreviousFlowBlockEditorUnit.NextFlowBlockEditorUnit = this;
+                }
             }
         }
 
@@ -36,7 +45,7 @@ public class FlowBlockEditorUnit : BlockEditorUnit
 
     [SerializeField]
     private FlowBlockEditorUnit nextFlowBlockEditorUnit;
-    public bool IsHaveNextBlockEditorUnit => typeof(IDownBumpBlock).IsAssignableFrom(base.BlockEditorUnitAttribute.BlockEditorUnitType);
+    public bool IsHaveNextBlockEditorUnit => typeof(IDownBumpBlock).IsAssignableFrom(base.TargetBlockType);
     public FlowBlockEditorUnit NextFlowBlockEditorUnit
     {
         get
@@ -52,28 +61,28 @@ public class FlowBlockEditorUnit : BlockEditorUnit
         }
         set
         {
-             //Never Set Value Of BlockEditorUnit From This Class
-            // FlowBlock -> BlockEditorUnit XXXXXX
-            // BlockEditorUnit -> FLowBlock OOOOOOO
-            if (this.nextFlowBlockEditorUnit != null)
-                this.nextFlowBlockEditorUnit.PreviousFlowBlockEditorUnit = null;
-
-            this.nextFlowBlockEditorUnit = value;
-            this.targetFlowBlock.NextBlock = value.targetFlowBlock; // Set To FlowBlock.NextBlock
-
-            if (this.nextFlowBlockEditorUnit != null)
+            if (IsHaveNextBlockEditorUnit == true)
             {
-                this.nextFlowBlockEditorUnit.PreviousFlowBlockEditorUnit = this;
+                //Never Set Value Of BlockEditorUnit From This Class
+                // FlowBlock -> BlockEditorUnit XXXXXX
+                // BlockEditorUnit -> FLowBlock OOOOOOO
+                if (this.NextFlowBlockEditorUnit != null)
+                {
+                    this.NextFlowBlockEditorUnit.PreviousFlowBlockEditorUnit = null;
+                }
+
+                this.nextFlowBlockEditorUnit = value;
+                this.targetFlowBlock.NextBlock = value.targetFlowBlock; // Set To FlowBlock.NextBlock
+
+                if (this.nextFlowBlockEditorUnit != null)
+                {
+                    this.nextFlowBlockEditorUnit.PreviousFlowBlockEditorUnit = this;
+                }
             }
+
         }
     }
 
-    protected override void CleanBlockEditorUnit()
-    {
-        base.CleanBlockEditorUnit();
-
-        //Clean Previous, Next FlowBlock Editor Unit(!!!) 
-        //Please Use Object Pool
-    }
+   
 }
 

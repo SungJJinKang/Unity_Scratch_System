@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-public static class Utility 
+public static class Utility
 {
     public static bool IsNumeric(this string str)
     {
@@ -13,10 +13,10 @@ public static class Utility
         return float.TryParse(str, out f);
     }
 
-   
+
 
     public static StringBuilder stringBuilderCache = new StringBuilder();
-  
+
 }
 
 

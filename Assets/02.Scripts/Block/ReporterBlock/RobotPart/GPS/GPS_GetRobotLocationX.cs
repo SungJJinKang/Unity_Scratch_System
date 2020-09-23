@@ -10,7 +10,7 @@ public sealed class GPS_GetRobotLocationX : ReporterBlock, IGPSBlockType
         }
         else
         {
-            return System.String.Empty; 
+            return System.String.Empty;
         }
     }
 }

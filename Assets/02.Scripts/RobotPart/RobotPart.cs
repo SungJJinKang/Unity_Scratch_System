@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
 public abstract class RobotPart : MonoBehaviour
 {
-    private RobotBase motherRobotBase ;
+    private RobotBase motherRobotBase;
     public RobotBase MotherRobotBase
     {
-        protected get 
+        protected get
         {
             if (this.motherRobotBase == null)
                 Debug.LogError("MotherRobotBase is null");
@@ -47,7 +45,7 @@ public abstract class RobotPart : MonoBehaviour
     {
 
     }
-    
+
     //Use "TextAsset" To Save method
-    
+
 }

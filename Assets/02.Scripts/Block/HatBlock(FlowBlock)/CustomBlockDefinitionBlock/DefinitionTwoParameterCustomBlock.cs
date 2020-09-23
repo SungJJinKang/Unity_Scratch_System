@@ -13,7 +13,7 @@ public sealed class DefinitionTwoParameterCustomBlock : DefinitionCustomBlock, I
         ParameterNames = new string[] { this.Input1Name, this.Input2Name };
     }
 
-    public LiteralReporterBlock Input1 { get ; set ; }
+    public LiteralReporterBlock Input1 { get; set; }
     public string Input1Name;
 
     public LiteralReporterBlock Input2 { get; set; }

@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-[System.Serializable]
-public sealed class GlobalVariableSelectorDropDownOfBlockUnit : ElementOfBlockUnit
+﻿[System.Serializable]
+public sealed class GlobalVariableSelectorDropDownOfBlockUnit : InputElementOfBlockUnit
 {
     // Start is called before the first frame update
     protected override void Start()

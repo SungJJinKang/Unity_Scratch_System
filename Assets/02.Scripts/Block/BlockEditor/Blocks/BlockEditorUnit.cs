@@ -167,7 +167,8 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
 
             elementOfBlockUnit.transform.SetParent(this.MainBlockTransform);
             elementOfBlockUnit.transform.localScale = Vector3.one;
-            elementOfBlockUnit.transform.SetSiblingIndex(this.MainBlockTransform.childCount - 2);
+            elementOfBlockUnit.transform.SetSiblingIndex(this.MainBlockTransform.childCount - 2); // place elementOfBlockUnit To the last space of blockeditorunit
+            elementOfBlockUnit.OwnerBlockUnit = this;
             elementOfBlockUnit.SetElementContent(elementContent);
 
 

@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-[System.Serializable]
-public sealed class BooleanBlockInputOfBlockUnit : ElementOfBlockUnit
+﻿[System.Serializable]
+public sealed class BooleanBlockInputOfBlockUnit : InputElementOfBlockUnit
 {
+    public BooleanBlockEditorUnit InputtedBooleanBlockEditorUnit;
+
     // Start is called before the first frame update
     protected override void Start()
     {

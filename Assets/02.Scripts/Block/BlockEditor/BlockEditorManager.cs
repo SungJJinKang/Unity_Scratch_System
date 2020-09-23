@@ -15,6 +15,7 @@ public class BlockEditorManager : MonoBehaviour
     private void Awake()
     {
         instnace = this;
+        this.SpawnedBlockEditorUnitDictionary = new Dictionary<Block, BlockEditorUnit>();
     }
 
     private void Start()
@@ -123,6 +124,7 @@ public class BlockEditorManager : MonoBehaviour
         if (this.EditingRobotSourceCode == null)
             return;
 
+
         //Spawn Hat Blocks
         this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.InitBlock);
         this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.LoopedBlock);
@@ -138,68 +140,72 @@ public class BlockEditorManager : MonoBehaviour
     /// Spawn Hat Block On Block Editor Work Space
     /// </summary>
     /// <param name="hatBlock"></param>
-    private void SpawnBlockEditorUnitOnBlockWorkSpace(HatBlock hatBlock)
+    private BlockEditorUnit SpawnBlockEditorUnitOnBlockWorkSpace(HatBlock hatBlock)
     {
         if (hatBlock == null)
-            return;
+            return null;
 
-        this.CreateBlockEditorUnit(hatBlock.GetType(), this.BlockWorkSpaceContentTransform);
+        BlockEditorUnit blockEditorUnit = this.CreateBlockEditorUnit(hatBlock, this.BlockWorkSpaceContentTransform);
         this.SpawnBlockEditorUnitOnBlockWorkSpace(hatBlock, hatBlock.NextBlock);
+        return blockEditorUnit;
     }
 
     /// <summary>
     /// Used When Spawn Next Block, and Attach next block to DownBumpBlock
     /// </summary>
-    /// <param name="downBumpBlock">Block what nextBlock attach to</param>
-    /// <param name="nextBlock">Block Attached To DownBumpBlock</param>
+    /// <param name="parentBlock">Block what nextBlock attach to</param>
+    /// <param name="childBlock">Block Attached To DownBumpBlock</param>
     private void SpawnBlockEditorUnitOnBlockWorkSpace(FlowBlock parentBlock, FlowBlock childBlock)
     {
         if (parentBlock == null || childBlock == null)
             return;
 
+        FlowBlockEditorUnit parentBlockEditorUnit = null;
+        if(this.SpawnedBlockEditorUnitDictionary.ContainsKey(parentBlock) == false)
+        {
+            parentBlockEditorUnit = this.CreateBlockEditorUnit(parentBlock, this.BlockWorkSpaceContentTransform) as FlowBlockEditorUnit;
+        }
+        else
+        {
+            parentBlockEditorUnit = this.SpawnedBlockEditorUnitDictionary[parentBlock] as FlowBlockEditorUnit;
+        }
 
-    }
+        FlowBlockEditorUnit childBlockEditorUnit = null;
+        if (this.SpawnedBlockEditorUnitDictionary.ContainsKey(childBlock) == false)
+        {
+            childBlockEditorUnit = this.CreateBlockEditorUnit(childBlock, this.BlockWorkSpaceContentTransform) as FlowBlockEditorUnit;
+        }
+        else
+        {
+            childBlockEditorUnit = this.SpawnedBlockEditorUnitDictionary[childBlock] as FlowBlockEditorUnit;
+        }
 
-    /// <summary>
-    /// Used When SpawnValueBlock, And Attach it to Parameter Input Of Other Blocks(IContainingParameter)
-    /// </summary>
-    /// <param name="blockContainingParameter">Block Containing Parameter</param>
-    /// <param name="parameterIndex">Index Of Parameter what valueBlock wiil be attached to</param>
-    /// <param name="valueBlock">Passed Parameter Blcok</param>
-    private void SpawnBlockEditorUnitOnBlockWorkSpace(IContainingParameter blockContainingParameter, int parameterIndex, ValueBlock valueBlock)
-    {
-        if (blockContainingParameter == null || valueBlock == null)
+        if (parentBlockEditorUnit != null && childBlockEditorUnit != null)
+        {
+            parentBlockEditorUnit.NextFlowBlockEditorUnit = childBlockEditorUnit;
+        }
+        else
+        {
+            if(parentBlockEditorUnit == null)
+            {
+                Debug.LogError("parentBlockEditorUnit is null");
+            }
+
+            if (childBlockEditorUnit == null)
+            {
+                Debug.LogError("schildBlockEditorUnit is null");
+            }
+
             return;
+        }
     }
+
 
     #endregion
 
     #region BlockEditorUnit
 
-    private const int BlockEditorUnitPoolCount = 3;
-    private void WarmPoolBlockEditorUnit()
-    {
-        PoolManager.WarmPool(booleanBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(capBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(cBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(hatBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(reporterBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-        PoolManager.WarmPool(stackBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
-    }
-
-    [Header("Block Editor Unit")]
-    [SerializeField]
-    private BooleanBlockEditorUnit booleanBlockEditorUnit;
-    [SerializeField]
-    private CapBlockEditorUnit capBlockEditorUnit;
-    [SerializeField]
-    private CBlockEditorUnit cBlockEditorUnit;
-    [SerializeField]
-    private HatBlockEditorUnit hatBlockEditorUnit;
-    [SerializeField]
-    private ReporterBlockEditorUnit reporterBlockEditorUnit;
-    [SerializeField]
-    private StackBlockEditorUnit stackBlockEditorUnit;
+  
 
 
     /// <summary>
@@ -222,10 +228,20 @@ public class BlockEditorManager : MonoBehaviour
     /// <returns></returns>
     private BlockEditorUnit CreateBlockEditorUnit(Block block, Transform parent)
     {
+        if(block == null)
+        {
+            Debug.LogError("block is null");
+            return null;
+        }
+
         Type blockType = block.GetType();
 
         if (blockType.IsSubclassOf(typeof(Block)) == false)
+        {
+            Debug.LogError(blockType.Name + " is not subclass of Block");
             return null;
+        }
+          
 
         BlockEditorUnit blockEditorUnit = null;
         if (blockType.IsSubclassOf(typeof(BooleanBlock)))
@@ -269,6 +285,13 @@ public class BlockEditorManager : MonoBehaviour
             blockEditorUnit.transform.localScale = Vector3.one;
 
             blockEditorUnit.TargetBlock = block;
+
+            if(blockEditorUnit.TargetBlock.IsAllParameterFilled)
+            {
+
+            }
+
+            this.AddToSpawnedBlockEditorUnitList(blockEditorUnit.TargetBlock, blockEditorUnit);
         }
 
 
@@ -280,24 +303,6 @@ public class BlockEditorManager : MonoBehaviour
 
     #region ElementOfBlockUnit
 
-    private const int ElementOfBlockUnitPoolCount = 3;
-    private void WarmPoolInitElementOfBlockUnit()
-    {
-        PoolManager.WarmPool(booleanBlockInputInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
-        PoolManager.WarmPool(globalVariableSelectorDropDownInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
-        PoolManager.WarmPool(reporterBlockInputInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
-        PoolManager.WarmPool(textInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
-    }
-
-    [Header("ElementOfBlockUnit")]
-    [SerializeField]
-    private BooleanBlockInputOfBlockUnit booleanBlockInputInBlockElement;
-    [SerializeField]
-    private GlobalVariableSelectorDropDownOfBlockUnit globalVariableSelectorDropDownInBlockElement;
-    [SerializeField]
-    private ReporterBlockInputOfBlockUnit reporterBlockInputInBlockElement;
-    [SerializeField]
-    private TextElementOfBlockUnit textInBlockElement;
 
     public ElementOfBlockUnit CreateElementOfBlockUnit(Type t)
     {
@@ -334,10 +339,59 @@ public class BlockEditorManager : MonoBehaviour
         nextBlockEditorUnit.PreviousFlowBlockEditorUnit = previousBlockEditorUnit;
     }
 
-    private void CreateBlockTemplate()
-    {
 
+    #region BlockEdidtorElementObjectPool 
+
+    private const int BlockEditorUnitPoolCount = 3;
+    private void WarmPoolBlockEditorUnit()
+    {
+        PoolManager.WarmPool(booleanBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
+        PoolManager.WarmPool(capBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
+        PoolManager.WarmPool(cBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
+        PoolManager.WarmPool(hatBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
+        PoolManager.WarmPool(reporterBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
+        PoolManager.WarmPool(stackBlockEditorUnit?.gameObject, BlockEditorUnitPoolCount);
     }
+
+
+    [Header("Block Editor Unit")]
+    [SerializeField]
+    private BooleanBlockEditorUnit booleanBlockEditorUnit;
+    [SerializeField]
+    private CapBlockEditorUnit capBlockEditorUnit;
+    [SerializeField]
+    private CBlockEditorUnit cBlockEditorUnit;
+    [SerializeField]
+    private HatBlockEditorUnit hatBlockEditorUnit;
+    [SerializeField]
+    private ReporterBlockEditorUnit reporterBlockEditorUnit;
+    [SerializeField]
+    private StackBlockEditorUnit stackBlockEditorUnit;
+
+    /// <summary>
+    /// The boolean block input in block element.
+    /// </summary>
+    [Header("ElementOfBlockUnit")]
+    [SerializeField]
+    private BooleanBlockInputOfBlockUnit booleanBlockInputInBlockElement;
+    [SerializeField]
+    private GlobalVariableSelectorDropDownOfBlockUnit globalVariableSelectorDropDownInBlockElement;
+    [SerializeField]
+    private ReporterBlockInputOfBlockUnit reporterBlockInputInBlockElement;
+    [SerializeField]
+    private TextElementOfBlockUnit textInBlockElement;
+
+    private const int ElementOfBlockUnitPoolCount = 3;
+    private void WarmPoolInitElementOfBlockUnit()
+    {
+        PoolManager.WarmPool(booleanBlockInputInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
+        PoolManager.WarmPool(globalVariableSelectorDropDownInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
+        PoolManager.WarmPool(reporterBlockInputInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
+        PoolManager.WarmPool(textInBlockElement?.gameObject, ElementOfBlockUnitPoolCount);
+    }
+
+
+    #endregion
 }
 
 [CustomEditor(typeof(BlockEditorManager))]

@@ -1,7 +1,15 @@
 ﻿[System.Serializable]
-public sealed class ReporterBlockInputOfBlockUnit : InputElementOfBlockUnit
+public abstract class InputElementOfBlockUnit : ElementOfBlockUnit
 {
-    public ReporterBlockEditorUnit InputtedReporterBlockEditorUnit;
+    /// <summary>
+    /// 1 ~ 4
+    /// </summary>
+    /// <value>The input index of block unit.</value>
+    public int inputIndexOfBlockUnit
+    {
+        set;
+        protected get;
+    }
 
     // Start is called before the first frame update
     protected override void Start()

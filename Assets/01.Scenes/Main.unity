@@ -254,8 +254,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 191250119}
+  - component: {fileID: 191250121}
+  - component: {fileID: 191250120}
   m_Layer: 5
-  m_Name: BlockWorkSpaceContent
+  m_Name: BlockWorkSpaceContentBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,8 +280,45 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 8144, y: 6456}
+  m_SizeDelta: {x: 15779.184, y: 10800.942}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &191250120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191250118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &191250121
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191250118}
+  m_CullTransparentMesh: 0
 --- !u!1 &256650262
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,7 +483,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1537071698}
   m_Direction: 2
   m_Value: 0.5
-  m_Size: 0.23064771
+  m_Size: 0.13786405
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -612,8 +651,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 794989906}
   m_HandleRect: {fileID: 794989905}
   m_Direction: 0
-  m_Value: 0.49999997
-  m_Size: 0.20625377
+  m_Value: 0.5
+  m_Size: 0.10645232
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1032,7 +1071,7 @@ GameObject:
   - component: {fileID: 809361724}
   m_Layer: 5
   m_Name: BlockShop
-  m_TagString: Untagged
+  m_TagString: BlockEditorBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1350,7 +1389,7 @@ GameObject:
   - component: {fileID: 1065784255}
   - component: {fileID: 1065784254}
   m_Layer: 5
-  m_Name: Scroll View
+  m_Name: BlockShop Scroll View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1658,7 +1697,7 @@ GameObject:
   - component: {fileID: 1348673956}
   m_Layer: 5
   m_Name: BlockWorkSpace
-  m_TagString: Untagged
+  m_TagString: BlockEditorBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1702,7 +1741,7 @@ MonoBehaviour:
   m_Vertical: 1
   m_MovementType: 2
   m_Elasticity: 0.1
-  m_Inertia: 1
+  m_Inertia: 0
   m_DecelerationRate: 0.05
   m_ScrollSensitivity: 1
   m_Viewport: {fileID: 779940052}
@@ -2166,7 +2205,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 32
 --- !u!114 &1742991224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2243,7 +2282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BlockShopContentTransform: {fileID: 1800445524}
-  BlockWorkSpaceContentTransform: {fileID: 0}
+  BlockWorkSpaceContentTransform: {fileID: 191250119}
   booleanBlockEditorUnit: {fileID: -105569658993342339, guid: 2fd1355999d5fa146bd18c071a5762b5,
     type: 3}
   capBlockEditorUnit: {fileID: 304028824464289061, guid: fb696f11a25c2654fa44bb0c5779c0bb,
@@ -2277,7 +2316,77 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Canvas: {fileID: 1742991225}
   BlockShopScrollRect: {fileID: 1065784254}
+  BlockShopContentBody: {fileID: 1800445524}
+  BlockWorkSpaceScrollRect: {fileID: 1348673956}
+  BlockWorkSpaceContentBody: {fileID: 191250119}
   BlockEditorBodyTransform: {fileID: 917930467}
+  _GUIStyle:
+    m_Name: 
+    m_Normal:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Hover:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Active:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Focused:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnNormal:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnHover:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnActive:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnFocused:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Border:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Margin:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Padding:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Overflow:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Font: {fileID: 0}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_Alignment: 0
+    m_WordWrap: 0
+    m_RichText: 1
+    m_TextClipping: 0
+    m_ImagePosition: 0
+    m_ContentOffset: {x: 0, y: 0}
+    m_FixedWidth: 0
+    m_FixedHeight: 0
+    m_StretchWidth: 1
+    m_StretchHeight: 0
   rectPos:
     serializedVersion: 2
     x: 10
@@ -2297,7 +2406,7 @@ GameObject:
   - component: {fileID: 1800445526}
   - component: {fileID: 1800445527}
   m_Layer: 5
-  m_Name: BlockShopContent
+  m_Name: BlockShopContentBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

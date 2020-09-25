@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 6953823854240251300}
   m_Layer: 5
   m_Name: ReporterBlockInput
-  m_TagString: Untagged
+  m_TagString: BlockInput
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ffb4b89f88943159687b66cd77b907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _RectTransform: {fileID: 0}
   InputtedReporterBlockEditorUnit: {fileID: 0}
 --- !u!222 &8332189862307948002
 CanvasRenderer:

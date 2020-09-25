@@ -1,6 +1,7 @@
 ﻿[System.Serializable]
 public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit
 {
+    public const string InputSpaceElementOfBlockUnitTag = "InputSpaceElementOfBlockUnit";
     /// <summary>
     /// 1 ~ 4
     /// </summary>
@@ -9,6 +10,13 @@ public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit
     {
         set;
         protected get;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        gameObject.tag = InputSpaceElementOfBlockUnitTag;
     }
 
     // Start is called before the first frame update

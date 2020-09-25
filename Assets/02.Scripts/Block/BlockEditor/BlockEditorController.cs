@@ -1,8 +1,10 @@
 ﻿
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
@@ -10,6 +12,8 @@ using UnityEngine.UI;
 
 public class BlockEditorController : MonoBehaviour
 {
+    public static BlockEditorController instance;
+
     [SerializeField]
     private Canvas _Canvas;
     private GraphicRaycaster _GraphicRaycaster;
@@ -17,6 +21,8 @@ public class BlockEditorController : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
+
 #if UNITY_EDITOR
         stringBuilder = new StringBuilder();
 
@@ -42,19 +48,20 @@ public class BlockEditorController : MonoBehaviour
 
     void Update()
     {
-        UpdateTopBlockEdidtorElementAtMouse();
+        //this.UpdateTopBlockEdidtorElementAtMouse();
 
-        UpdateControllingBlockEdidtorElement();
+        this.UpdateControllingBlockEdidtorElement();
     }
 
 
-
+    /*
     [SerializeField]
     public BlockEdidtorElement TopBlockEdidtorElementAtMousePoint
     {
         get;
         private set;
     }
+    */
 
     private BlockEditorUnit controllingBlockEditorUnit;
     [SerializeField]
@@ -72,52 +79,178 @@ public class BlockEditorController : MonoBehaviour
             {
                 this.BlockShopScrollRect.StopMovement();
                 this.BlockShopScrollRect.enabled = false;
+
+                this.BlockWorkSpaceScrollRect.StopMovement();
+                this.BlockWorkSpaceScrollRect.enabled = false;
+
+
+
+                UpdateIsControllingBlockEditorUnitAttachableCoroutine = StartCoroutine(UpdateIsControllingBlockEditorUnitAttachableIEnumerator());
             }
             else
             {
                 this.BlockShopScrollRect.enabled = true;
+
+                this.BlockWorkSpaceScrollRect.enabled = true;
+
+
+
+
+                if(UpdateIsControllingBlockEditorUnitAttachableCoroutine != null)
+                {
+                    StopCoroutine(UpdateIsControllingBlockEditorUnitAttachableCoroutine);
+                    UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
+                }
             }
         }
+    }
+
+    private Coroutine UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
+    /// <summary>
+    /// Update ControllingBlockEditorUnit Is Attachable
+    /// If attachable, show preview when attached ( see scratch )
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator UpdateIsControllingBlockEditorUnitAttachableIEnumerator()
+    {
+        while(true)
+        {
+            if (this.ControllingBlockEditorUnit == null)
+                yield break;
+
+            if(this.ControllingBlockEditorUnit.IsAttatchable() == true)
+            {
+
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
     }
 
 
     private BlockEditorUnit PinchingBlockEditorUnit;
 
 
+    private BlockEditorUnit TopBlockEditorUnit;
+    //private ElementOfBlockUnit TopElementOfBlockUnit;
 
-    private void UpdateTopBlockEdidtorElementAtMouse()
+    /// <summary>
+    /// Dont Call this at every tick(update)
+    /// </summary>
+    /// <param name="screenPos"></param>
+    private void UpdateHitUiList(Vector3 screenPos)
     {
-        _PointerEventData.position = Input.mousePosition;
+        _PointerEventData.position = screenPos;
 
         if (this.hitUiList == null)
             this.hitUiList = new List<RaycastResult>();
 
         this.hitUiList.Clear();
         _GraphicRaycaster.Raycast(_PointerEventData, this.hitUiList);
+    }
 
-        TopBlockEdidtorElementAtMousePoint = null;
 
-        for (int i = 0; i < this.hitUiList.Count; i++)
-        {//Top Object comes first
-            if (TopBlockEdidtorElementAtMousePoint != null && TopBlockEdidtorElementAtMousePoint.gameObject == this.hitUiList[i].gameObject)
-                break;
+    private void UpdateTopHitBlockEdidtorElement()
+    {
+        this.UpdateHitUiList(Input.mousePosition);
 
-            if (this.hitUiList[i].gameObject.CompareTag(BlockEdidtorElement.BlockEdidtorElementTag))
-            {
-                TopBlockEdidtorElementAtMousePoint = this.hitUiList[i].gameObject.GetComponent<BlockEdidtorElement>();
+        this.TopBlockEditorUnit = null;
+        //this.TopElementOfBlockUnit = null;
+        this.HoveringBodyScrollRect = null;
 
-                if (TopBlockEdidtorElementAtMousePoint != null)
+        if (this.hitUiList.Count > 0)
+        {
+            for (int i = 0; i < this.hitUiList.Count; i++)
+            {//Top Object comes first
+
+                if (this.TopBlockEditorUnit != null && HoveringBodyScrollRect != null)
                     break;
+
+                //if (this.TopBlockEditorUnit != null && this.TopElementOfBlockUnit != null && HoveringBodyScrollRect != null)
+                //    break;
+
+                if (this.TopBlockEditorUnit == null && this.hitUiList[i].gameObject.CompareTag(BlockEditorUnit.BlockEditorUnitTag))
+                {
+                    this.TopBlockEditorUnit = this.hitUiList[i].gameObject.GetComponent<BlockEditorUnit>();
+
+                    if (this.TopBlockEditorUnit != null)
+                        continue;
+                }
+
+                /*
+                if (this.TopElementOfBlockUnit == null && this.hitUiList[i].gameObject.CompareTag(ElementOfBlockUnit.ElementOfBlockUnitTag))
+                {
+                    this.TopElementOfBlockUnit = this.hitUiList[i].gameObject.GetComponent<ElementOfBlockUnit>();
+
+                    if (this.TopElementOfBlockUnit != null)
+                        continue;
+                }
+                */
+
+                if (this.HoveringBodyScrollRect == null && this.hitUiList[i].gameObject.CompareTag(HoveringBodyTag))
+                {
+                    if (this.hitUiList[i].gameObject == BlockShopScrollRect.gameObject)
+                    {
+                        HoveringBodyScrollRect = BlockShopScrollRect;
+                        continue;
+                    }
+
+                    if (this.hitUiList[i].gameObject == BlockWorkSpaceScrollRect.gameObject)
+                    {
+                        HoveringBodyScrollRect = BlockWorkSpaceScrollRect;
+                        continue;
+                    }
+
+                    if (this.HoveringBodyScrollRect != null)
+                        continue;
+                }
             }
         }
+
 
 #if UNITY_EDITOR
         DebugHitUiList();
 #endif
     }
 
+    
+    public FlowBlockConnector GetTopFlowBlockConnector(Vector2 screenPos)
+    {
+        this.UpdateHitUiList(screenPos);
+
+        if (this.hitUiList.Count > 0)
+        {
+            for (int i = 0; i < this.hitUiList.Count; i++)
+            {//Top Object comes first
+             
+                if(this.hitUiList[i].gameObject.CompareTag(FlowBlockConnector.FlowBlockConnectorTag))
+                {
+                    return this.hitUiList[i].gameObject.GetComponent<FlowBlockConnector>();
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+
+    private const string HoveringBodyTag = "BlockEditorBody";
+
     [SerializeField]
     private ScrollRect BlockShopScrollRect;
+    [SerializeField]
+    private RectTransform BlockShopContentBody;
+
+    [SerializeField]
+    private ScrollRect BlockWorkSpaceScrollRect;
+    [SerializeField]
+    private RectTransform BlockWorkSpaceContentBody;
+
+    private ScrollRect HoveringBodyScrollRect;
+
+
     [SerializeField]
     private RectTransform BlockEditorBodyTransform;
 
@@ -127,22 +260,27 @@ public class BlockEditorController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            this.UpdateTopHitBlockEdidtorElement();
+
             this.screenPointWhenMouseClicked = Input.mousePosition;
-            this.PinchingBlockEditorUnit = this.TopBlockEdidtorElementAtMousePoint as BlockEditorUnit;
+            this.PinchingBlockEditorUnit = this.TopBlockEditorUnit ;
         }
         else if (Input.GetMouseButton(0))
         {
             if (this.ControllingBlockEditorUnit == null)
             {
-                if (this.PinchingBlockEditorUnit != null && Mathf.Abs(this.screenPointWhenMouseClicked.x - Input.mousePosition.x) > 0.5f)
-                {// If Move Mouse After Clicking Block, it start control clicked block
-                    this.ControllingBlockEditorUnit = this.PinchingBlockEditorUnit.GetComponent<BlockTemplateInBlockShop>() != null ? this.PinchingBlockEditorUnit.Duplicate(this.BlockEditorBodyTransform) : this.PinchingBlockEditorUnit;
+                if (this.PinchingBlockEditorUnit != null && Mathf.Abs(this.screenPointWhenMouseClicked.x - Input.mousePosition.x) > 1.5f)
+                {   // If Move Mouse After Clicking Block, it start control clicked block
+                    //Set this.ControllingBlockEditorUnit 
+
+                    this.ControllingBlockEditorUnit = this.PinchingBlockEditorUnit.IsShopBlock == true ? this.PinchingBlockEditorUnit.Duplicate(this.BlockEditorBodyTransform) : this.PinchingBlockEditorUnit;
 
                     if (this.ControllingBlockEditorUnit != null)
                     {
-                        SetUIAtMousePoint(this.ControllingBlockEditorUnit.transform, this.BlockEditorBodyTransform, -Vector3.right * 50);
+                        this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 50;
 
                         this.ControllingBlockEditorUnit.transform.SetParent(this.BlockEditorBodyTransform);
+                  
                         this.ControllingBlockEditorUnit.OnStartControlling();
                     }
                     else
@@ -154,7 +292,8 @@ public class BlockEditorController : MonoBehaviour
             }
             else
             {
-                SetUIAtMousePoint(this.ControllingBlockEditorUnit.transform, this.BlockEditorBodyTransform, -Vector3.right * 50);
+                this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 100;
+             
             }
 
 
@@ -163,19 +302,41 @@ public class BlockEditorController : MonoBehaviour
         {
             if (this.ControllingBlockEditorUnit != null)
             {
-                if(this.ControllingBlockEditorUnit.IsAttatchable == true)
-                {
+                this.UpdateTopHitBlockEdidtorElement();
 
-                    this.ControllingBlockEditorUnit.OnEndControlling();
+                if (HoveringBodyScrollRect == null || HoveringBodyScrollRect == this.BlockShopScrollRect.gameObject)
+                {//if player end controlling block on BlockShop UI or Outside of Editor UI
+                    if(this.ControllingBlockEditorUnit.IsRemovable == true)
+                    {
+                        this.ControllingBlockEditorUnit.Release();
+                    }
+                    else
+                    {
+                        this.ControllingBlockEditorUnit.RevertUiPos();
+                    }
                 }
                 else
-                {
-                    //Release(Destroy) ControllingBlockEditorUnit
-                    this.ControllingBlockEditorUnit.Release();
+                {//if player end controlling block on BlockWorkdSpace UI
+
+                    this.ControllingBlockEditorUnit.transform.SetParent(this.BlockWorkSpaceContentBody);
+                    
+                    if (this.ControllingBlockEditorUnit.IsAttatchable() == true)
+                    {//if block can attach to other block as flowbloc or valueblock
+                        Debug.Log("this.ControllingBlockEditorUnit.IsAttatchable() is true");
+                    }
+                    else
+                    {
+                        Debug.Log("this.ControllingBlockEditorUnit.IsAttatchable() is false");
+                    }
+
+                    this.ControllingBlockEditorUnit.BackupUiTransform();
+                    this.ControllingBlockEditorUnit.OnEndControlling();
                 }
             }
+
             this.ControllingBlockEditorUnit = null;
             this.PinchingBlockEditorUnit = null;
+            this.HoveringBodyScrollRect = null;
         }
 
     }
@@ -186,14 +347,17 @@ public class BlockEditorController : MonoBehaviour
     /// <param name="uiTransform"></param>
     /// <param name="parentRect"></param>
     /// <param name="offset"></param>
-    private void SetUIAtMousePoint(Transform uiTransform, RectTransform parentRect, Vector3 offset)
+    private Vector3 GetUiWorldPos( RectTransform parentRect, Vector3 ScreenPos)
     {
-        if (uiTransform == null || parentRect == null)
-            return;
+        if (parentRect == null)
+            return Vector3.zero;
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, Input.mousePosition, _Canvas.worldCamera, out MousePosOnBlockEditorBodyTransform);
-        uiTransform.position = parentRect.TransformPoint(MousePosOnBlockEditorBodyTransform) + offset;
+        return parentRect.TransformPoint(MousePosOnBlockEditorBodyTransform);
     }
+
+
+
 
 
 
@@ -207,7 +371,9 @@ public class BlockEditorController : MonoBehaviour
     {
         stringBuilder.Clear();
 
-        stringBuilder.Append("TopBlockEdidtorElementAtMousePoint : " + this.TopBlockEdidtorElementAtMousePoint?.name + "\n");
+        stringBuilder.Append("TopBlockEditorUnit : " + this.TopBlockEditorUnit?.name + "\n");
+        //stringBuilder.Append("TopElementOfBlockUnit : " + this.TopElementOfBlockUnit?.name + "\n");
+        stringBuilder.Append("HoveringBodyScrollRect : " + this.HoveringBodyScrollRect?.name + "\n");
         stringBuilder.Append("PinchingBlockEditorUnit : " + this.PinchingBlockEditorUnit?.name + "\n");
         stringBuilder.Append("ControllingBlockEditorUnit : " + this.ControllingBlockEditorUnit?.name);
         stringBuilder.Append("\n\n\n");
@@ -220,7 +386,7 @@ public class BlockEditorController : MonoBehaviour
         this.pointHitResultStr = stringBuilder.ToString();
     }
 
-    private GUIStyle _GUIStyle;
+    public GUIStyle _GUIStyle;
     [SerializeField]
     private Rect rectPos;
     void OnGUI()
@@ -229,7 +395,13 @@ public class BlockEditorController : MonoBehaviour
         GUI.Label(this.rectPos, this.pointHitResultStr, this._GUIStyle);
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
 
+        if(_PointerEventData != null)
+            Gizmos.DrawSphere(Camera.main.ScreenToWorldPoint(_PointerEventData.position), 0.2f);
+    }
 
 
 #endif

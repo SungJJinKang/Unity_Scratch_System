@@ -4,8 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - BlockEdidtorElement
   - BlockTemplateInBlockShop
+  - ElementOfBlockUnit
+  - BlockEditorUnit
+  - BlockEditorBody
+  - BlockInput
+  - FlowBlockConnector
+  - InputSpaceElementOfBlockUnit
+  - BlockConnector
   layers:
   - Default
   - TransparentFX

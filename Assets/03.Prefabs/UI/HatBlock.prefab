@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 5381193569961858307}
   - component: {fileID: 3082421630110041135}
   - component: {fileID: 6397588364684803053}
+  - component: {fileID: 7539688082455502136}
   m_Layer: 5
   m_Name: NextConnector
-  m_TagString: Untagged
+  m_TagString: BlockConnector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,7 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -76,6 +77,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7539688082455502136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314205476573036944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18389df55ff0fa3419153f879a6add8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _FlowBlockEditorUnit: {fileID: 0}
+  _ConnectorType: 1
 --- !u!1 &1451175156551764686
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,7 +255,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f371e7ea9743a4150808966bf1841fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _RectTransform: {fileID: 0}
+  RayBoxExtentX: 0
+  RayBoxExtentY: 0
   MainBlockTransform: {fileID: 7450145499832387573}
+  previousFlowBlockEditorUnit: {fileID: 0}
+  nextFlowBlockEditorUnit: {fileID: 0}
 --- !u!114 &7101536439537722255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,7 +614,7 @@ GameObject:
   - component: {fileID: 6794233957035627738}
   m_Layer: 5
   m_Name: PreviousConnector
-  m_TagString: Untagged
+  m_TagString: BlockConnector
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

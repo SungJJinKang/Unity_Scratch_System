@@ -6,10 +6,39 @@ using UnityEngine.Rendering.PostProcessing;
 
 public abstract class BlockEditorUnit : BlockEdidtorElement
 {
+    public const string BlockEditorUnitTag = "BlockEditorUnit";
+
     protected override void Awake()
     {
         base.Awake();
+
+        gameObject.tag = BlockEditorUnitTag;
+
+        this.IsRemovable = true;
+        this.IsShopBlock = false;
     }
+
+    public bool IsShopBlock = false;
+    public bool IsRemovable = true;
+    private Vector3 backupedPos;
+    private Transform backupedParentTransform;
+
+    public void BackupUiTransform()
+    {
+        this.backupedPos = transform.position;
+        this.backupedParentTransform = transform.parent;
+    }
+
+    public void RevertUiPos()
+    {
+        if (backupedParentTransform == null)
+            Debug.LogError("not backuped yet");
+
+        transform.SetParent(this.backupedParentTransform);
+        transform.position = this.backupedPos;
+    }
+
+   
 
     /// <summary>
     /// Duplicate BlockEditorUnit
@@ -22,17 +51,34 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         return BlockEditorManager.instnace.CreateBlockEditorUnit(this.TargetBlock.GetType(), parent);
     }
 
+
+    [SerializeField]
+    private float RayBoxExtentX;
+    [SerializeField]
+    private float RayBoxExtentY;
+
+  
+
+    private void OnDrawGizmos()
+    {
+        for (int i = 0; i <= 2; i++)
+        {
+            for (int j = 0; j <= 2; j++)
+            {
+                //Gizmos.DrawSphere(base._RectTransform.position + new Vector3(RayBoxExtents.x * i, RayBoxExtents.y * (j - 1)), 0.1f);
+            }
+        }
+    }
+
     /// <summary>
     /// Return IsAttatchable
     /// Return if this BlockEditorUnit can be attached to any InputElementOfBlockUnit or as NextBlock, PreviousBlock
+    /// 
+    /// Don call this every tick, update
     /// </summary>
-    public bool IsAttatchable
-    {
-        get
-        {
-            return false;
-        }
-    }
+    /// <returns></returns>
+    public virtual bool IsAttatchable() { return true; }
+    public virtual bool AttachBlock() { return true; }
 
 
     public virtual void OnStartControlling()
@@ -57,12 +103,16 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         // Removing BlockEditorUnit, Element Of BlockUnit shouldn't effect to Block instance
         this.targetBlock = null; 
 
-        for (int i = 0; i < this.ElementOfBlockUnitList.Count; i++)
+        if(this.ElementOfBlockUnitList != null && this.ElementOfBlockUnitList.Count > 0)
         {
-            this.ElementOfBlockUnitList[i].Release();
-        }
+            for (int i = 0; i < this.ElementOfBlockUnitList.Count; i++)
+            {
+                this.ElementOfBlockUnitList[i].Release();
+            }
 
-        this.ElementOfBlockUnitList.Clear();
+            this.ElementOfBlockUnitList.Clear();
+        }
+        
         PoolManager.Instance.releaseObject(gameObject);
     }
 

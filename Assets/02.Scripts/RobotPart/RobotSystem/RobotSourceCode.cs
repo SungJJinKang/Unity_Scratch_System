@@ -98,7 +98,17 @@ public class RobotSourceCode
     private Dictionary<string, EventBlock> StoredEventBlockDictonary;
     public EventBlock[] StoredEventBlocks
     {
-        get => this.StoredEventBlockDictonary.Values.ToArray();
+        get
+        {
+            if(this.StoredEventBlockDictonary != null)
+            {
+                return this.StoredEventBlockDictonary.Values.ToArray();
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
     public bool AddToStoredEventBlockList(EventBlock eventBlock)
     {

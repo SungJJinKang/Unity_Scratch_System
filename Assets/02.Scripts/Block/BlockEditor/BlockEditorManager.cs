@@ -19,7 +19,9 @@ public class BlockEditorManager : MonoBehaviour
 
     private void Start()
     {
-        InitBlockEditorSystem();
+        this.InitBlockEditorSystem();
+
+        this.EditingRobotSourceCode = new RobotSourceCode("123");
     }
 
 
@@ -81,7 +83,7 @@ public class BlockEditorManager : MonoBehaviour
             BlockEditorUnit createdBlockEditorUnit = this.CreateBlockEditorUnit(type, this.BlockShopContentTransform);
             if (createdBlockEditorUnit != null)
             {
-                createdBlockEditorUnit.gameObject.AddComponent<BlockTemplateInBlockShop>();
+                createdBlockEditorUnit.IsShopBlock = true;
             }
 
 
@@ -129,13 +131,33 @@ public class BlockEditorManager : MonoBehaviour
 
 
         //Spawn Hat Blocks
-        this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.InitBlock);
-        this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.LoopedBlock);
+        BlockEditorUnit initBlockEditorUnit = this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.InitBlock);
+        BlockEditorUnit loopedBlockEditorUnit = this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.LoopedBlock);
 
-        foreach (var eventBlock in this.EditingRobotSourceCode.StoredEventBlocks)
+        if(initBlockEditorUnit != null)
         {
-            this.SpawnBlockEditorUnitOnBlockWorkSpace(eventBlock);
+            initBlockEditorUnit._RectTransform.anchoredPosition = Vector2.zero;
+            initBlockEditorUnit.IsRemovable = false;
+            initBlockEditorUnit.BackupUiTransform();
         }
+
+        if (loopedBlockEditorUnit != null)
+        {
+            loopedBlockEditorUnit._RectTransform.anchoredPosition = Vector2.zero;
+            loopedBlockEditorUnit.IsRemovable = false;
+            loopedBlockEditorUnit.BackupUiTransform();
+        }
+
+
+        EventBlock[] eventBlocks = this.EditingRobotSourceCode.StoredEventBlocks;
+        if (eventBlocks != null)
+        {
+            foreach (var eventBlock in this.EditingRobotSourceCode.StoredEventBlocks)
+            {
+                this.SpawnBlockEditorUnitOnBlockWorkSpace(eventBlock);
+            }
+        }
+       
         //
     }
 
@@ -309,12 +331,6 @@ public class BlockEditorManager : MonoBehaviour
 
 
 
-
-    public void ConnectFlowBlockEditorUnit(FlowBlockEditorUnit previousBlockEditorUnit, FlowBlockEditorUnit nextBlockEditorUnit)
-    {
-        previousBlockEditorUnit.NextFlowBlockEditorUnit = nextBlockEditorUnit;
-        nextBlockEditorUnit.PreviousFlowBlockEditorUnit = previousBlockEditorUnit;
-    }
 
 
     #region BlockEdidtorElementObjectPool 

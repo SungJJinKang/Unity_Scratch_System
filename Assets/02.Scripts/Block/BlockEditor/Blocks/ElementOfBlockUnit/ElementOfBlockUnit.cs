@@ -3,6 +3,8 @@
 [System.Serializable]
 public abstract class ElementOfBlockUnit : BlockEdidtorElement
 {
+
+
     [SerializeField]
     public BlockEditorUnit OwnerBlockUnit
     {
@@ -13,6 +15,7 @@ public abstract class ElementOfBlockUnit : BlockEdidtorElement
     protected override void Awake()
     {
         base.Awake();
+
     }
 
     // Start is called before the first frame update

@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: -1546926074924971972}
   m_Layer: 5
   m_Name: BooleanBlockInput
-  m_TagString: Untagged
+  m_TagString: BlockInput
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e72fc29ba52a4d3484e23607feb807b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _RectTransform: {fileID: 0}
   InputtedBooleanBlockEditorUnit: {fileID: 0}
 --- !u!222 &1695487423319045430
 CanvasRenderer:

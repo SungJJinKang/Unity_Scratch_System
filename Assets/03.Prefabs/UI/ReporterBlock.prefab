@@ -473,7 +473,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _RectTransform: {fileID: 0}
-  RayBoxExtents: {x: 0, y: 0}
+  _BlockMockupHelper: {fileID: 0}
+  IsShopBlock: 0
+  IsRemovable: 1
   MainBlockTransform: {fileID: 3386564316465024957}
 --- !u!222 &8744976857688236976
 CanvasRenderer:

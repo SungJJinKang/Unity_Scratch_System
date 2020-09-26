@@ -8,14 +8,20 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
 {
     public const string BlockEditorUnitTag = "BlockEditorUnit";
 
+    public BlockMockupHelper _BlockMockupHelper;
+
     protected override void Awake()
     {
         base.Awake();
+
+        _BlockMockupHelper = GetComponent<BlockMockupHelper>();
 
         gameObject.tag = BlockEditorUnitTag;
 
         this.IsRemovable = true;
         this.IsShopBlock = false;
+
+       
     }
 
     public bool IsShopBlock = false;
@@ -51,25 +57,7 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         return BlockEditorManager.instnace.CreateBlockEditorUnit(this.TargetBlock.GetType(), parent);
     }
 
-
-    [SerializeField]
-    private float RayBoxExtentX;
-    [SerializeField]
-    private float RayBoxExtentY;
-
   
-
-    private void OnDrawGizmos()
-    {
-        for (int i = 0; i <= 2; i++)
-        {
-            for (int j = 0; j <= 2; j++)
-            {
-                //Gizmos.DrawSphere(base._RectTransform.position + new Vector3(RayBoxExtents.x * i, RayBoxExtents.y * (j - 1)), 0.1f);
-            }
-        }
-    }
-
     /// <summary>
     /// Return IsAttatchable
     /// Return if this BlockEditorUnit can be attached to any InputElementOfBlockUnit or as NextBlock, PreviousBlock
@@ -77,8 +65,14 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
     /// Don call this every tick, update
     /// </summary>
     /// <returns></returns>
-    public virtual bool IsAttatchable() { return true; }
+    public abstract bool IsAttatchable();
+    public BlockConnector AttachableBlockConnector
+    {
+        protected set;
+        get;
+    }
     public virtual bool AttachBlock() { return true; }
+    public virtual Vector3 GetAttachPoint() { return Vector3.zero; }
 
 
     public virtual void OnStartControlling()
@@ -169,7 +163,7 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
     /// Target Block Type
     /// Target Block is subclass of This Type
     /// </summary>
-    protected Type TargetBlockType
+    private Type TargetBlockType
     {
         get
         {
@@ -293,6 +287,8 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         elementOfBlockUnit.SetElementContent(elementContent);
         return elementOfBlockUnit;
     }
+
+
 
 
 }

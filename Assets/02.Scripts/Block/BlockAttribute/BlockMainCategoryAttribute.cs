@@ -34,7 +34,7 @@ public class BlockMainCategoryAttribute : Attribute
             return true;
         }
 
-        if ((object)a == null || (object)b == null)
+        if (a == null || b == null)
         {
             return false;
         }

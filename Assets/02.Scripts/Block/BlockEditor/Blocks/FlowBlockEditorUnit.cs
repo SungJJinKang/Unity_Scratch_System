@@ -7,7 +7,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
     [SerializeField]
     private FlowBlockEditorUnit previousFlowBlockEditorUnit;
-    public bool IsPreviousBlockEditorUnitAssignable => typeof(IUpNotchBlock).IsAssignableFrom(base.TargetBlockType);
+    public bool IsPreviousBlockEditorUnitAssignable => base.TargetBlock is IUpNotchBlock;
     public FlowBlockEditorUnit PreviousFlowBlockEditorUnit
     {
         get
@@ -45,7 +45,8 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
     [SerializeField]
     private FlowBlockEditorUnit nextFlowBlockEditorUnit;
-    public bool IsNextBlockEditorUnitAssignable => typeof(IDownBumpBlock).IsAssignableFrom(base.TargetBlockType);
+    private bool isNextBlockEditorUnitAssignableCahe;
+    public bool IsNextBlockEditorUnitAssignable => base.TargetBlock is IDownBumpBlock;
     public FlowBlockEditorUnit NextFlowBlockEditorUnit
     {
         get
@@ -91,18 +92,20 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
     /// <returns></returns>
     sealed public override bool IsAttatchable()
     {
-        FlowBlockConnector flowBlockConnector = BlockEditorController.instance.GetTopFlowBlockConnector(RectTransformUtility.WorldToScreenPoint(Camera.current, transform.position + Vector3.right * OffsetX));
+        FlowBlockConnector flowBlockConnector = BlockEditorController.instance.GetTopBlockConnector<FlowBlockConnector>(RectTransformUtility.WorldToScreenPoint(Camera.current, transform.position));
+        base.AttachableBlockConnector = null;
 
-        if (flowBlockConnector == null || flowBlockConnector._FlowBlockEditorUnit == this)
+        if (flowBlockConnector == null || flowBlockConnector.ParentBlockEditorUnit == this)
         {
             return false;
         }
         else
         {
-            if(flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.UpNotch)
-            {
+            if (flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.UpNotch)
+            {//if hit connector is up notch type
                 if(this.IsNextBlockEditorUnitAssignable)
                 {
+                    base.AttachableBlockConnector = flowBlockConnector;
                     return true;
                 }
                 else
@@ -111,9 +114,10 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
                 }
             }
             else
-            {
+            {//if hit connector is down bump type
                 if (this.IsPreviousBlockEditorUnitAssignable)
                 {
+                    base.AttachableBlockConnector = flowBlockConnector;
                     return true;
                 }
                 else
@@ -127,7 +131,31 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
     sealed public override bool AttachBlock()
     {
-        return true;
+        if (base.AttachableBlockConnector != null)
+        {
+            FlowBlockConnector flowBlockConnector = base.AttachableBlockConnector as FlowBlockConnector;
+            FlowBlockEditorUnit targetFlowBlockEditorUnit = flowBlockConnector.ParentBlockEditorUnit as FlowBlockEditorUnit;
+            if (flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.UpNotch)
+            {//if hit connector is up notch type
+                targetFlowBlockEditorUnit.PreviousFlowBlockEditorUnit = this;
+            }
+            else
+            {
+
+                targetFlowBlockEditorUnit.NextFlowBlockEditorUnit = this;
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    sealed public override Vector3 GetAttachPoint()
+    {
+        return Vector3.zero;
     }
 
 #if UNITY_EDITOR

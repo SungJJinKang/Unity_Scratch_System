@@ -204,6 +204,7 @@ public abstract class Block
         {
             if (this.IsParametersTypesCached == false)
             {
+                /*
                 Type t = this.GetType();
                 if (typeof(IContainingParameter).IsAssignableFrom(t))
                 {
@@ -216,6 +217,21 @@ public abstract class Block
                         }
                     }
                 }
+                */
+
+                if (this is IContainingParameter)
+                {
+                    foreach (Type interfaceType in this.GetType().GetInterfaces())
+                    {
+                        if (typeof(IContainingParameter).IsAssignableFrom(interfaceType) && interfaceType.IsGenericType)
+                        {
+                            this.parametersTypes = interfaceType.GetGenericArguments(); // Caching
+                            break;
+                        }
+                    }
+                }
+
+
 
                 this.IsParametersTypesCached = true;
 

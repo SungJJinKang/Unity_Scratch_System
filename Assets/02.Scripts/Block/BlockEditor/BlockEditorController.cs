@@ -77,6 +77,7 @@ public class BlockEditorController : MonoBehaviour
 
             if(this.controllingBlockEditorUnit != null)
             {
+                //Make scrollrect stop
                 this.BlockShopScrollRect.StopMovement();
                 this.BlockShopScrollRect.enabled = false;
 
@@ -84,8 +85,8 @@ public class BlockEditorController : MonoBehaviour
                 this.BlockWorkSpaceScrollRect.enabled = false;
 
 
-
-                UpdateIsControllingBlockEditorUnitAttachableCoroutine = StartCoroutine(UpdateIsControllingBlockEditorUnitAttachableIEnumerator());
+                this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
+                this.UpdateIsControllingBlockEditorUnitAttachableCoroutine = StartCoroutine(this.UpdateIsControllingBlockEditorUnitAttachableIEnumerator());
             }
             else
             {
@@ -94,14 +95,19 @@ public class BlockEditorController : MonoBehaviour
                 this.BlockWorkSpaceScrollRect.enabled = true;
 
 
+                this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
 
-
-                if(UpdateIsControllingBlockEditorUnitAttachableCoroutine != null)
-                {
-                    StopCoroutine(UpdateIsControllingBlockEditorUnitAttachableCoroutine);
-                    UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
-                }
+                this.SetBlockMockUpVisible(false);
             }
+        }
+    }
+
+    private void StopUpdateIsControllingBlockEditorUnitAttachableCoroutine()
+    {
+        if (this.UpdateIsControllingBlockEditorUnitAttachableCoroutine != null)
+        {
+            StopCoroutine(this.UpdateIsControllingBlockEditorUnitAttachableCoroutine);
+            this.UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
         }
     }
 
@@ -118,15 +124,24 @@ public class BlockEditorController : MonoBehaviour
             if (this.ControllingBlockEditorUnit == null)
                 yield break;
 
-            if(this.ControllingBlockEditorUnit.IsAttatchable() == true)
-            {
+            Debug.Log("this.ControllingBlockEditorUnit : " + this.ControllingBlockEditorUnit.gameObject.name);
 
+            if (this.ControllingBlockEditorUnit.IsAttatchable() == true && this.ControllingBlockEditorUnit.AttachableBlockConnector != null)
+            {
+                this.SetBlockMockUpVisible(true);
+                this.SetBlockMockUp(this.ControllingBlockEditorUnit, this.ControllingBlockEditorUnit.AttachableBlockConnector);
+            }
+            else
+            {
+               
+                this.SetBlockMockUpVisible(false);
             }
 
             yield return new WaitForSeconds(0.1f);
         }
 
     }
+
 
 
     private BlockEditorUnit PinchingBlockEditorUnit;
@@ -215,18 +230,19 @@ public class BlockEditorController : MonoBehaviour
     }
 
     
-    public FlowBlockConnector GetTopFlowBlockConnector(Vector2 screenPos)
+    public T GetTopBlockConnector<T>(Vector2 screenPos) where T : BlockConnector
     {
         this.UpdateHitUiList(screenPos);
-
+        Debug.Log(screenPos.ToString());
+        Debug.Log(this.hitUiList.Count.ToString());
         if (this.hitUiList.Count > 0)
         {
             for (int i = 0; i < this.hitUiList.Count; i++)
             {//Top Object comes first
              
-                if(this.hitUiList[i].gameObject.CompareTag(FlowBlockConnector.FlowBlockConnectorTag))
+                if(this.hitUiList[i].gameObject.CompareTag(BlockConnector.BlockConnectorTag))
                 {
-                    return this.hitUiList[i].gameObject.GetComponent<FlowBlockConnector>();
+                    return this.hitUiList[i].gameObject.GetComponent<T>();
                 }
             }
         }
@@ -277,7 +293,7 @@ public class BlockEditorController : MonoBehaviour
 
                     if (this.ControllingBlockEditorUnit != null)
                     {
-                        this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 50;
+                        this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 10;
 
                         this.ControllingBlockEditorUnit.transform.SetParent(this.BlockEditorBodyTransform);
                   
@@ -292,7 +308,7 @@ public class BlockEditorController : MonoBehaviour
             }
             else
             {
-                this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 100;
+                this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 10;
              
             }
 
@@ -322,11 +338,10 @@ public class BlockEditorController : MonoBehaviour
                     
                     if (this.ControllingBlockEditorUnit.IsAttatchable() == true)
                     {//if block can attach to other block as flowbloc or valueblock
-                        Debug.Log("this.ControllingBlockEditorUnit.IsAttatchable() is true");
+                        this.controllingBlockEditorUnit.AttachBlock();
                     }
                     else
                     {
-                        Debug.Log("this.ControllingBlockEditorUnit.IsAttatchable() is false");
                     }
 
                     this.ControllingBlockEditorUnit.BackupUiTransform();
@@ -352,13 +367,32 @@ public class BlockEditorController : MonoBehaviour
         if (parentRect == null)
             return Vector3.zero;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, Input.mousePosition, _Canvas.worldCamera, out MousePosOnBlockEditorBodyTransform);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, _Canvas.worldCamera, out MousePosOnBlockEditorBodyTransform);
         return parentRect.TransformPoint(MousePosOnBlockEditorBodyTransform);
     }
 
 
 
+    #region BlockMockUp
 
+    [SerializeField]
+    private BlockMockupHelper BlockMockUp;
+    private void SetBlockMockUp(BlockEditorUnit copyBlockEditorUnit, BlockConnector blockConnector)
+    {
+        if (blockConnector == null)
+            return;
+
+        this.BlockMockUp.CopyTargetBlock(copyBlockEditorUnit);
+        this.BlockMockUp._RectTransform.position = blockConnector.ConnectionPoint.position;
+        //RectTransformUtility.
+    }
+
+    private void SetBlockMockUpVisible(bool isVisible)
+    {
+        this.BlockMockUp.gameObject.SetActive(isVisible);
+    }
+
+    #endregion
 
 
 

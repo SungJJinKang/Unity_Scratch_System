@@ -9,7 +9,6 @@ TagManager:
   - BlockEditorUnit
   - BlockEditorBody
   - BlockInput
-  - FlowBlockConnector
   - InputSpaceElementOfBlockUnit
   - BlockConnector
   layers:

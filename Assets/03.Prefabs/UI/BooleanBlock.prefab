@@ -203,6 +203,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5923f4697390642f394a7fee5e927c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _RectTransform: {fileID: 0}
+  _BlockMockupHelper: {fileID: 0}
+  IsShopBlock: 0
+  IsRemovable: 1
   MainBlockTransform: {fileID: 7293966890273587056}
 --- !u!222 &-32267182389799391
 CanvasRenderer:

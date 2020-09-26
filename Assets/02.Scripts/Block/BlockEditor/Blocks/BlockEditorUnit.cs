@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-
-public abstract class BlockEditorUnit : BlockEdidtorElement
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+[System.Serializable]
+public abstract class BlockEditorUnit : BlockEditorElement
 {
     public const string BlockEditorUnitTag = "BlockEditorUnit";
 
+    [HideInInspector]
     public BlockMockupHelper _BlockMockupHelper;
 
     protected override void Awake()
@@ -24,8 +28,12 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
        
     }
 
+    [HideInInspector]
     public bool IsShopBlock = false;
+    [HideInInspector]
     public bool IsRemovable = true;
+
+    #region BackUpUiPos
     private Vector3 backupedPos;
     private Transform backupedParentTransform;
 
@@ -43,8 +51,8 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         transform.SetParent(this.backupedParentTransform);
         transform.position = this.backupedPos;
     }
+    #endregion
 
-   
 
     /// <summary>
     /// Duplicate BlockEditorUnit
@@ -57,7 +65,34 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         return BlockEditorManager.instnace.CreateBlockEditorUnit(this.TargetBlock.GetType(), parent);
     }
 
-  
+    /// <summary>
+    /// Release(Destroy) BlockEditorUnit
+    /// Disable This Object
+    /// Clean ElementOfBlockUnitList
+    /// Return back to 
+    /// </summary>
+    sealed public override void Release()
+    {
+        // never touch element of targetBlock. Block is seperate from BlockEditorUnit
+        // Removing BlockEditorUnit, Element Of BlockUnit shouldn't effect to Block instance
+        this.targetBlock = null;
+
+        if (this.ElementOfBlockUnitList != null && this.ElementOfBlockUnitList.Count > 0)
+        {
+            for (int i = 0; i < this.ElementOfBlockUnitList.Count; i++)
+            {
+                this.ElementOfBlockUnitList[i].Release();
+            }
+
+            this.ElementOfBlockUnitList.Clear();
+        }
+
+        PoolManager.Instance.releaseObject(gameObject);
+    }
+
+
+    #region AttachBlock
+
     /// <summary>
     /// Return IsAttatchable
     /// Return if this BlockEditorUnit can be attached to any InputElementOfBlockUnit or as NextBlock, PreviousBlock
@@ -75,6 +110,7 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
     public virtual Vector3 GetAttachPoint() { return Vector3.zero; }
 
 
+
     public virtual void OnStartControlling()
     {
 
@@ -85,34 +121,12 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
 
     }
 
-    /// <summary>
-    /// Release(Destroy) BlockEditorUnit
-    /// Disable This Object
-    /// Clean ElementOfBlockUnitList
-    /// Return back to 
-    /// </summary>
-    sealed public override void Release()
-    {
-        // never touch element of targetBlock. Block is seperate from BlockEditorUnit
-        // Removing BlockEditorUnit, Element Of BlockUnit shouldn't effect to Block instance
-        this.targetBlock = null; 
+    #endregion
 
-        if(this.ElementOfBlockUnitList != null && this.ElementOfBlockUnitList.Count > 0)
-        {
-            for (int i = 0; i < this.ElementOfBlockUnitList.Count; i++)
-            {
-                this.ElementOfBlockUnitList[i].Release();
-            }
-
-            this.ElementOfBlockUnitList.Clear();
-        }
-        
-        PoolManager.Instance.releaseObject(gameObject);
-    }
-
-    
+  
 
 
+    #region TargetBlock
 
     private Block targetBlock;
     public Block TargetBlock
@@ -180,11 +194,14 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         InitElementsOfBlockUnit();
     }
 
-  
+    #endregion
 
     [SerializeField]
     private Transform MainBlockTransform;
 
+
+
+    #region ElementsOfBlockUnit
 
     private List<ElementOfBlockUnit> ElementOfBlockUnitList;
 
@@ -288,7 +305,23 @@ public abstract class BlockEditorUnit : BlockEdidtorElement
         return elementOfBlockUnit;
     }
 
-
+    #endregion
 
 
 }
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(BlockEditorUnit), true)]
+public class BlockEditorUnitEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.DrawDefaultInspector();
+
+        
+    }
+}
+
+
+#endif

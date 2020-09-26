@@ -4,8 +4,9 @@
 /// All Objects On Block Editor
 /// </summary>
 [System.Serializable]
-public abstract class BlockEdidtorElement : MonoBehaviour
+public abstract class BlockEditorElement : MonoBehaviour
 {
+    [HideInInspector]
     public RectTransform _RectTransform;
 
     protected virtual void Awake()

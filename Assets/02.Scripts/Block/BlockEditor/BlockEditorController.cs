@@ -19,6 +19,7 @@ public class BlockEditorController : MonoBehaviour
     private GraphicRaycaster _GraphicRaycaster;
     private PointerEventData _PointerEventData;
 
+    private Camera _Camera;
     private void Awake()
     {
         instance = this;
@@ -37,6 +38,7 @@ public class BlockEditorController : MonoBehaviour
 
         _GraphicRaycaster = _Canvas.GetComponent<GraphicRaycaster>();
         _PointerEventData = new PointerEventData(null);
+        _Camera = _Canvas.worldCamera;
     }
 
     void Start()
@@ -124,7 +126,7 @@ public class BlockEditorController : MonoBehaviour
             if (this.ControllingBlockEditorUnit == null)
                 yield break;
 
-            Debug.Log("this.ControllingBlockEditorUnit : " + this.ControllingBlockEditorUnit.gameObject.name);
+
 
             if (this.ControllingBlockEditorUnit.IsAttatchable() == true && this.ControllingBlockEditorUnit.AttachableBlockConnector != null)
             {
@@ -156,14 +158,33 @@ public class BlockEditorController : MonoBehaviour
     /// <param name="screenPos"></param>
     private void UpdateHitUiList(Vector3 screenPos)
     {
-        _PointerEventData.position = screenPos;
-
         if (this.hitUiList == null)
             this.hitUiList = new List<RaycastResult>();
 
         this.hitUiList.Clear();
+
+        _PointerEventData.position = screenPos;
         _GraphicRaycaster.Raycast(_PointerEventData, this.hitUiList);
     }
+
+    /// <summary>
+    /// Dont Call this at every tick(update)
+    /// </summary>
+    /// <param name="screenPos"></param>
+    private void UpdateHitUiList(params Vector3[] screenPos)
+    {
+        if (this.hitUiList == null)
+            this.hitUiList = new List<RaycastResult>();
+
+        this.hitUiList.Clear();
+
+        for (int i = 0; i < screenPos.Length; i++)
+        {
+            _PointerEventData.position = screenPos[i];
+            _GraphicRaycaster.Raycast(_PointerEventData, this.hitUiList);
+        }
+    }
+
 
 
     private void UpdateTopHitBlockEdidtorElement()
@@ -230,11 +251,21 @@ public class BlockEditorController : MonoBehaviour
     }
 
     
-    public T GetTopBlockConnector<T>(Vector2 screenPos) where T : BlockConnector
+    public T GetTopBlockConnector<T>(Vector2 worldPos, FlowBlockEditorUnit exceptedFlowBlockEditorUnit) where T : BlockConnector
     {
-        this.UpdateHitUiList(screenPos);
-        Debug.Log(screenPos.ToString());
-        Debug.Log(this.hitUiList.Count.ToString());
+        this.UpdateHitUiList(RectTransformUtility.WorldToScreenPoint(_Camera, worldPos));
+
+#if UNITY_EDITOR
+        StringBuilder stringBuilder = Utility.stringBuilderCache;
+        stringBuilder.Clear();
+
+        for (int i = 0; i < this.hitUiList.Count; i++)
+        {//Top Object comes first
+
+            stringBuilder.Append(this.hitUiList[i].gameObject.name + "\n");
+        }
+#endif
+
         if (this.hitUiList.Count > 0)
         {
             for (int i = 0; i < this.hitUiList.Count; i++)
@@ -242,7 +273,11 @@ public class BlockEditorController : MonoBehaviour
              
                 if(this.hitUiList[i].gameObject.CompareTag(BlockConnector.BlockConnectorTag))
                 {
-                    return this.hitUiList[i].gameObject.GetComponent<T>();
+                    T blockConnector = this.hitUiList[i].gameObject.GetComponent<T>();
+                    if(blockConnector != null && blockConnector.ParentFlowBlockEditorUnit.RootBlock != exceptedFlowBlockEditorUnit)
+                    {
+                        return blockConnector;
+                    }
                 }
             }
         }
@@ -263,6 +298,15 @@ public class BlockEditorController : MonoBehaviour
     private ScrollRect BlockWorkSpaceScrollRect;
     [SerializeField]
     private RectTransform BlockWorkSpaceContentBody;
+
+    /// <summary>
+    /// Make This Flow Block EditorUnit RootBlock
+    /// This block will not have previous block
+    /// </summary>
+    public void SetBlockRoot(BlockEditorElement blockEditorElement)
+    {
+        blockEditorElement.transform.SetParent(this.BlockWorkSpaceContentBody);
+    }
 
     private ScrollRect HoveringBodyScrollRect;
 
@@ -373,7 +417,7 @@ public class BlockEditorController : MonoBehaviour
 
 
 
-    #region BlockMockUp
+#region BlockMockUp
 
     [SerializeField]
     private BlockMockupHelper BlockMockUp;
@@ -392,7 +436,7 @@ public class BlockEditorController : MonoBehaviour
         this.BlockMockUp.gameObject.SetActive(isVisible);
     }
 
-    #endregion
+#endregion
 
 
 

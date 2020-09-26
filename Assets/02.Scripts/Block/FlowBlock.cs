@@ -42,15 +42,18 @@ public abstract class FlowBlock : Block
             //Don't Set this.previousBlock.NextBlock ~~~
             if (this.IsHavePreviousBlock == true)
             {
-                if (this.PreviousBlock != null)
-                    this.PreviousBlock.NextBlock = null;
+                
+                //if (this.PreviousBlock != null)
+                //    this.PreviousBlock.NextBlock = null;
+                
 
                 this.previousBlock = value;
 
-                if (this.PreviousBlock != null)
-                {
-                    this.PreviousBlock.NextBlock = this;
-                }
+
+                //if (this.PreviousBlock != null)
+                //{
+                //    this.PreviousBlock.NextBlock = this;
+                //}
             }
 
         }
@@ -91,7 +94,11 @@ public abstract class FlowBlock : Block
 
                 if (this.NextBlock != null)
                 {
-                    this.NextBlock.PreviousBlock = this;
+                    if (this.nextBlock.PreviousBlock != null)
+                    {
+                        this.nextBlock.PreviousBlock.NextBlock = null;
+                    }
+                    this.nextBlock.PreviousBlock = this;
                 }
             }
 

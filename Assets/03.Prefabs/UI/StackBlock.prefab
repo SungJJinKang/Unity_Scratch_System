@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334e9abb65b364847b515d83755d0f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParentBlockEditorUnit: {fileID: 0}
+  ParentFlowBlockEditorUnit: {fileID: 0}
   ConnectionPoint: {fileID: 2502381558907557273}
   _ConnectorType: 0
 --- !u!1 &2502381558854412933
@@ -275,7 +275,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -3}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2502381558907557274
@@ -310,7 +310,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2502381560508474596
@@ -669,7 +669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334e9abb65b364847b515d83755d0f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParentBlockEditorUnit: {fileID: 0}
+  ParentFlowBlockEditorUnit: {fileID: 0}
   ConnectionPoint: {fileID: 2502381558854412932}
   _ConnectorType: 1
 --- !u!1 &6722112333905383091
@@ -768,6 +768,8 @@ MonoBehaviour:
   IsShopBlock: 0
   IsRemovable: 1
   MainBlockTransform: {fileID: 2502381560508474595}
+  PreviousBlockConnector: {fileID: 0}
+  NextBlockConnector: {fileID: 2523886322570371667}
   previousFlowBlockEditorUnit: {fileID: 0}
   nextFlowBlockEditorUnit: {fileID: 0}
 --- !u!114 &9111033361265640553

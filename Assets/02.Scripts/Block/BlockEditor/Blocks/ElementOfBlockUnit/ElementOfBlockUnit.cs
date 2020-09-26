@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public abstract class ElementOfBlockUnit : BlockEdidtorElement
+public abstract class ElementOfBlockUnit : BlockEditorElement
 {
 
 

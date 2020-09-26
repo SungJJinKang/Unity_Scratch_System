@@ -18,11 +18,10 @@ public abstract class FlowBlock : Block
     }
 
 
-    /// <summary>
-    /// PreviousBlock
-    /// </summary>
-    private FlowBlock previousBlock;
     public bool IsHavePreviousBlock => this is IUpNotchBlock;
+
+
+    private FlowBlock previousBlock;
     public FlowBlock PreviousBlock
     {
         get
@@ -39,26 +38,12 @@ public abstract class FlowBlock : Block
         }
         set
         {
-            //Don't Set this.previousBlock.NextBlock ~~~
             if (this.IsHavePreviousBlock == true)
             {
-                
-                //if (this.PreviousBlock != null)
-                //    this.PreviousBlock.NextBlock = null;
-                
-
                 this.previousBlock = value;
-
-
-                //if (this.PreviousBlock != null)
-                //{
-                //    this.PreviousBlock.NextBlock = this;
-                //}
             }
-
         }
     }
-
 
 
     /// <summary>
@@ -82,26 +67,10 @@ public abstract class FlowBlock : Block
         }
         set
         {
-            //Never Set Value Of BlockEditorUnit From This Class
-            // FlowBlock -> BlockEditorUnit XXXXXX
-            // BlockEditorUnit -> FLowBlock OOOOOOO
             if (this.IsHaveNextBlock == true)
             {
-                if (this.NextBlock != null)
-                    this.NextBlock.PreviousBlock = null;
-
                 this.nextBlock = value;
-
-                if (this.NextBlock != null)
-                {
-                    if (this.nextBlock.PreviousBlock != null)
-                    {
-                        this.nextBlock.PreviousBlock.NextBlock = null;
-                    }
-                    this.nextBlock.PreviousBlock = this;
-                }
             }
-
         }
     }
 
@@ -157,23 +126,24 @@ public abstract class FlowBlock : Block
     public abstract void Operation(RobotBase operatingRobotBase);
 
 
-    private FlowBlock GetRootBlock(FlowBlock flowBlock)
+    /// <summary>
+    /// return last DescendantBlock
+    /// </summary>
+    public FlowBlock LastDescendantBlock
     {
-        if (this.PreviousBlock == null)
+        get
         {
-            return this;
-        }
-        else
-        {
-            return this.GetRootBlock(flowBlock);
+            if (this.NextBlock != null)
+            {
+                return this.NextBlock;
+            }
+            else
+            {
+                return this;
+            }
         }
     }
 
-    public FlowBlock GetRootBlock()
-    {
-        return GetRootBlock(this);
-
-    }
 
 
 

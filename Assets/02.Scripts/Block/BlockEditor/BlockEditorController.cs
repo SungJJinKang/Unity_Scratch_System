@@ -251,35 +251,66 @@ public class BlockEditorController : MonoBehaviour
     }
 
     
-    public T GetTopBlockConnector<T>(Vector2 worldPos, FlowBlockEditorUnit exceptedFlowBlockEditorUnit) where T : BlockConnector
+    public T GetTopBlockConnector<T>(Vector2 worldPos, List<FlowBlockEditorUnit> exceptedUnitList) where T : FlowBlockConnector
     {
         this.UpdateHitUiList(RectTransformUtility.WorldToScreenPoint(_Camera, worldPos));
 
 #if UNITY_EDITOR
+        /*
         StringBuilder stringBuilder = Utility.stringBuilderCache;
         stringBuilder.Clear();
 
-        for (int i = 0; i < this.hitUiList.Count; i++)
+        foreach(var a in exceptedUnitList)
         {//Top Object comes first
 
-            stringBuilder.Append(this.hitUiList[i].gameObject.name + "\n");
+            stringBuilder.Append(a.name + "\n");
         }
+
+        Debug.Log(stringBuilder.ToString());
+        */
 #endif
 
         if (this.hitUiList.Count > 0)
         {
+            T TopUpNotchFlowBlockConnector = null;
+
             for (int i = 0; i < this.hitUiList.Count; i++)
             {//Top Object comes first
              
                 if(this.hitUiList[i].gameObject.CompareTag(BlockConnector.BlockConnectorTag))
                 {
-                    T blockConnector = this.hitUiList[i].gameObject.GetComponent<T>();
-                    if(blockConnector != null && blockConnector.ParentFlowBlockEditorUnit.RootBlock != exceptedFlowBlockEditorUnit)
+                    T flowBlockConnector = this.hitUiList[i].gameObject.GetComponent<T>();
+                    if(flowBlockConnector != null)
                     {
-                        return blockConnector;
+                        bool hit = true;
+                        foreach(FlowBlockEditorUnit exceptedUnit in exceptedUnitList)
+                        {
+                            if (exceptedUnit == flowBlockConnector.OwnerFlowBlockEditorUnit)
+                            {
+                                hit = false;
+                                break;
+                            }
+                        }
+
+                        if (hit == true)
+                        {
+                            if(flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.DownBump)
+                            {
+                                return flowBlockConnector;
+                            }
+                            else
+                            {
+                                TopUpNotchFlowBlockConnector = flowBlockConnector;
+                            }
+                            
+                        }
+                            
                     }
                 }
             }
+
+            
+            return TopUpNotchFlowBlockConnector; //if fail to find topDownBump FlowBlock Connector, return TopUpNotchFlowBlockConnector
         }
 
         return null;
@@ -305,7 +336,10 @@ public class BlockEditorController : MonoBehaviour
     /// </summary>
     public void SetBlockRoot(BlockEditorElement blockEditorElement)
     {
-        blockEditorElement.transform.SetParent(this.BlockWorkSpaceContentBody);
+        if (blockEditorElement == null)
+            return; 
+
+        blockEditorElement.transform.SetParent(_Canvas.transform);
     }
 
     private ScrollRect HoveringBodyScrollRect;
@@ -339,9 +373,7 @@ public class BlockEditorController : MonoBehaviour
                     {
                         this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 10;
 
-                        this.ControllingBlockEditorUnit.transform.SetParent(this.BlockEditorBodyTransform);
-                  
-                        this.ControllingBlockEditorUnit.OnStartControlling();
+                        this.ControllingBlockEditorUnit.MakeRootBlock();
                     }
                     else
                     {

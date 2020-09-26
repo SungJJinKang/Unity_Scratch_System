@@ -131,8 +131,8 @@ public class BlockEditorManager : MonoBehaviour
 
 
         //Spawn Hat Blocks
-        BlockEditorUnit initBlockEditorUnit = this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.InitBlock);
-        BlockEditorUnit loopedBlockEditorUnit = this.SpawnBlockEditorUnitOnBlockWorkSpace(this.EditingRobotSourceCode.LoopedBlock);
+        BlockEditorUnit initBlockEditorUnit = this.SpawnFlowBlockEditorUnitRecursive(this.EditingRobotSourceCode.InitBlock);
+        BlockEditorUnit loopedBlockEditorUnit = this.SpawnFlowBlockEditorUnitRecursive(this.EditingRobotSourceCode.LoopedBlock);
 
         if(initBlockEditorUnit != null)
         {
@@ -154,7 +154,7 @@ public class BlockEditorManager : MonoBehaviour
         {
             foreach (var eventBlock in this.EditingRobotSourceCode.StoredEventBlocks)
             {
-                this.SpawnBlockEditorUnitOnBlockWorkSpace(eventBlock);
+                this.SpawnFlowBlockEditorUnitRecursive(eventBlock);
             }
         }
        
@@ -162,69 +162,34 @@ public class BlockEditorManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Spawn Hat Block On Block Editor Work Space
+    /// Spawn Flow Block Recursivly
+    /// Spawned Block create child block again,
+    /// and spawned child block create child of block of that ..........
     /// </summary>
-    /// <param name="hatBlock"></param>
-    private BlockEditorUnit SpawnBlockEditorUnitOnBlockWorkSpace(HatBlock hatBlock)
+    /// <param name="flowBlock"></param>
+    private FlowBlockEditorUnit SpawnFlowBlockEditorUnitRecursive(FlowBlock createdNewFlowBlock, FlowBlockEditorUnit parentBlockEditorUnit = null)
     {
-        if (hatBlock == null)
+        if (createdNewFlowBlock == null)
             return null;
 
-        BlockEditorUnit blockEditorUnit = this.CreateBlockEditorUnit(hatBlock, this.BlockWorkSpaceContentTransform);
-        this.SpawnBlockEditorUnitOnBlockWorkSpace(hatBlock, hatBlock.NextBlock);
+        FlowBlockEditorUnit blockEditorUnit = this.CreateBlockEditorUnit(createdNewFlowBlock, this.BlockWorkSpaceContentTransform) as FlowBlockEditorUnit;
+
+        if(parentBlockEditorUnit != null)
+        {
+            FlowBlockEditorUnit.ConnectTwoBlock(parentBlockEditorUnit, blockEditorUnit);
+        }
+
+        if(createdNewFlowBlock.NextBlock != null)
+        {
+            this.SpawnFlowBlockEditorUnitRecursive(createdNewFlowBlock.NextBlock, blockEditorUnit);
+        }
+
+    
+
         return blockEditorUnit;
     }
 
-    /// <summary>
-    /// Used When Spawn Next Block, and Attach next block to DownBumpBlock
-    /// </summary>
-    /// <param name="parentBlock">Block what nextBlock attach to</param>
-    /// <param name="childBlock">Block Attached To DownBumpBlock</param>
-    private void SpawnBlockEditorUnitOnBlockWorkSpace(FlowBlock parentBlock, FlowBlock childBlock)
-    {
-        if (parentBlock == null || childBlock == null)
-            return;
-
-        FlowBlockEditorUnit parentBlockEditorUnit = null;
-        if (this.SpawnedBlockEditorUnitDictionary.ContainsKey(parentBlock) == false)
-        {
-            parentBlockEditorUnit = this.CreateBlockEditorUnit(parentBlock, this.BlockWorkSpaceContentTransform) as FlowBlockEditorUnit;
-        }
-        else
-        {
-            parentBlockEditorUnit = this.SpawnedBlockEditorUnitDictionary[parentBlock] as FlowBlockEditorUnit;
-        }
-
-        FlowBlockEditorUnit childBlockEditorUnit = null;
-        if (this.SpawnedBlockEditorUnitDictionary.ContainsKey(childBlock) == false)
-        {
-            childBlockEditorUnit = this.CreateBlockEditorUnit(childBlock, this.BlockWorkSpaceContentTransform) as FlowBlockEditorUnit;
-        }
-        else
-        {
-            childBlockEditorUnit = this.SpawnedBlockEditorUnitDictionary[childBlock] as FlowBlockEditorUnit;
-        }
-
-        if (parentBlockEditorUnit != null && childBlockEditorUnit != null)
-        {
-            parentBlockEditorUnit.NextFlowBlockEditorUnit = childBlockEditorUnit;
-        }
-        else
-        {
-            if (parentBlockEditorUnit == null)
-            {
-                Debug.LogError("parentBlockEditorUnit is null");
-            }
-
-            if (childBlockEditorUnit == null)
-            {
-                Debug.LogError("schildBlockEditorUnit is null");
-            }
-
-            return;
-        }
-    }
-
+   
 
     #endregion
 

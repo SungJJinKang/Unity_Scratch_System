@@ -71,8 +71,9 @@ public abstract class BlockEditorUnit : BlockEditorElement
     /// Clean ElementOfBlockUnitList
     /// Return back to 
     /// </summary>
-    sealed public override void Release()
+    public override void Release()
     {
+
         // never touch element of targetBlock. Block is seperate from BlockEditorUnit
         // Removing BlockEditorUnit, Element Of BlockUnit shouldn't effect to Block instance
         this.targetBlock = null;
@@ -110,11 +111,12 @@ public abstract class BlockEditorUnit : BlockEditorElement
     public virtual Vector3 GetAttachPoint() { return Vector3.zero; }
 
 
-
-    public virtual void OnStartControlling()
+    public virtual void MakeRootBlock() 
     {
-
+        BlockEditorController.instance.SetBlockRoot(this);
     }
+
+    
 
     public virtual void OnEndControlling()
     {

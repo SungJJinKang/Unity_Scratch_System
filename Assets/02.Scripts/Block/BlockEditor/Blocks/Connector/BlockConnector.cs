@@ -7,15 +7,15 @@ public class BlockConnector : MonoBehaviour
     public const string BlockConnectorTag = "BlockConnector";
 
     [HideInInspector]
-    public FlowBlockEditorUnit ParentFlowBlockEditorUnit;
+    public FlowBlockEditorUnit OwnerFlowBlockEditorUnit;
     public RectTransform ConnectionPoint;
 
     protected virtual void Awake()
     {
         gameObject.tag = BlockConnectorTag;
 
-        ParentFlowBlockEditorUnit = GetComponentInParent<FlowBlockEditorUnit>();
-        if (ParentFlowBlockEditorUnit == null)
+        OwnerFlowBlockEditorUnit = GetComponentInParent<FlowBlockEditorUnit>();
+        if (OwnerFlowBlockEditorUnit == null)
             Debug.LogError("ParentBlockEditorUnit is null");
     }
 }

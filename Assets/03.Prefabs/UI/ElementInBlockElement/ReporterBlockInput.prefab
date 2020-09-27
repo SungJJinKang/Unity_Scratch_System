@@ -151,8 +151,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _RectTransform: {fileID: 0}
-  attachPointRectTransform: {fileID: 0}
-  InputtedReporterBlockEditorUnit: {fileID: 0}
+  attachPointRectTransform: {fileID: 5560415761211852488}
+  inputtedReporterBlockEditorUnit: {fileID: 0}
+  DefaultReporterBlockInputObj: {fileID: 433597843464917596}
+  DefaultReporterBlockInputField: {fileID: 5990924063058755123}
 --- !u!222 &8332189862307948002
 CanvasRenderer:
   m_ObjectHideFlags: 0

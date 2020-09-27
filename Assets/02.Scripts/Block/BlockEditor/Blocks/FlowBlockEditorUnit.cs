@@ -213,7 +213,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
     }
 
 
-    
+
 
     /// <summary>
     /// Don call this every tick, update
@@ -226,7 +226,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
         FlowBlockConnector.ConnectorType expectedConnectorTypeFlag = FlowBlockConnector.ConnectorType.None;
 
-        if(IsPreviousBlockEditorUnitAssignable == true && PreviousFlowBlockEditorUnit == null)
+        if (IsPreviousBlockEditorUnitAssignable == true && PreviousFlowBlockEditorUnit == null)
         {
             expectedConnectorTypeFlag |= FlowBlockConnector.ConnectorType.DownBump;
         }
@@ -238,26 +238,25 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
         FlowBlockConnector flowBlockConnector = BlockEditorController.instance.GetTopFlowBlockConnector(transform.position, exceptedCheckBlockList, expectedConnectorTypeFlag);
 
-        if(flowBlockConnector != null)
-            //Debug.Log(flowBlockConnector.OwnerFlowBlockEditorUnit.name);
 
-        base.AttachableEditorElement = null;
 
         if (flowBlockConnector == null || flowBlockConnector.OwnerFlowBlockEditorUnit == this)
         {
+            base.AttachableEditorElement = null;
             return false;
         }
         else
         {
             if (flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.UpNotch)
             {//if hit connector is up notch type
-                if(this.IsNextBlockEditorUnitAssignable)
+                if (this.IsNextBlockEditorUnitAssignable)
                 {
-                    this.AttachableEditorElement = flowBlockConnector;
+                    base.AttachableEditorElement = flowBlockConnector;
                     return true;
                 }
                 else
                 {
+                    base.AttachableEditorElement = null;
                     return false;
                 }
             }
@@ -265,11 +264,12 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
             {//if hit connector is down bump type
                 if (this.IsPreviousBlockEditorUnitAssignable)
                 {
-                    this.AttachableEditorElement = flowBlockConnector;
+                    base.AttachableEditorElement = flowBlockConnector;
                     return true;
                 }
                 else
                 {
+                    base.AttachableEditorElement = null;
                     return false;
                 }
             }

@@ -18,6 +18,9 @@ public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit, IAttach
     private RectTransform attachPointRectTransform;
     public RectTransform AttachPointRectTransform => attachPointRectTransform;
 
+    public abstract bool IsEmpty { get; }
+
+
     protected override void Awake()
     {
         base.Awake();

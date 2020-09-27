@@ -7,14 +7,16 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
     sealed public override bool IsAttatchable()
     {
         InputSpaceElementOfBlockUnit topInputSpaceElementOfBlockUnit = BlockEditorController.instance.GetTopInputSpaceElementOfBlockUnit(this.TargetEditorBlockType, transform.position);
-        base.AttachableEditorElement = topInputSpaceElementOfBlockUnit;
+   
 
-        if (AttachableEditorElement == null || topInputSpaceElementOfBlockUnit.OwnerBlockUnit == this)
+        if (AttachableEditorElement == null || topInputSpaceElementOfBlockUnit.OwnerBlockUnit == this || topInputSpaceElementOfBlockUnit.IsEmpty == false)
         {
+            base.AttachableEditorElement = null;
             return false;
         }
         else
         {
+            base.AttachableEditorElement = topInputSpaceElementOfBlockUnit;
             return true;
         }
 

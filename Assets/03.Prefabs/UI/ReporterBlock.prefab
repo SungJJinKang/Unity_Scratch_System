@@ -393,6 +393,7 @@ GameObject:
   - component: {fileID: -6456920897045348266}
   - component: {fileID: 8744976857688236976}
   - component: {fileID: -3973374534126005914}
+  - component: {fileID: 4180449603595377929}
   m_Layer: 5
   m_Name: ReporterBlock
   m_TagString: Untagged
@@ -514,6 +515,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4180449603595377929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7502234506364786275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9c9a3866fd4d4b92bd21d6c489cf4ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _RectTransform: {fileID: 0}
+  images:
+  - {fileID: -3973374534126005914}
+  - {fileID: 8129770625109106982}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 3386564316465024958}
+  - {fileID: 3206896738663111753}
+  - {fileID: 2057099241416857528}
 --- !u!1 &8579585497889490230
 GameObject:
   m_ObjectHideFlags: 0

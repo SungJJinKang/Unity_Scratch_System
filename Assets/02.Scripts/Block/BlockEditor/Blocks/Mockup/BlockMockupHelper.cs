@@ -29,6 +29,9 @@ public class BlockMockupHelper : MonoBehaviour
         {
             if(targetBlockMockupHelper.images.Length > i)
             {
+                if (targetBlockMockupHelper.images[i] == null)
+                    continue;
+
                 this.images[i].gameObject.SetActive(targetBlockMockupHelper.images[i].gameObject.activeSelf);
 
                 if(this.images[i].gameObject.activeSelf == true)
@@ -38,6 +41,10 @@ public class BlockMockupHelper : MonoBehaviour
                     this.images[i].rectTransform.anchoredPosition = targetBlockMockupHelper.images[i].rectTransform.anchoredPosition;
                     this.images[i].rectTransform.sizeDelta = targetBlockMockupHelper.images[i].rectTransform.sizeDelta;
                 }
+            }
+            else
+            {
+                this.images[i].gameObject.SetActive(false);
             }
         }
     }

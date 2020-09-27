@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _RectTransform: {fileID: 0}
+  attachPointRectTransform: {fileID: 0}
   InputtedReporterBlockEditorUnit: {fileID: 0}
 --- !u!222 &8332189862307948002
 CanvasRenderer:

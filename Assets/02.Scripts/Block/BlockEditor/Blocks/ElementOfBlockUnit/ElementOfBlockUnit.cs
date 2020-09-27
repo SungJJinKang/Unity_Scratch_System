@@ -8,7 +8,7 @@ public abstract class ElementOfBlockUnit : BlockEditorElement
     [SerializeField]
     public BlockEditorUnit OwnerBlockUnit
     {
-        protected get;
+        get;
         set;
     }
 

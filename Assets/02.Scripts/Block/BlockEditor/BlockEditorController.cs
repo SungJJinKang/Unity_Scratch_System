@@ -1,10 +1,10 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
@@ -43,10 +43,10 @@ public class BlockEditorController : MonoBehaviour
 
     void Start()
     {
-
+        this.InitBlockMockUp();
     }
 
-    List<RaycastResult> hitUiList;
+   
 
     void Update()
     {
@@ -64,93 +64,9 @@ public class BlockEditorController : MonoBehaviour
         private set;
     }
     */
+    #region RayHitBlock
 
-    private BlockEditorUnit controllingBlockEditorUnit;
-    [SerializeField]
-    public BlockEditorUnit ControllingBlockEditorUnit
-    {
-        get
-        {
-            return this.controllingBlockEditorUnit;
-        }
-        private set
-        {
-            this.controllingBlockEditorUnit = value;
-
-            if(this.controllingBlockEditorUnit != null)
-            {
-                //Make scrollrect stop
-                this.BlockShopScrollRect.StopMovement();
-                this.BlockShopScrollRect.enabled = false;
-
-                this.BlockWorkSpaceScrollRect.StopMovement();
-                this.BlockWorkSpaceScrollRect.enabled = false;
-
-
-                this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
-                this.UpdateIsControllingBlockEditorUnitAttachableCoroutine = StartCoroutine(this.UpdateIsControllingBlockEditorUnitAttachableIEnumerator());
-            }
-            else
-            {
-                this.BlockShopScrollRect.enabled = true;
-
-                this.BlockWorkSpaceScrollRect.enabled = true;
-
-
-                this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
-
-                this.SetBlockMockUpVisible(false);
-            }
-        }
-    }
-
-    private void StopUpdateIsControllingBlockEditorUnitAttachableCoroutine()
-    {
-        if (this.UpdateIsControllingBlockEditorUnitAttachableCoroutine != null)
-        {
-            StopCoroutine(this.UpdateIsControllingBlockEditorUnitAttachableCoroutine);
-            this.UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
-        }
-    }
-
-    private Coroutine UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
-    /// <summary>
-    /// Update ControllingBlockEditorUnit Is Attachable
-    /// If attachable, show preview when attached ( see scratch )
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator UpdateIsControllingBlockEditorUnitAttachableIEnumerator()
-    {
-        while(true)
-        {
-            if (this.ControllingBlockEditorUnit == null)
-                yield break;
-
-
-
-            if (this.ControllingBlockEditorUnit.IsAttatchable() == true && this.ControllingBlockEditorUnit.AttachableBlockConnector != null)
-            {
-                this.SetBlockMockUpVisible(true);
-                this.SetBlockMockUp(this.ControllingBlockEditorUnit, this.ControllingBlockEditorUnit.AttachableBlockConnector);
-            }
-            else
-            {
-               
-                this.SetBlockMockUpVisible(false);
-            }
-
-            yield return new WaitForSeconds(0.1f);
-        }
-
-    }
-
-
-
-    private BlockEditorUnit PinchingBlockEditorUnit;
-
-
-    private BlockEditorUnit TopBlockEditorUnit;
-    //private ElementOfBlockUnit TopElementOfBlockUnit;
+    private List<RaycastResult> hitUiList;
 
     /// <summary>
     /// Dont Call this at every tick(update)
@@ -250,42 +166,39 @@ public class BlockEditorController : MonoBehaviour
 #endif
     }
 
-    
-    public T GetTopBlockConnector<T>(Vector2 worldPos, List<FlowBlockEditorUnit> exceptedUnitList) where T : FlowBlockConnector
+    /// <summary>
+    /// Gets the top flow block connector.
+    /// </summary>
+    /// <returns>The top flow block connector.</returns>
+    /// <param name="worldPos">World position.</param>
+    /// <param name="exceptedUnitList">Excepted unit list.</param>
+    /// <param name="expectedConnectorType">Expected connector type. if this value is 2 , UpNotch, DownBump is ok</param>
+    public FlowBlockConnector GetTopFlowBlockConnector(Vector2 worldPos, List<FlowBlockEditorUnit> exceptedUnitList, FlowBlockConnector.ConnectorType expectedConnectorTypeFlag)
     {
         this.UpdateHitUiList(RectTransformUtility.WorldToScreenPoint(_Camera, worldPos));
 
-#if UNITY_EDITOR
-        /*
-        StringBuilder stringBuilder = Utility.stringBuilderCache;
-        stringBuilder.Clear();
-
-        foreach(var a in exceptedUnitList)
-        {//Top Object comes first
-
-            stringBuilder.Append(a.name + "\n");
-        }
-
-        Debug.Log(stringBuilder.ToString());
-        */
-#endif
-
         if (this.hitUiList.Count > 0)
         {
-            T TopUpNotchFlowBlockConnector = null;
+            FlowBlockConnector TopUpNotchFlowBlockConnector = null;
 
             for (int i = 0; i < this.hitUiList.Count; i++)
             {//Top Object comes first
              
-                if(this.hitUiList[i].gameObject.CompareTag(BlockConnector.BlockConnectorTag))
+                if(this.hitUiList[i].gameObject.CompareTag(FlowBlockConnector.FlowBlockConnectorTag))
                 {
-                    T flowBlockConnector = this.hitUiList[i].gameObject.GetComponent<T>();
+                    FlowBlockConnector flowBlockConnector = this.hitUiList[i].gameObject.GetComponent<FlowBlockConnector>();
                     if(flowBlockConnector != null)
                     {
                         bool hit = true;
-                        foreach(FlowBlockEditorUnit exceptedUnit in exceptedUnitList)
+                       
+                        if (expectedConnectorTypeFlag.HasFlag(flowBlockConnector._ConnectorType) == false)
                         {
-                            if (exceptedUnit == flowBlockConnector.OwnerFlowBlockEditorUnit)
+                            continue;
+                        }
+
+                        for (int j = 0; j < exceptedUnitList.Count; j++)
+                        {
+                            if (exceptedUnitList[j] == flowBlockConnector.OwnerFlowBlockEditorUnit)
                             {
                                 hit = false;
                                 break;
@@ -295,12 +208,13 @@ public class BlockEditorController : MonoBehaviour
                         if (hit == true)
                         {
                             if(flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.DownBump)
-                            {
+                            {// find downbump connector preferentially
                                 return flowBlockConnector;
                             }
                             else
-                            {
-                                TopUpNotchFlowBlockConnector = flowBlockConnector;
+                            {// save up notch connector
+                                if(TopUpNotchFlowBlockConnector == null)
+                                    TopUpNotchFlowBlockConnector = flowBlockConnector;
                             }
                             
                         }
@@ -308,15 +222,45 @@ public class BlockEditorController : MonoBehaviour
                     }
                 }
             }
-
-            
             return TopUpNotchFlowBlockConnector; //if fail to find topDownBump FlowBlock Connector, return TopUpNotchFlowBlockConnector
         }
-
         return null;
     }
 
+    public InputSpaceElementOfBlockUnit GetTopInputSpaceElementOfBlockUnit(Type t, Vector2 worldPos) 
+    {
+#if UNITY_EDITOR
+        if(t.IsSubclassOf(typeof(InputSpaceElementOfBlockUnit)) == false)
+        {
+            Debug.LogError("parameter t should be subclass of InputSpaceElementOfBlockUnit");
+        }
 
+#endif
+
+        this.UpdateHitUiList(RectTransformUtility.WorldToScreenPoint(_Camera, worldPos));
+
+        if (this.hitUiList.Count > 0)
+        {
+            for (int i = 0; i < this.hitUiList.Count; i++)
+            {//Top Object comes first
+
+                if (this.hitUiList[i].gameObject.CompareTag(InputSpaceElementOfBlockUnit.InputSpaceElementOfBlockUnitTag))
+                {
+                    InputSpaceElementOfBlockUnit inputSpaceElementOfBlockUnit = this.hitUiList[i].gameObject.GetComponent<InputSpaceElementOfBlockUnit>();
+                    if (inputSpaceElementOfBlockUnit != null && inputSpaceElementOfBlockUnit.GetType() == t)
+                    {
+                        return inputSpaceElementOfBlockUnit;
+
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    #endregion
+
+    #region ControllingBlock
 
     private const string HoveringBodyTag = "BlockEditorBody";
 
@@ -432,6 +376,109 @@ public class BlockEditorController : MonoBehaviour
 
     }
 
+    private BlockEditorUnit originalControllingBlockEditorUnit;
+    private BlockEditorUnit controllingBlockEditorUnit;
+    [SerializeField]
+    public BlockEditorUnit ControllingBlockEditorUnit
+    {
+        get
+        {
+            return this.controllingBlockEditorUnit;
+        }
+        private set
+        {
+            originalControllingBlockEditorUnit = this.controllingBlockEditorUnit;
+
+            this.controllingBlockEditorUnit = value;
+
+            if (this.controllingBlockEditorUnit != null)
+            {
+                if(originalControllingBlockEditorUnit != this.controllingBlockEditorUnit)
+                {
+                    //Make scrollrect stop
+                    this.BlockShopScrollRect.StopMovement();
+                    this.BlockShopScrollRect.enabled = false;
+
+                    this.BlockWorkSpaceScrollRect.StopMovement();
+                    this.BlockWorkSpaceScrollRect.enabled = false;
+
+                    this.HideBlockMockUp();
+                    StartUpdateIsControllingBlockEditorUnitAttachableCoroutine();
+                }
+            }
+            else
+            {
+                this.BlockShopScrollRect.enabled = true;
+
+                this.BlockWorkSpaceScrollRect.enabled = true;
+
+
+                this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
+
+                this.HideBlockMockUp();
+            }
+        }
+    }
+
+    private void StartUpdateIsControllingBlockEditorUnitAttachableCoroutine()
+    {
+        this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
+        this.UpdateIsControllingBlockEditorUnitAttachableCoroutine = StartCoroutine(this.UpdateIsControllingBlockEditorUnitAttachableIEnumerator());
+    }
+
+    private void StopUpdateIsControllingBlockEditorUnitAttachableCoroutine()
+    {
+        if (this.UpdateIsControllingBlockEditorUnitAttachableCoroutine != null)
+        {
+            StopCoroutine(this.UpdateIsControllingBlockEditorUnitAttachableCoroutine);
+            this.UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
+        }
+    }
+
+    private Coroutine UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
+    /// <summary>
+    /// Update ControllingBlockEditorUnit Is Attachable
+    /// If attachable, show preview when attached ( see scratch )
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator UpdateIsControllingBlockEditorUnitAttachableIEnumerator()
+    {
+        bool IsMockUpSet = false;
+        while (true)
+        {
+            if (this.ControllingBlockEditorUnit == null)
+                yield break;
+
+
+
+            if (this.ControllingBlockEditorUnit.IsAttatchable() == true && this.ControllingBlockEditorUnit.AttachableEditorElement != null)
+            {
+                if(IsMockUpSet == false)
+                {
+                    this.SetBlockMockUp(this.ControllingBlockEditorUnit, this.ControllingBlockEditorUnit.AttachableEditorElement);
+
+                    IsMockUpSet = true;
+                }
+
+            }
+            else
+            {
+                this.HideBlockMockUp();
+                IsMockUpSet = false;
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+    }
+
+
+
+    private BlockEditorUnit PinchingBlockEditorUnit;
+
+
+    private BlockEditorUnit TopBlockEditorUnit;
+
     /// <summary>
     /// Set Ui Position To Mouse point
     /// </summary>
@@ -446,31 +493,64 @@ public class BlockEditorController : MonoBehaviour
         RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, _Canvas.worldCamera, out MousePosOnBlockEditorBodyTransform);
         return parentRect.TransformPoint(MousePosOnBlockEditorBodyTransform);
     }
-
-
-
-#region BlockMockUp
-
-    [SerializeField]
-    private BlockMockupHelper BlockMockUp;
-    private void SetBlockMockUp(BlockEditorUnit copyBlockEditorUnit, BlockConnector blockConnector)
-    {
-        if (blockConnector == null)
-            return;
-
-        this.BlockMockUp.CopyTargetBlock(copyBlockEditorUnit);
-        this.BlockMockUp._RectTransform.position = blockConnector.ConnectionPoint.position;
-        //RectTransformUtility.
-    }
-
-    private void SetBlockMockUpVisible(bool isVisible)
-    {
-        this.BlockMockUp.gameObject.SetActive(isVisible);
-    }
-
 #endregion
 
 
+    #region BlockMockUp
+
+    [SerializeField]
+    private GameObject BlockMockUpPrefab;
+    private void InitBlockMockUp()
+    {
+        PoolManager.WarmPool(BlockMockUpPrefab, 5);
+    }
+
+    private List<GameObject> SpawnedBlockMockUp;
+
+    private void SetBlockMockUp(BlockEditorUnit copyBlockEditorUnit, IAttachableEditorElement attachableEditorElement)
+    {
+        if (copyBlockEditorUnit == null || attachableEditorElement == null)
+            return;
+
+        BlockMockupHelper blockMockupHelper = PoolManager.SpawnObject(BlockMockUpPrefab).GetComponent< BlockMockupHelper>();
+
+        if (this.SpawnedBlockMockUp == null)
+            this.SpawnedBlockMockUp = new List<GameObject>();
+
+        this.SpawnedBlockMockUp.Add(blockMockupHelper.gameObject);
+
+        blockMockupHelper.CopyTargetBlock(copyBlockEditorUnit);
+        blockMockupHelper._RectTransform.SetParent(attachableEditorElement.AttachPointRectTransform);
+        blockMockupHelper._RectTransform.localScale = Vector3.one;
+        blockMockupHelper._RectTransform.SetSiblingIndex(attachableEditorElement.AttachPointRectTransform.childCount - 2);
+        blockMockupHelper._RectTransform.anchoredPosition = Vector2.up * blockMockupHelper._RectTransform.anchoredPosition.y;
+
+        if(copyBlockEditorUnit is FlowBlockEditorUnit)
+        {
+            //if copyBlockEditorUnit is FlowBlockEditorUnit
+            //SetBlockMockUp nextblock of FlowBlockEditorUnit
+            FlowBlockEditorUnit flowBlockEditorUnit = copyBlockEditorUnit as FlowBlockEditorUnit;
+            this.SetBlockMockUp(flowBlockEditorUnit?.NextFlowBlockEditorUnit, attachableEditorElement);
+        }
+        //RectTransformUtility.
+    }
+
+    private void HideBlockMockUp()
+    {
+        if (this.SpawnedBlockMockUp == null)
+            return;
+
+        for(int i=0;i< this.SpawnedBlockMockUp.Count;i++)
+        {
+            PoolManager.ReleaseObject(this.SpawnedBlockMockUp[i]);
+        }
+
+        this.SpawnedBlockMockUp.Clear();
+    }
+
+    #endregion
+
+    #region DEBUG
 
 #if UNITY_EDITOR
 
@@ -515,4 +595,5 @@ public class BlockEditorController : MonoBehaviour
 
 
 #endif
+    #endregion
 }

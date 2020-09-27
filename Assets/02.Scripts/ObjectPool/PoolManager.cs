@@ -19,14 +19,6 @@ public class PoolManager : Singleton<PoolManager>
         instanceLookup = new Dictionary<GameObject, ObjectPool<GameObject>>();
     }
 
-    void Update()
-    {
-        if (logStatus && dirty)
-        {
-            PrintStatus();
-            dirty = false;
-        }
-    }
 
     public void warmPool(GameObject prefab, int size)
     {
@@ -47,6 +39,9 @@ public class PoolManager : Singleton<PoolManager>
         prefabLookup[prefab] = pool;
 
         dirty = true;
+
+        if (logStatus)
+            Debug.Log("Pool Warm : " + prefab.name);
     }
 
     public GameObject spawnObject(GameObject prefab)
@@ -70,6 +65,10 @@ public class PoolManager : Singleton<PoolManager>
 
         instanceLookup.Add(clone, pool);
         dirty = true;
+
+        if (logStatus)
+            Debug.Log("Pool Spawn : " + prefab.name);
+
         return clone;
     }
 
@@ -84,6 +83,9 @@ public class PoolManager : Singleton<PoolManager>
             clone.gameObject.SetActive(false);
             instanceLookup.Remove(clone);
             dirty = true;
+
+            if (logStatus)
+                Debug.Log("Pool Release : " + clone.name);
         }
         else
         {

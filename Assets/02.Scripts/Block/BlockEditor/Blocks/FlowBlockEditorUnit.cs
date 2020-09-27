@@ -25,10 +25,10 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
 
     [SerializeField]
-    private BlockConnector PreviousBlockConnector;
+    private FlowBlockConnector PreviousBlockConnector;
 
     [SerializeField]
-    private BlockConnector NextBlockConnector;
+    private FlowBlockConnector NextBlockConnector;
 
     public bool IsPreviousBlockEditorUnitAssignable => base.TargetBlock is IUpNotchBlock;
 
@@ -88,12 +88,12 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
     public override void MakeRootBlock()
     {
         base.MakeRootBlock();
-        ConnectTwoBlock(null, this);
+        ConnectFlowBlockEditorUnit(null, this);
        
     }
 
 
-    public static void ConnectTwoBlock(FlowBlockEditorUnit parentBlock, FlowBlockEditorUnit newChildBlock)
+    public static void ConnectFlowBlockEditorUnit(FlowBlockEditorUnit parentBlock, FlowBlockEditorUnit newChildBlock)
     {
         if(parentBlock == null && newChildBlock != null)
         {
@@ -129,10 +129,18 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
             //ConnectTwoBlock(parentBlock, null);
             //ConnectTwoBlock(null, newChildBlock);
 
-            parentBlock.NextFlowBlockEditorUnit = newChildBlock;
-            newChildBlock.PreviousFlowBlockEditorUnit = parentBlock;
-            newChildBlock.transform.SetParent(parentBlock.NextBlockConnector.ConnectionPoint);
-            newChildBlock._RectTransform.anchoredPosition = Vector2.zero;
+            if(parentBlock.IsNextBlockEditorUnitAssignable && newChildBlock.IsPreviousBlockEditorUnitAssignable)
+            {
+                parentBlock.NextFlowBlockEditorUnit = newChildBlock;
+                newChildBlock.PreviousFlowBlockEditorUnit = parentBlock;
+                newChildBlock.transform.SetParent(parentBlock.NextBlockConnector.AttachPointRectTransform);
+                newChildBlock._RectTransform.anchoredPosition = Vector2.zero;
+            }
+            else
+            {
+                parentBlock.NextFlowBlockEditorUnit = null;
+                newChildBlock.PreviousFlowBlockEditorUnit = null;
+            }
 
             return;
             //ConnectTwoBlock(newChildBlock.DescendantBlockUnit, OriginalChildBlockOfParentBlock);
@@ -203,8 +211,9 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
             this.NextFlowBlockEditorUnit.GetDescendantBlockList(ref descendantBlocks);
         }
     }
-    
 
+
+    
 
     /// <summary>
     /// Don call this every tick, update
@@ -215,12 +224,24 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         List<FlowBlockEditorUnit> exceptedCheckBlockList = this.ChildBlockList;
         exceptedCheckBlockList.Add(this);
 
-        FlowBlockConnector flowBlockConnector = BlockEditorController.instance.GetTopBlockConnector<FlowBlockConnector>(transform.position, exceptedCheckBlockList);
+        FlowBlockConnector.ConnectorType expectedConnectorTypeFlag = FlowBlockConnector.ConnectorType.None;
+
+        if(IsPreviousBlockEditorUnitAssignable == true && PreviousFlowBlockEditorUnit == null)
+        {
+            expectedConnectorTypeFlag |= FlowBlockConnector.ConnectorType.DownBump;
+        }
+        if (IsNextBlockEditorUnitAssignable == true && NextFlowBlockEditorUnit == null)
+        {
+            expectedConnectorTypeFlag |= FlowBlockConnector.ConnectorType.UpNotch;
+        }
+
+
+        FlowBlockConnector flowBlockConnector = BlockEditorController.instance.GetTopFlowBlockConnector(transform.position, exceptedCheckBlockList, expectedConnectorTypeFlag);
 
         if(flowBlockConnector != null)
             //Debug.Log(flowBlockConnector.OwnerFlowBlockEditorUnit.name);
 
-        base.AttachableBlockConnector = null;
+        base.AttachableEditorElement = null;
 
         if (flowBlockConnector == null || flowBlockConnector.OwnerFlowBlockEditorUnit == this)
         {
@@ -232,7 +253,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
             {//if hit connector is up notch type
                 if(this.IsNextBlockEditorUnitAssignable)
                 {
-                    base.AttachableBlockConnector = flowBlockConnector;
+                    this.AttachableEditorElement = flowBlockConnector;
                     return true;
                 }
                 else
@@ -244,7 +265,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
             {//if hit connector is down bump type
                 if (this.IsPreviousBlockEditorUnitAssignable)
                 {
-                    base.AttachableBlockConnector = flowBlockConnector;
+                    this.AttachableEditorElement = flowBlockConnector;
                     return true;
                 }
                 else
@@ -260,20 +281,20 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
     sealed public override bool AttachBlock()
     {
-        if (base.AttachableBlockConnector != null)
+        if (this.AttachableEditorElement != null)
         {
-            FlowBlockConnector flowBlockConnector = base.AttachableBlockConnector as FlowBlockConnector;
+            FlowBlockConnector flowBlockConnector = this.AttachableEditorElement as FlowBlockConnector;
             if (flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.UpNotch)
             {//if hit connector is up notch type
-                ConnectTwoBlock(flowBlockConnector.OwnerFlowBlockEditorUnit.PreviousFlowBlockEditorUnit, this);
-                ConnectTwoBlock(this.DescendantBlockUnit, flowBlockConnector.OwnerFlowBlockEditorUnit);
+                ConnectFlowBlockEditorUnit(flowBlockConnector.OwnerFlowBlockEditorUnit.PreviousFlowBlockEditorUnit, this);
+                ConnectFlowBlockEditorUnit(this.DescendantBlockUnit, flowBlockConnector.OwnerFlowBlockEditorUnit);
 
             }
             else
             {
                 FlowBlockEditorUnit originalNextBlock = flowBlockConnector.OwnerFlowBlockEditorUnit.NextFlowBlockEditorUnit;
-                ConnectTwoBlock(flowBlockConnector.OwnerFlowBlockEditorUnit, this);
-                ConnectTwoBlock(this.DescendantBlockUnit, originalNextBlock);
+                ConnectFlowBlockEditorUnit(flowBlockConnector.OwnerFlowBlockEditorUnit, this);
+                ConnectFlowBlockEditorUnit(this.DescendantBlockUnit, originalNextBlock);
             }
 
             return true;
@@ -340,12 +361,26 @@ public class FlowBlockEditorUnitEditor : Editor
     {
         if (flowBlockEditorUnit != null)
         {
+            if (flowBlockEditorUnit.PreviousFlowBlockEditorUnit != null)
+            {
+                stringBuilder.Append(flowBlockEditorUnit.PreviousFlowBlockEditorUnit.name);
+            }
+
+            stringBuilder.Append("   ---   ");
+
             if (flowBlockEditorUnit != null)
             {
                 stringBuilder.Append(flowBlockEditorUnit.name);
             }
 
-            stringBuilder.Append("\n|\n|\n");
+            stringBuilder.Append("   ---   ");
+
+            if (flowBlockEditorUnit.NextFlowBlockEditorUnit != null)
+            {
+                stringBuilder.Append(flowBlockEditorUnit.NextFlowBlockEditorUnit.name);
+            }
+
+            stringBuilder.Append("\n");
 
             this.DebugBlockUnitFlowRecursive(flowBlockEditorUnit.NextFlowBlockEditorUnit, ref stringBuilder);
         }

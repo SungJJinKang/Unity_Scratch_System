@@ -1,5 +1,7 @@
-﻿[System.Serializable]
-public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit
+﻿using UnityEngine;
+
+[System.Serializable]
+public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit, IAttachableEditorElement
 {
     public const string InputSpaceElementOfBlockUnitTag = "InputSpaceElementOfBlockUnit";
     /// <summary>
@@ -11,6 +13,10 @@ public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit
         set;
         protected get;
     }
+
+    [SerializeField]
+    private RectTransform attachPointRectTransform;
+    public RectTransform AttachPointRectTransform => attachPointRectTransform;
 
     protected override void Awake()
     {

@@ -10,6 +10,7 @@ TagManager:
   - BlockEditorBody
   - BlockInput
   - InputSpaceElementOfBlockUnit
+  - FlowBlockConnector
   - BlockConnector
   layers:
   - Default

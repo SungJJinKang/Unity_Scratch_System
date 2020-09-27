@@ -176,7 +176,7 @@ public class BlockEditorManager : MonoBehaviour
 
         if(parentBlockEditorUnit != null)
         {
-            FlowBlockEditorUnit.ConnectTwoBlock(parentBlockEditorUnit, blockEditorUnit);
+            FlowBlockEditorUnit.ConnectFlowBlockEditorUnit(parentBlockEditorUnit, blockEditorUnit);
         }
 
         if(createdNewFlowBlock.NextBlock != null)

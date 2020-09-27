@@ -102,23 +102,20 @@ public abstract class BlockEditorUnit : BlockEditorElement
     /// </summary>
     /// <returns></returns>
     public abstract bool IsAttatchable();
-    public BlockConnector AttachableBlockConnector
+    public virtual bool AttachBlock() { return true; }
+    public virtual Vector3 GetAttachPoint() { return Vector3.zero; }
+    public IAttachableEditorElement AttachableEditorElement
     {
         protected set;
         get;
     }
-    public virtual bool AttachBlock() { return true; }
-    public virtual Vector3 GetAttachPoint() { return Vector3.zero; }
 
-
-    public virtual void MakeRootBlock() 
+  public virtual void MakeRootBlock() 
     {
         BlockEditorController.instance.SetBlockRoot(this);
     }
 
-    
-
-    public virtual void OnEndControlling()
+      public virtual void OnEndControlling()
     {
 
     }

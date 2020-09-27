@@ -1,15 +1,7 @@
 ﻿[System.Serializable]
 public sealed class BooleanBlockInputOfBlockUnit : InputSpaceElementOfBlockUnit
 {
-    public BooleanBlockEditorUnit InputtedBooleanBlockEditorUnit;
-
-    sealed public override bool IsEmpty 
-    {
-        get 
-        {
-            return InputtedBooleanBlockEditorUnit == null;
-        }
-    }
+   
 
     // Start is called before the first frame update
     protected override void Start()

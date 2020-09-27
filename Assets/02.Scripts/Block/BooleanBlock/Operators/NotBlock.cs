@@ -1,5 +1,5 @@
 ﻿[BlockTitle("NotBlock")]
-public sealed class NotBlock : BooleanBlock, IContainingParameter<BooleanBlock>
+public sealed class NotBlock : BooleanBlock, IContainingParameter<BooleanBlock>, IOperatorBlockType
 {
     public BooleanBlock Input1 { get; set; }
 

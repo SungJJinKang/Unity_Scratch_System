@@ -108,8 +108,8 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 55}
   m_Pivot: {x: 0, y: 0.5}
@@ -151,9 +151,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _RectTransform: {fileID: 0}
+  ColoredBlockImage:
+  - {fileID: 4383718892843893621}
+  - {fileID: 1371154420907501651}
+  - {fileID: 5560415761211852491}
+  - {fileID: 5716406543653721404}
+  - {fileID: 6735091752409133543}
+  - {fileID: 9176548497892957901}
+  DefaultBlockInputObj: {fileID: 433597843464917596}
   attachPointRectTransform: {fileID: 5560415761211852488}
-  inputtedReporterBlockEditorUnit: {fileID: 0}
-  DefaultReporterBlockInputObj: {fileID: 433597843464917596}
+  MockUpImage: []
   DefaultReporterBlockInputField: {fileID: 5990924063058755123}
 --- !u!222 &8332189862307948002
 CanvasRenderer:
@@ -556,7 +563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.9858491, b: 0.9858491, a: 1}
   m_RaycastTarget: 0
   m_Maskable: 1
   m_OnCullStateChanged:

@@ -205,6 +205,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _RectTransform: {fileID: 0}
+  ColoredBlockImage:
+  - {fileID: 8397872953269959540}
+  - {fileID: 4257204840512770539}
+  - {fileID: 7293966890273587059}
+  - {fileID: 7441971779649760388}
+  - {fileID: 6289935127279462261}
   _BlockMockupHelper: {fileID: 0}
   IsShopBlock: 0
   IsRemovable: 1

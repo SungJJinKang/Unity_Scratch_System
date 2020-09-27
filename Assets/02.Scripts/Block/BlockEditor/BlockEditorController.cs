@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -189,36 +190,44 @@ public class BlockEditorController : MonoBehaviour
                     FlowBlockConnector flowBlockConnector = this.hitUiList[i].gameObject.GetComponent<FlowBlockConnector>();
                     if(flowBlockConnector != null)
                     {
-                        bool hit = true;
-                       
-                        if (expectedConnectorTypeFlag.HasFlag(flowBlockConnector._ConnectorType) == false)
+                        if (expectedConnectorTypeFlag.HasFlag(flowBlockConnector._ConnectorType) == true)
                         {
-                            continue;
+                            return flowBlockConnector;
                         }
+                      
+                       /*
+                       bool hit = true;
 
-                        for (int j = 0; j < exceptedUnitList.Count; j++)
-                        {
-                            if (exceptedUnitList[j] == flowBlockConnector.OwnerFlowBlockEditorUnit)
-                            {
-                                hit = false;
-                                break;
-                            }
-                        }
+                       if (expectedConnectorTypeFlag.HasFlag(flowBlockConnector._ConnectorType) == false)
+                       {
+                           continue;
+                       }
 
-                        if (hit == true)
-                        {
-                            if(flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.DownBump)
-                            {// find downbump connector preferentially
-                                return flowBlockConnector;
-                            }
-                            else
-                            {// save up notch connector
-                                if(TopUpNotchFlowBlockConnector == null)
-                                    TopUpNotchFlowBlockConnector = flowBlockConnector;
-                            }
-                            
-                        }
-                            
+
+                       for (int j = 0; j < exceptedUnitList.Count; j++)
+                       {
+                           if (exceptedUnitList[j] == flowBlockConnector.OwnerFlowBlockEditorUnit)
+                           {
+                               hit = false;
+                               break;
+                           }
+                       }
+
+
+                       if (hit == true)
+                       {
+                           if(flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.DownBump)
+                           {// find downbump connector preferentially
+                               return flowBlockConnector;
+                           }
+                           else
+                           {// save up notch connector
+                               if(TopUpNotchFlowBlockConnector == null)
+                                   TopUpNotchFlowBlockConnector = flowBlockConnector;
+                           }
+
+                       }
+                       */
                     }
                 }
             }
@@ -278,7 +287,7 @@ public class BlockEditorController : MonoBehaviour
     /// Make This Flow Block EditorUnit RootBlock
     /// This block will not have previous block
     /// </summary>
-    public void SetBlockRoot(BlockEditorElement blockEditorElement)
+    public void SetBlockHoverOnEditorWindow(BlockEditorElement blockEditorElement)
     {
         if (blockEditorElement == null)
             return; 
@@ -317,7 +326,7 @@ public class BlockEditorController : MonoBehaviour
                     {
                         this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 10;
 
-                        this.ControllingBlockEditorUnit.MakeRootBlock();
+                        
                     }
                     else
                     {
@@ -391,23 +400,8 @@ public class BlockEditorController : MonoBehaviour
 
             this.controllingBlockEditorUnit = value;
 
-            if (this.controllingBlockEditorUnit != null)
-            {
-                if(originalControllingBlockEditorUnit != this.controllingBlockEditorUnit)
-                {
-                    //Make scrollrect stop
-                    this.BlockShopScrollRect.StopMovement();
-                    this.BlockShopScrollRect.enabled = false;
-
-                    this.BlockWorkSpaceScrollRect.StopMovement();
-                    this.BlockWorkSpaceScrollRect.enabled = false;
-
-                    this.HideBlockMockUp();
-                    StartUpdateIsControllingBlockEditorUnitAttachableCoroutine();
-                }
-            }
-            else
-            {
+            if (this.controllingBlockEditorUnit == null)
+            {//If controllingBlockEditorUnit is null
                 this.BlockShopScrollRect.enabled = true;
 
                 this.BlockWorkSpaceScrollRect.enabled = true;
@@ -417,6 +411,22 @@ public class BlockEditorController : MonoBehaviour
 
                 this.HideBlockMockUp();
             }
+            else if (originalControllingBlockEditorUnit != this.controllingBlockEditorUnit)
+            {//If controllingBlockEditorUnit is not null and controllingBlockEditorUnit changed from originalControllingBlockEditorUnit
+
+                //Make scrollrect stop
+                this.BlockShopScrollRect.StopMovement();
+                this.BlockShopScrollRect.enabled = false;
+
+                this.BlockWorkSpaceScrollRect.StopMovement();
+                this.BlockWorkSpaceScrollRect.enabled = false;
+
+                this.HideBlockMockUp();
+                StartUpdateIsControllingBlockEditorUnitAttachableCoroutine();
+
+                this.ControllingBlockEditorUnit.OnStartControllingByPlayer();
+            }
+           
         }
     }
 
@@ -436,6 +446,31 @@ public class BlockEditorController : MonoBehaviour
     }
 
     private Coroutine UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
+
+
+    private IAttachableEditorElement previousIAttachableEditorElement = null;
+    private IAttachableEditorElement PreviousIAttachableEditorElement
+    {
+        get
+        {
+            return this.previousIAttachableEditorElement;
+        }
+        set
+        {
+            if(this.previousIAttachableEditorElement != null)
+            {
+                
+            }
+
+            this.previousIAttachableEditorElement = value;
+
+            if (this.previousIAttachableEditorElement != null)
+            {
+                
+            }
+        }
+    }
+
     /// <summary>
     /// Update ControllingBlockEditorUnit Is Attachable
     /// If attachable, show preview when attached ( see scratch )
@@ -443,35 +478,38 @@ public class BlockEditorController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator UpdateIsControllingBlockEditorUnitAttachableIEnumerator()
     {
-        bool IsMockUpSet = false;
+        
         while (true)
         {
             if (this.ControllingBlockEditorUnit == null)
                 yield break;
 
-
+            
 
             if (this.ControllingBlockEditorUnit.IsAttatchable() == true && this.ControllingBlockEditorUnit.AttachableEditorElement != null)
             {
-                if(IsMockUpSet == false)
+                if (this.PreviousIAttachableEditorElement != this.ControllingBlockEditorUnit.AttachableEditorElement)
                 {
-                    this.SetBlockMockUp(this.ControllingBlockEditorUnit, this.ControllingBlockEditorUnit.AttachableEditorElement);
+                    this.HideBlockMockUp();
+                    if (this.previousIAttachableEditorElement != null)
+                        this.previousIAttachableEditorElement.OnRootMockUpSet(null, false);
 
-                    IsMockUpSet = true;
+                    this.ControllingBlockEditorUnit.AttachableEditorElement.OnRootMockUpSet(this.ControllingBlockEditorUnit, true);
+                    this.PreviousIAttachableEditorElement = this.ControllingBlockEditorUnit.AttachableEditorElement;
                 }
-
             }
             else
             {
                 this.HideBlockMockUp();
-                IsMockUpSet = false;
+                if (this.previousIAttachableEditorElement != null)
+                    this.previousIAttachableEditorElement.OnRootMockUpSet(null, false);
+                this.PreviousIAttachableEditorElement = null;
             }
 
             yield return new WaitForSeconds(0.1f);
         }
 
     }
-
 
 
     private BlockEditorUnit PinchingBlockEditorUnit;
@@ -499,41 +537,22 @@ public class BlockEditorController : MonoBehaviour
     #region BlockMockUp
 
     [SerializeField]
-    private GameObject BlockMockUpPrefab;
+    public GameObject BlockMockUpPrefab;
     private void InitBlockMockUp()
     {
         PoolManager.WarmPool(BlockMockUpPrefab, 5);
     }
 
-    private List<GameObject> SpawnedBlockMockUp;
-
-    private void SetBlockMockUp(BlockEditorUnit copyBlockEditorUnit, IAttachableEditorElement attachableEditorElement)
+    private List<BlockMockupHelper> SpawnedBlockMockUp;
+    public void AddToSpawnedBlockMockUp(BlockMockupHelper blockMockupHelper)
     {
-        if (copyBlockEditorUnit == null || attachableEditorElement == null)
-            return;
-
-        BlockMockupHelper blockMockupHelper = PoolManager.SpawnObject(BlockMockUpPrefab).GetComponent< BlockMockupHelper>();
-
         if (this.SpawnedBlockMockUp == null)
-            this.SpawnedBlockMockUp = new List<GameObject>();
+            this.SpawnedBlockMockUp = new List<BlockMockupHelper>();
 
-        this.SpawnedBlockMockUp.Add(blockMockupHelper.gameObject);
-
-        blockMockupHelper.CopyTargetBlock(copyBlockEditorUnit);
-        blockMockupHelper._RectTransform.SetParent(attachableEditorElement.AttachPointRectTransform);
-        blockMockupHelper._RectTransform.localScale = Vector3.one;
-        blockMockupHelper._RectTransform.SetSiblingIndex(attachableEditorElement.AttachPointRectTransform.childCount - 2);
-        blockMockupHelper._RectTransform.anchoredPosition = Vector2.up * blockMockupHelper._RectTransform.anchoredPosition.y;
-
-        if(copyBlockEditorUnit is FlowBlockEditorUnit)
-        {
-            //if copyBlockEditorUnit is FlowBlockEditorUnit
-            //SetBlockMockUp nextblock of FlowBlockEditorUnit
-            FlowBlockEditorUnit flowBlockEditorUnit = copyBlockEditorUnit as FlowBlockEditorUnit;
-            this.SetBlockMockUp(flowBlockEditorUnit?.NextFlowBlockEditorUnit, attachableEditorElement);
-        }
-        //RectTransformUtility.
+        this.SpawnedBlockMockUp.Add(blockMockupHelper);
     }
+
+
 
     private void HideBlockMockUp()
     {
@@ -542,7 +561,7 @@ public class BlockEditorController : MonoBehaviour
 
         for(int i=0;i< this.SpawnedBlockMockUp.Count;i++)
         {
-            PoolManager.ReleaseObject(this.SpawnedBlockMockUp[i]);
+            PoolManager.ReleaseObject(this.SpawnedBlockMockUp[i].gameObject);
         }
 
         this.SpawnedBlockMockUp.Clear();

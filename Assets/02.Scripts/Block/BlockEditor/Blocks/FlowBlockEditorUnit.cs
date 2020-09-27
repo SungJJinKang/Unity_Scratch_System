@@ -11,6 +11,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 {
     public FlowBlock TargetFlowBlock => base.TargetBlock as FlowBlock;
 
+    sealed public override BlockEditorElement ParentBlockEditorElement => this.PreviousFlowBlockEditorUnit;
 
     sealed public override void Release()
     {
@@ -22,13 +23,41 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         }
     }
 
+    public void SetBlockMockUp(IAttachableEditorElement targetAttachableEditorElement)
+    {
+        if (targetAttachableEditorElement == null)
+            return;
+
+        BlockMockupHelper blockMockupHelper = PoolManager.SpawnObject(BlockEditorController.instance.BlockMockUpPrefab).GetComponent<BlockMockupHelper>();
+        BlockEditorController.instance.AddToSpawnedBlockMockUp(blockMockupHelper);
+
+
+        blockMockupHelper.CopyTargetBlock(this);
+
+        Transform attachPointRectTransform = targetAttachableEditorElement.AttachPointRectTransform;
+
+        blockMockupHelper._RectTransform.SetParent(attachPointRectTransform);
+        blockMockupHelper._RectTransform.localScale = Vector3.one;
+        blockMockupHelper._RectTransform.SetSiblingIndex(attachPointRectTransform.childCount - 2);
+        blockMockupHelper._RectTransform.anchoredPosition = Vector2.up * blockMockupHelper._RectTransform.anchoredPosition.y;
+
+        //if copyBlockEditorUnit is FlowBlockEditorUnit
+        //SetBlockMockUp nextblock of FlowBlockEditorUnit
+        if (this.NextFlowBlockEditorUnit != null)
+        {
+            this.NextFlowBlockEditorUnit.SetBlockMockUp(targetAttachableEditorElement);
+        }
+
+
+    }
+
 
 
     [SerializeField]
     private FlowBlockConnector PreviousBlockConnector;
 
     [SerializeField]
-    private FlowBlockConnector NextBlockConnector;
+    public FlowBlockConnector NextBlockConnector;
 
     public bool IsPreviousBlockEditorUnitAssignable => base.TargetBlock is IUpNotchBlock;
 
@@ -85,9 +114,9 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         }
     }
 
-    public override void MakeRootBlock()
+    public override void OnStartControllingByPlayer()
     {
-        base.MakeRootBlock();
+        base.OnStartControllingByPlayer();
         ConnectFlowBlockEditorUnit(null, this);
        
     }
@@ -106,7 +135,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
             }
            
 
-            BlockEditorController.instance.SetBlockRoot(newChildBlock);
+            BlockEditorController.instance.SetBlockHoverOnEditorWindow(newChildBlock);
             return;
         }
 
@@ -240,7 +269,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
 
 
-        if (flowBlockConnector == null || flowBlockConnector.OwnerFlowBlockEditorUnit == this)
+        if (flowBlockConnector == null || flowBlockConnector.OwnerFlowBlockEditorUnit == this || flowBlockConnector.OwnerBlockEditorUnit.IsShopBlock == true)
         {
             base.AttachableEditorElement = null;
             return false;

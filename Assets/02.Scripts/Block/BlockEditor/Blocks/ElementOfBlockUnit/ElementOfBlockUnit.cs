@@ -3,10 +3,11 @@
 [System.Serializable]
 public abstract class ElementOfBlockUnit : BlockEditorElement
 {
+    sealed public override BlockEditorElement ParentBlockEditorElement => OwnerBlockEditorUnit;
 
 
-    [SerializeField]
-    public BlockEditorUnit OwnerBlockUnit
+   [SerializeField]
+    public BlockEditorUnit OwnerBlockEditorUnit
     {
         get;
         set;
@@ -49,7 +50,7 @@ public abstract class ElementOfBlockUnit : BlockEditorElement
     {
         // never touch element of targetBlock. Block is seperate from BlockEditorUnit
         // Removing BlockEditorUnit, Element Of BlockUnit don't effect to Block instance
-        OwnerBlockUnit = null;
+        OwnerBlockEditorUnit = null;
         PoolManager.Instance.releaseObject(gameObject);
     }
 

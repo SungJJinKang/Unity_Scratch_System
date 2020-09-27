@@ -258,6 +258,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _RectTransform: {fileID: 0}
+  ColoredBlockImage:
+  - {fileID: -5460597677582285831}
+  - {fileID: 4128106369123215726}
+  - {fileID: 2568907980866974806}
+  - {fileID: 6397588364684803053}
+  - {fileID: 7450145499832387574}
   _BlockMockupHelper: {fileID: 0}
   IsShopBlock: 0
   IsRemovable: 1
@@ -741,7 +747,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 105, y: 0}
   m_SizeDelta: {x: 0, y: 105}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &7450145499832387577
@@ -810,7 +816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: -120
-    m_Right: 0
+    m_Right: 15
     m_Top: 15
     m_Bottom: 0
   m_ChildAlignment: 3

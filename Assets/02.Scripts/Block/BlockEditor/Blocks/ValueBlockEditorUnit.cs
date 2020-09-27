@@ -1,15 +1,30 @@
 ﻿using System;
+using UnityEngine;
 
+[System.Serializable]
 public abstract class ValueBlockEditorUnit : BlockEditorUnit
 {
     protected abstract Type TargetEditorBlockType { get; }
 
+    public InputSpaceElementOfBlockUnit _InputSpaceElementOfBlockUnit;
+
+    sealed public override BlockEditorElement ParentBlockEditorElement => _InputSpaceElementOfBlockUnit?.OwnerBlockEditorUnit;
+
+    public override void OnStartControllingByPlayer()
+    {
+        base.OnStartControllingByPlayer();
+
+        if(_InputSpaceElementOfBlockUnit != null)
+        {
+            _InputSpaceElementOfBlockUnit.InputtedValueBlockEditorUnit = null;
+        }
+    }
+
     sealed public override bool IsAttatchable()
     {
         InputSpaceElementOfBlockUnit topInputSpaceElementOfBlockUnit = BlockEditorController.instance.GetTopInputSpaceElementOfBlockUnit(this.TargetEditorBlockType, transform.position);
-   
-
-        if (AttachableEditorElement == null || topInputSpaceElementOfBlockUnit.OwnerBlockUnit == this || topInputSpaceElementOfBlockUnit.IsEmpty == false)
+        //Debug.Log("topInputSpaceElementOfBlockUnit " + topInputSpaceElementOfBlockUnit?.OwnerBlockEditorUnit?.name);
+        if (topInputSpaceElementOfBlockUnit == null || topInputSpaceElementOfBlockUnit.OwnerBlockEditorUnit == this || topInputSpaceElementOfBlockUnit.OwnerBlockEditorUnit.IsShopBlock == true || topInputSpaceElementOfBlockUnit.IsEmpty == false)
         {
             base.AttachableEditorElement = null;
             return false;
@@ -17,6 +32,7 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
         else
         {
             base.AttachableEditorElement = topInputSpaceElementOfBlockUnit;
+            Debug.Log("topInputSpaceElementOfBlockUnit hit" + base.AttachableEditorElement?.OwnerBlockEditorUnit?.name);
             return true;
         }
 
@@ -28,21 +44,11 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
     {
         if (base.AttachableEditorElement != null)
         {
-            /*
+            
             InputSpaceElementOfBlockUnit inputSpaceElementOfBlockUnit = base.AttachableEditorElement as InputSpaceElementOfBlockUnit;
-            if (flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.UpNotch)
-            {//if hit connector is up notch type
-                ConnectFlowBlockEditorUnit(flowBlockConnector.OwnerFlowBlockEditorUnit.PreviousFlowBlockEditorUnit, this);
-                ConnectFlowBlockEditorUnit(this.DescendantBlockUnit, flowBlockConnector.OwnerFlowBlockEditorUnit);
+            inputSpaceElementOfBlockUnit.InputtedValueBlockEditorUnit = this;
 
-            }
-            else
-            {
-                FlowBlockEditorUnit originalNextBlock = flowBlockConnector.OwnerFlowBlockEditorUnit.NextFlowBlockEditorUnit;
-                ConnectFlowBlockEditorUnit(flowBlockConnector.OwnerFlowBlockEditorUnit, this);
-                ConnectFlowBlockEditorUnit(this.DescendantBlockUnit, originalNextBlock);
-            }
-            */
+
             return true;
         }
         else

@@ -14,6 +14,8 @@ public abstract class BlockEditorUnit : BlockEditorElement
     [HideInInspector]
     public BlockMockupHelper _BlockMockupHelper;
 
+   
+
     protected override void Awake()
     {
         base.Awake();
@@ -27,6 +29,17 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
        
     }
+
+    protected override void Start()
+    {
+        base.Start();
+
+    }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
+ 
 
     [HideInInspector]
     public bool IsShopBlock = false;
@@ -110,9 +123,12 @@ public abstract class BlockEditorUnit : BlockEditorElement
         get;
     }
 
-  public virtual void MakeRootBlock() 
+    /// <summary>
+    /// Detach From ParentBlock(Input or FlowBlock)
+    /// </summary>
+    public virtual void OnStartControllingByPlayer()
     {
-        BlockEditorController.instance.SetBlockRoot(this);
+        BlockEditorController.instance.SetBlockHoverOnEditorWindow(this);
     }
 
       public virtual void OnEndControlling()
@@ -187,10 +203,37 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
     protected virtual void OnSetTargetBlock()
     {
-        if (this.targetBlock == null)
+        if (this.TargetBlock == null)
             return;
 
+        InitBlockColor();
         InitElementsOfBlockUnit();
+      
+    }
+
+
+    private void InitBlockColor()
+    {
+        if (base.ColoredBlockImage == null || base.ColoredBlockImage.Count == 0 || this.TargetBlock == null)
+            return;
+
+        //IBlockCategory blockCategory = this.TargetBlock as IBlockCategory;
+        //Type t = blockCategory.GetType();
+        //BlockColorCategoryAttribute blockColorCategoryAttribute = blockCategory.GetType().GetCustomAttribute<BlockColorCategoryAttribute>(true);
+        BlockColorCategoryAttribute blockColorCategoryAttribute = Utility.GetAncestorAttribute<BlockColorCategoryAttribute>(this.TargetBlock.GetType());
+        if (blockColorCategoryAttribute != null)
+        {
+            Color color = blockColorCategoryAttribute.Color;
+            for (int i = 0; i < base.ColoredBlockImage.Count; i++)
+            {
+                color.a = base.ColoredBlockImage[i].color.a;
+                base.ColoredBlockImage[i].color = color;
+            }
+        }
+        else
+        {
+            Debug.LogError("blockColorCategoryAttribute is null : " + this.TargetBlock.ToString());
+        }
     }
 
     #endregion
@@ -210,7 +253,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
     private void InitElementsOfBlockUnit()
     {
-        ElementContentContainerAttribute elementContentContainerAttribute = this.targetBlock.GetType().GetCustomAttribute<ElementContentContainerAttribute>();
+        ElementContentContainerAttribute elementContentContainerAttribute = this.TargetBlock.GetType().GetCustomAttribute<ElementContentContainerAttribute>();
         if (elementContentContainerAttribute != null)
         {//If Block class have ElementContentAttribute
 
@@ -241,11 +284,11 @@ public abstract class BlockEditorUnit : BlockEditorElement
         else
         {//If Block class don't have ElementContentAttribute
 
-            AddElementOfBlockUnit(new TextElementContent(this.targetBlock.GetType().Name));//First Add Text Element with class name
+            AddElementOfBlockUnit(new TextElementContent(this.TargetBlock.GetType().Name));//First Add Text Element with class name
 
 
             //Automatically add ElementOfBlockUnit 
-            Type[] parameterTypes = this.targetBlock.ParametersTypes;
+            Type[] parameterTypes = this.TargetBlock.ParametersTypes;
             if (parameterTypes != null)
             {
                 for (int i = 0; i < parameterTypes.Length; i++)
@@ -299,7 +342,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
         elementOfBlockUnit.transform.SetParent(this.MainBlockTransform);
         elementOfBlockUnit.transform.localScale = Vector3.one;
         elementOfBlockUnit.transform.SetSiblingIndex(this.MainBlockTransform.childCount - 2); // place elementOfBlockUnit To the last space of blockeditorunit
-        elementOfBlockUnit.OwnerBlockUnit = this;
+        elementOfBlockUnit.OwnerBlockEditorUnit = this;
         elementOfBlockUnit.SetElementContent(elementContent);
         return elementOfBlockUnit;
     }

@@ -1,21 +1,33 @@
 ﻿
+using UnityEngine;
+
+public interface IBlockCategory
+{ 
+}
+
+[BlockColorCategoryAttribute(0.2980392f, 0.5921569f, 1)]
 [BlockMainCategoryAttribute("Event")]
-public interface IEventBlockType
+public interface IEventBlockType : IBlockCategory
 {
 }
 
+[BlockColorCategoryAttribute(0.3490196f, 0.7529413f, 0.3490196f)]
 [BlockMainCategoryAttribute("Operator")]
-public interface IOperatorBlockType
+public interface IOperatorBlockType : IBlockCategory
 {
 }
 
+[BlockColorCategoryAttribute(1, 0.5490196f, 0.1019608f)]
 [BlockMainCategoryAttribute("Variable")]
-public interface IVariableBlockType
+public interface IVariableBlockType : IBlockCategory
 {
 }
 
+[BlockColorCategoryAttribute(1, 0.4f, 0.5019608f)]
 [BlockMainCategoryAttribute("CustomBlock")]
-public interface CustomBlockType { }
+public interface CustomBlockType : IBlockCategory 
+{ 
+}
 
 
 public interface ICallCustomBlockType : CustomBlockType
@@ -31,8 +43,9 @@ public interface IDefinitionCustomBlockType : CustomBlockType
 /// <summary>
 /// Robot part block type.
 /// </summary>
+[BlockColorCategoryAttribute(1, 0, 0)]
 [BlockMainCategoryAttribute("RobotPart")]
-public interface IRobotPartBlockType
+public interface IRobotPartBlockType : IBlockCategory
 {
 }
 

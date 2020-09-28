@@ -6,32 +6,33 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
 {
     protected abstract Type TargetEditorBlockType { get; }
 
-    public InputSpaceElementOfBlockUnit _InputSpaceElementOfBlockUnit;
+    [HideInInspector]
+    public InputDefinitionOfBlockEditorUnit ParentInputDefinitionOfBlockEditorUnit;
 
-    sealed public override BlockEditorElement ParentBlockEditorElement => _InputSpaceElementOfBlockUnit?.OwnerBlockEditorUnit;
+    sealed public override BlockEditorElement ParentBlockEditorElement => ParentInputDefinitionOfBlockEditorUnit?.OwnerBlockEditorUnit;
 
     public override void OnStartControllingByPlayer()
     {
         base.OnStartControllingByPlayer();
 
-        if(_InputSpaceElementOfBlockUnit != null)
+        if(ParentInputDefinitionOfBlockEditorUnit != null)
         {
-            _InputSpaceElementOfBlockUnit.InputtedValueBlockEditorUnit = null;
+            ParentInputDefinitionOfBlockEditorUnit.InputtedValueBlockEditorUnit = null;
         }
     }
 
     sealed public override bool IsAttatchable()
     {
-        InputSpaceElementOfBlockUnit topInputSpaceElementOfBlockUnit = BlockEditorController.instance.GetTopInputSpaceElementOfBlockUnit(this.TargetEditorBlockType, transform.position);
+        InputDefinitionOfBlockEditorUnit topInputDefinitionOfBlockEditorUnit = BlockEditorController.instance.GetTopInputSpaceElementOfBlockUnit(this.TargetEditorBlockType, transform.position);
         //Debug.Log("topInputSpaceElementOfBlockUnit " + topInputSpaceElementOfBlockUnit?.OwnerBlockEditorUnit?.name);
-        if (topInputSpaceElementOfBlockUnit == null || topInputSpaceElementOfBlockUnit.OwnerBlockEditorUnit == this || topInputSpaceElementOfBlockUnit.OwnerBlockEditorUnit.IsShopBlock == true || topInputSpaceElementOfBlockUnit.IsEmpty == false)
+        if (topInputDefinitionOfBlockEditorUnit == null || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit == this || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit.IsShopBlock == true || topInputDefinitionOfBlockEditorUnit.IsEmpty == false)
         {
             base.AttachableEditorElement = null;
             return false;
         }
         else
         {
-            base.AttachableEditorElement = topInputSpaceElementOfBlockUnit;
+            base.AttachableEditorElement = topInputDefinitionOfBlockEditorUnit;
             Debug.Log("topInputSpaceElementOfBlockUnit hit" + base.AttachableEditorElement?.OwnerBlockEditorUnit?.name);
             return true;
         }
@@ -45,8 +46,8 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
         if (base.AttachableEditorElement != null)
         {
             
-            InputSpaceElementOfBlockUnit inputSpaceElementOfBlockUnit = base.AttachableEditorElement as InputSpaceElementOfBlockUnit;
-            inputSpaceElementOfBlockUnit.InputtedValueBlockEditorUnit = this;
+            InputDefinitionOfBlockEditorUnit inputDefinitionOfBlockEditorUnit = base.AttachableEditorElement as InputDefinitionOfBlockEditorUnit;
+            inputDefinitionOfBlockEditorUnit.InputtedValueBlockEditorUnit = this;
 
 
             return true;

@@ -91,14 +91,14 @@ public abstract class BlockEditorUnit : BlockEditorElement
         // Removing BlockEditorUnit, Element Of BlockUnit shouldn't effect to Block instance
         this.targetBlock = null;
 
-        if (this.ElementOfBlockUnitList != null && this.ElementOfBlockUnitList.Count > 0)
+        if (this.DefinitionOfBlockEditorUnitList != null && this.DefinitionOfBlockEditorUnitList.Count > 0)
         {
-            for (int i = 0; i < this.ElementOfBlockUnitList.Count; i++)
+            for (int i = 0; i < this.DefinitionOfBlockEditorUnitList.Count; i++)
             {
-                this.ElementOfBlockUnitList[i].Release();
+                this.DefinitionOfBlockEditorUnitList[i].Release();
             }
 
-            this.ElementOfBlockUnitList.Clear();
+            this.DefinitionOfBlockEditorUnitList.Clear();
         }
 
         PoolManager.Instance.releaseObject(gameObject);
@@ -245,7 +245,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
     #region ElementsOfBlockUnit
 
-    private List<ElementOfBlockUnit> ElementOfBlockUnitList;
+    private List<DefinitionOfBlockEditorUnit> DefinitionOfBlockEditorUnitList;
 
 
 
@@ -253,38 +253,44 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
     private void InitElementsOfBlockUnit()
     {
-        ElementContentContainerAttribute elementContentContainerAttribute = this.TargetBlock.GetType().GetCustomAttribute<ElementContentContainerAttribute>();
-        if (elementContentContainerAttribute != null)
+        BlockDefinitionAttribute blockDefinition = this.TargetBlock.GetType().GetCustomAttribute<BlockDefinitionAttribute>();
+        if (blockDefinition != null)
         {//If Block class have ElementContentAttribute
 
-            string[] elementContents = elementContentContainerAttribute.ElementContents;
-            for (int i = 0; i < elementContents.Length; i++)
+            object[] blockDefinitions = blockDefinition._BlockDefinitions;
+            for (int i = 0; i < blockDefinitions.Length; i++)
             {
-                if (elementContents[i] != null)
+                if (blockDefinitions[i] != null)
                 {
-                    if (elementContents[i] == typeof(BooleanBlockInputContent).Name)
+                    if (blockDefinitions[i].GetType() == typeof(string))
                     {
-                        this.AddElementOfBlockUnit(new BooleanBlockInputContent());
+                        this.AddDefinitionOfBlockEditorUnit(new TextDefinitionContentOfBlock((string)blockDefinitions[i]));
                     }
-                    else if (elementContents[i] == typeof(GlobalVariableSelectorDropDownContent).Name)
+                    else if (blockDefinitions[i].GetType() == typeof(BlockDefinitionAttribute.BlockDefinitionType))
                     {
-                        this.AddElementOfBlockUnit(new GlobalVariableSelectorDropDownContent());
-                    }
-                    else if (elementContents[i] == typeof(ReporterBlockInputContent).Name)
-                    {
-                        this.AddElementOfBlockUnit(new ReporterBlockInputContent());
-                    }
-                    else
-                    {// if elementContents[i] is just text
-                        AddElementOfBlockUnit(new TextElementContent(elementContents[i]));
+                        switch ((BlockDefinitionAttribute.BlockDefinitionType)blockDefinitions[i])
+                        {
+                            case BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput:
+                                this.AddDefinitionOfBlockEditorUnit(new BooleanBlockInputDefinitionContentOfBlock());
+                                break;
+
+                            case BlockDefinitionAttribute.BlockDefinitionType.GlobalVariableSelector:
+                                this.AddDefinitionOfBlockEditorUnit(new GlobalVariableSelectorDefinitionContentOfBlock());
+                                break;
+
+                            case BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput:
+                                this.AddDefinitionOfBlockEditorUnit(new ReporterBlockInputDefinitionContentOfBlock());
+                                break;
+                        }
                     }
                 }
             }
+
         }
         else
         {//If Block class don't have ElementContentAttribute
 
-            AddElementOfBlockUnit(new TextElementContent(this.TargetBlock.GetType().Name));//First Add Text Element with class name
+            AddDefinitionOfBlockEditorUnit(new TextDefinitionContentOfBlock(this.TargetBlock.GetType().Name));//First Add Text Element with class name
 
 
             //Automatically add ElementOfBlockUnit 
@@ -297,15 +303,15 @@ public abstract class BlockEditorUnit : BlockEditorElement
                     {
                         if (parameterTypes[i] == typeof(BooleanBlock) || parameterTypes[i].IsSubclassOf(typeof(BooleanBlock)))
                         {
-                            this.AddElementOfBlockUnit(new BooleanBlockInputContent());
+                            this.AddDefinitionOfBlockEditorUnit(new BooleanBlockInputDefinitionContentOfBlock());
                         }
                         else if (parameterTypes[i] == typeof(VariableBlock) || parameterTypes[i].IsSubclassOf(typeof(VariableBlock)))
                         {
-                            this.AddElementOfBlockUnit(new GlobalVariableSelectorDropDownContent());
+                            this.AddDefinitionOfBlockEditorUnit(new GlobalVariableSelectorDefinitionContentOfBlock());
                         }
                         else if (parameterTypes[i] == typeof(ReporterBlock) || parameterTypes[i].IsSubclassOf(typeof(ReporterBlock)))
                         {
-                            this.AddElementOfBlockUnit(new ReporterBlockInputContent());
+                            this.AddDefinitionOfBlockEditorUnit(new ReporterBlockInputDefinitionContentOfBlock());
                         }
                         else
                         {
@@ -322,29 +328,29 @@ public abstract class BlockEditorUnit : BlockEditorElement
     /// <summary>
     /// Add Element Of Block Unit In Block Unit UI
     /// </summary>
-    /// <param name="elementContent">Element content.</param>
-    private ElementOfBlockUnit AddElementOfBlockUnit(ElementContent elementContent)
+    /// <param name="definitionContentOfBlock">Element content.</param>
+    private DefinitionOfBlockEditorUnit AddDefinitionOfBlockEditorUnit(DefinitionContentOfBlock definitionContentOfBlock)
     {
-        ElementOfBlockUnit elementOfBlockUnit = BlockEditorManager.instnace.SpawnElementOfBlockUnit(elementContent);
+        DefinitionOfBlockEditorUnit definitionOfBlockEditorUnit = BlockEditorManager.instnace.SpawnDefinitionOfBlockEditorUnit(definitionContentOfBlock);
 
-        if (elementOfBlockUnit == null)
+        if (definitionOfBlockEditorUnit == null)
         {
-            Debug.LogError("Cant Find Proper Type : " + elementContent.GetType().Name);
+            Debug.LogError("Cant Find Proper Type : " + definitionContentOfBlock.GetType().Name);
             return null;
         }
 
-        if (this.ElementOfBlockUnitList == null)
-            this.ElementOfBlockUnitList = new List<ElementOfBlockUnit>();
+        if (this.DefinitionOfBlockEditorUnitList == null)
+            this.DefinitionOfBlockEditorUnitList = new List<DefinitionOfBlockEditorUnit>();
 
-        if (this.ElementOfBlockUnitList.Contains(elementOfBlockUnit) == false)
-            this.ElementOfBlockUnitList.Add(elementOfBlockUnit);
+        if (this.DefinitionOfBlockEditorUnitList.Contains(definitionOfBlockEditorUnit) == false)
+            this.DefinitionOfBlockEditorUnitList.Add(definitionOfBlockEditorUnit);
 
-        elementOfBlockUnit.transform.SetParent(this.MainBlockTransform);
-        elementOfBlockUnit.transform.localScale = Vector3.one;
-        elementOfBlockUnit.transform.SetSiblingIndex(this.MainBlockTransform.childCount - 2); // place elementOfBlockUnit To the last space of blockeditorunit
-        elementOfBlockUnit.OwnerBlockEditorUnit = this;
-        elementOfBlockUnit.SetElementContent(elementContent);
-        return elementOfBlockUnit;
+        definitionOfBlockEditorUnit.transform.SetParent(this.MainBlockTransform);
+        definitionOfBlockEditorUnit.transform.localScale = Vector3.one;
+        definitionOfBlockEditorUnit.transform.SetSiblingIndex(this.MainBlockTransform.childCount); // place elementOfBlockUnit To the last space of blockeditorunit
+        definitionOfBlockEditorUnit.OwnerBlockEditorUnit = this;
+        definitionOfBlockEditorUnit.SetDefinitionContentOfBlock(definitionContentOfBlock);
+        return definitionOfBlockEditorUnit;
     }
 
     #endregion

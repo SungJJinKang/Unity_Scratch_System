@@ -1,4 +1,5 @@
 ﻿[BlockTitle("OrBlock")]
+[BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput, "or", BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput)]
 public sealed class OrBlock : BinaryComparisonTwoBooleanBlock
 {
     sealed public override bool GetBooleanValue(RobotBase operatingRobotBase)

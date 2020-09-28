@@ -33,7 +33,7 @@ public abstract class BlockEditorElement : MonoBehaviour
     /// <summary>
     /// Call LayoutRebuilder.ForceRebuildLayoutImmediate At All Ancestors BlockEditorElement
     /// </summary>
-    protected void RecursiveRefreshRectTransform()
+    public void RecursiveRefreshRectTransform()
     {
         //https://ssscool.tistory.com/367
         //sometimes ContentSizeFilter doesn't work, so this method fix this

@@ -236,10 +236,10 @@ public class BlockEditorController : MonoBehaviour
         return null;
     }
 
-    public InputSpaceElementOfBlockUnit GetTopInputSpaceElementOfBlockUnit(Type t, Vector2 worldPos) 
+    public InputDefinitionOfBlockEditorUnit GetTopInputSpaceElementOfBlockUnit(Type t, Vector2 worldPos) 
     {
 #if UNITY_EDITOR
-        if(t.IsSubclassOf(typeof(InputSpaceElementOfBlockUnit)) == false)
+        if(t.IsSubclassOf(typeof(InputDefinitionOfBlockEditorUnit)) == false)
         {
             Debug.LogError("parameter t should be subclass of InputSpaceElementOfBlockUnit");
         }
@@ -253,12 +253,12 @@ public class BlockEditorController : MonoBehaviour
             for (int i = 0; i < this.hitUiList.Count; i++)
             {//Top Object comes first
 
-                if (this.hitUiList[i].gameObject.CompareTag(InputSpaceElementOfBlockUnit.InputSpaceElementOfBlockUnitTag))
+                if (this.hitUiList[i].gameObject.CompareTag(InputDefinitionOfBlockEditorUnit.InputDefinitionOfBlockEditorUnitTag))
                 {
-                    InputSpaceElementOfBlockUnit inputSpaceElementOfBlockUnit = this.hitUiList[i].gameObject.GetComponent<InputSpaceElementOfBlockUnit>();
-                    if (inputSpaceElementOfBlockUnit != null && inputSpaceElementOfBlockUnit.GetType() == t)
+                    InputDefinitionOfBlockEditorUnit inputDefinitionOfBlockEditorUnit = this.hitUiList[i].gameObject.GetComponent<InputDefinitionOfBlockEditorUnit>();
+                    if (inputDefinitionOfBlockEditorUnit != null && inputDefinitionOfBlockEditorUnit.GetType() == t)
                     {
-                        return inputSpaceElementOfBlockUnit;
+                        return inputDefinitionOfBlockEditorUnit;
 
                     }
                 }

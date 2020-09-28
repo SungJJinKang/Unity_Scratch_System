@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [System.Serializable]
-public sealed class TextElementOfBlockUnit : ElementOfBlockUnit
+public sealed class TextElementOfBlockUnit : DefinitionOfBlockEditorUnit
 {
     [SerializeField]
     private Text _Text;
@@ -34,11 +34,11 @@ public sealed class TextElementOfBlockUnit : ElementOfBlockUnit
         base.OnDisable();
     }
 
-    public override void SetElementContent(ElementContent elementContent)
+    public override void SetDefinitionContentOfBlock(DefinitionContentOfBlock definitionContentOfBlock)
     {
-        base.SetElementContent(elementContent);
+        base.SetDefinitionContentOfBlock(definitionContentOfBlock);
 
-        TextElementContent textElementContent = elementContent as TextElementContent;
+        TextDefinitionContentOfBlock textElementContent = definitionContentOfBlock as TextDefinitionContentOfBlock;
         if (textElementContent != null)
         {
             this.SetText(textElementContent.Text);

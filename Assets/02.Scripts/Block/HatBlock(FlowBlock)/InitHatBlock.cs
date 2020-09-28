@@ -2,7 +2,7 @@
 /// Event Block
 /// This is HatBlock
 [NotAutomaticallyMadeOnBlockShop]
-[ElementContentContainerAttribute("Init Block")]
+[BlockDefinitionAttribute("Init Hat Block")]
 public sealed class InitHatBlock : HatBlock
 {
 

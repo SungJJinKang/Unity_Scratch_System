@@ -1,4 +1,5 @@
 ﻿[BlockTitle("Minus")]
+[BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "-", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class MinusBlock : ArithmeticBlock
 {
     sealed public override string GetReporterStringValue(RobotBase operatingRobotBase)

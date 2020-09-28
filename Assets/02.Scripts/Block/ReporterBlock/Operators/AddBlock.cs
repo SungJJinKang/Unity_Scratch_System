@@ -1,4 +1,5 @@
 ﻿[BlockTitle("Add")]
+[BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "+", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class AddBlock : ArithmeticBlock
 {
     sealed public override string GetReporterStringValue(RobotBase operatingRobotBase)

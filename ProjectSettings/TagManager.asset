@@ -9,9 +9,9 @@ TagManager:
   - BlockEditorUnit
   - BlockEditorBody
   - BlockInput
-  - InputSpaceElementOfBlockUnit
   - FlowBlockConnector
   - BlockConnector
+  - InputDefinitionOfBlockEditorUnitTag
   layers:
   - Default
   - TransparentFX

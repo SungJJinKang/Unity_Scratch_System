@@ -62,8 +62,6 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
     public bool IsPreviousBlockEditorUnitAssignable => base.TargetBlock is IUpNotchBlock;
 
   
-
-    [SerializeField]
     private FlowBlockEditorUnit previousFlowBlockEditorUnit;
     public FlowBlockEditorUnit PreviousFlowBlockEditorUnit
     {
@@ -88,7 +86,6 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         }
     }
 
-    [SerializeField]
     private FlowBlockEditorUnit nextFlowBlockEditorUnit;
     public bool IsNextBlockEditorUnitAssignable => base.TargetBlock is IDownBumpBlock;
     public FlowBlockEditorUnit NextFlowBlockEditorUnit

@@ -1,4 +1,5 @@
 ﻿[BlockTitle("GreaterOrEqual")]
+[BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, ">=", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class GreaterOrEqualBlock : BinaryComparisonTwoReporterBlock
 {
     sealed public override bool GetBooleanValue(RobotBase operatingRobotBase)

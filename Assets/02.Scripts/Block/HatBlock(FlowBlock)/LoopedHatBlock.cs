@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// LoopedHatBlock
 [NotAutomaticallyMadeOnBlockShop]
-[ElementContentContainerAttribute("Looped Block")]
+[BlockDefinitionAttribute("Looped Block")]
 public sealed class LoopedHatBlock : HatBlock
 {
 

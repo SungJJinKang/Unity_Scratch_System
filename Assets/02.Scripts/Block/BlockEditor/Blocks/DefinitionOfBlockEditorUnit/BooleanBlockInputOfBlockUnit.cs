@@ -1,6 +1,8 @@
 ﻿[System.Serializable]
-public sealed class GlobalVariableSelectorDropDownOfBlockUnit : ElementOfBlockUnit
+public sealed class BooleanBlockInputOfBlockUnit : InputDefinitionOfBlockEditorUnit
 {
+   
+
     // Start is called before the first frame update
     protected override void Start()
     {

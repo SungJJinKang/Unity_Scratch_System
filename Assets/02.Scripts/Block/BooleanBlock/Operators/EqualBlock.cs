@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 [BlockTitle("Equal")]
+[BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "=", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class EqualBlock : BinaryComparisonTwoReporterBlock
 {
     sealed public override bool GetBooleanValue(RobotBase operatingRobotBase)

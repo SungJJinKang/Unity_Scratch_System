@@ -1,7 +1,7 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 [System.Serializable]
-public sealed class ReporterBlockInputOfBlockUnit : InputSpaceElementOfBlockUnit
+public sealed class ReporterBlockInputOfBlockUnit : InputDefinitionOfBlockEditorUnit
 {
 
     private ReporterBlock DefaultInputtedReporterBlock

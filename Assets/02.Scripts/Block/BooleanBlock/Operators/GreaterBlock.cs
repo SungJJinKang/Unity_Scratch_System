@@ -1,4 +1,5 @@
 ﻿[BlockTitle("Greater")]
+[BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, ">", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class GreaterBlock : BinaryComparisonTwoReporterBlock
 {
     sealed public override bool GetBooleanValue(RobotBase operatingRobotBase)

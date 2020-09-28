@@ -328,7 +328,7 @@ public class BlockEditorManager : MonoBehaviour
     /// <summary>
     /// The boolean block input in block element.
     /// </summary>
-    [Header("ElementOfBlockUnit")]
+    [Header("DefinitionOfBlockEditorUnit")]
     [SerializeField]
     private BooleanBlockInputOfBlockUnit booleanBlockInputInBlockElement;
     [SerializeField]
@@ -346,27 +346,27 @@ public class BlockEditorManager : MonoBehaviour
         PoolManager.WarmPool(textInBlockElement?.gameObject, 20);
     }
 
-    public ElementOfBlockUnit SpawnElementOfBlockUnit(ElementContent elementContent)
+    public DefinitionOfBlockEditorUnit SpawnDefinitionOfBlockEditorUnit(DefinitionContentOfBlock definitionContentOfBlock)
     {
-        if (elementContent is BooleanBlockInputContent)
+        if (definitionContentOfBlock is BooleanBlockInputDefinitionContentOfBlock)
         {
-            return PoolManager.SpawnObject(booleanBlockInputInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
+            return PoolManager.SpawnObject(booleanBlockInputInBlockElement?.gameObject).GetComponent<DefinitionOfBlockEditorUnit>();
         }
-        else if (elementContent is GlobalVariableSelectorDropDownContent)
+        else if (definitionContentOfBlock is GlobalVariableSelectorDefinitionContentOfBlock)
         {
-            return PoolManager.SpawnObject(globalVariableSelectorDropDownInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
+            return PoolManager.SpawnObject(globalVariableSelectorDropDownInBlockElement?.gameObject).GetComponent<DefinitionOfBlockEditorUnit>();
         }
-        else if (elementContent is ReporterBlockInputContent)
+        else if (definitionContentOfBlock is ReporterBlockInputDefinitionContentOfBlock)
         {
-            return PoolManager.SpawnObject(reporterBlockInputInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
+            return PoolManager.SpawnObject(reporterBlockInputInBlockElement?.gameObject).GetComponent<DefinitionOfBlockEditorUnit>();
         }
-        else if (elementContent is TextElementContent)
+        else if (definitionContentOfBlock is TextDefinitionContentOfBlock)
         {
-            return PoolManager.SpawnObject(textInBlockElement?.gameObject).GetComponent<ElementOfBlockUnit>();
+            return PoolManager.SpawnObject(textInBlockElement?.gameObject).GetComponent<DefinitionOfBlockEditorUnit>();
         }
         else
         {
-            Debug.LogError("Cant Find Proper Type : " + elementContent.GetType().Name);
+            Debug.LogError("Cant Find Proper Type : " + definitionContentOfBlock.GetType().Name);
             return null;
         }
     }
@@ -374,6 +374,7 @@ public class BlockEditorManager : MonoBehaviour
     #endregion
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(BlockEditorManager))]
 public class BlockEditorManagerEditor : Editor
 {
@@ -390,3 +391,4 @@ public class BlockEditorManagerEditor : Editor
     }
 
 }
+#endif

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public abstract class ElementOfBlockUnit : BlockEditorElement
+public abstract class DefinitionOfBlockEditorUnit : BlockEditorElement
 {
     sealed public override BlockEditorElement ParentBlockEditorElement => OwnerBlockEditorUnit;
 
@@ -41,7 +41,7 @@ public abstract class ElementOfBlockUnit : BlockEditorElement
 
     }
 
-    public virtual void SetElementContent(ElementContent elementContent)
+    public virtual void SetDefinitionContentOfBlock(DefinitionContentOfBlock definitionContentOfBlock)
     {
 
     }

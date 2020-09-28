@@ -3,15 +3,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
-public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit, IAttachableEditorElement
+public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditorUnit, IAttachableEditorElement
 {
-    public const string InputSpaceElementOfBlockUnitTag = "InputSpaceElementOfBlockUnit";
+    public const string InputDefinitionOfBlockEditorUnitTag = "InputDefinitionOfBlockEditorUnitTag";
 
 
     [SerializeField]
     protected GameObject DefaultBlockInputObj;
 
-    [SerializeField]
     private ValueBlockEditorUnit inputtedValueBlockEditorUnit;
     public ValueBlockEditorUnit InputtedValueBlockEditorUnit
     {
@@ -23,7 +22,7 @@ public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit, IAttach
         {
             if (this.inputtedValueBlockEditorUnit != null)
             {
-                this.inputtedValueBlockEditorUnit._InputSpaceElementOfBlockUnit = null;
+                this.inputtedValueBlockEditorUnit.ParentInputDefinitionOfBlockEditorUnit = null;
             }
         
             this.inputtedValueBlockEditorUnit = value;
@@ -35,7 +34,7 @@ public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit, IAttach
 
 
 
-                this.inputtedValueBlockEditorUnit._InputSpaceElementOfBlockUnit = this;
+                this.inputtedValueBlockEditorUnit.ParentInputDefinitionOfBlockEditorUnit = this;
             }
 
             if (DefaultBlockInputObj != null)
@@ -91,7 +90,7 @@ public abstract class InputSpaceElementOfBlockUnit : ElementOfBlockUnit, IAttach
     {
         base.Awake();
 
-        gameObject.tag = InputSpaceElementOfBlockUnitTag;
+        gameObject.tag = InputDefinitionOfBlockEditorUnitTag;
     }
 
     // Start is called before the first frame update

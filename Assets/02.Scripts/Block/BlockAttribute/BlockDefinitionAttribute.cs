@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 /// <summary>
 /// BlockEditorElementAttribute
@@ -21,9 +22,14 @@ public sealed class BlockDefinitionAttribute : Attribute
     public BlockDefinitionAttribute(params object[] blockDefinitions)
     {
         _BlockDefinitions = blockDefinitions;
+
+        
     }
 
-    public object[] _BlockDefinitions { get; private set; }
+    public readonly object[] _BlockDefinitions;
+
+    public static readonly Vector3 rrr = new Vector3(1, 1, 1);
+    public static ref readonly Vector3 R => ref rrr;
 }
 
 

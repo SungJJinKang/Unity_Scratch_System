@@ -22,4 +22,12 @@ public sealed class GlobalVariableSelectorDropDownOfBlockUnit : DefinitionOfBloc
     {
         base.OnDisable();
     }
+
+    sealed public override void Release()
+    {
+        //Set DropDown Show First Item
+
+
+        base.Release();
+    }
 }

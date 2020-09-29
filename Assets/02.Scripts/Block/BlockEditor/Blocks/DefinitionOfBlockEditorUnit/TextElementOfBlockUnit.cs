@@ -44,4 +44,11 @@ public sealed class TextElementOfBlockUnit : DefinitionOfBlockEditorUnit
             this.SetText(textElementContent.Text);
         }
     }
+
+    sealed public override void Release()
+    {
+        this.SetText(string.Empty);
+
+        base.Release();
+    }
 }

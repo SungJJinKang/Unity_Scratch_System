@@ -9,9 +9,23 @@ public abstract class ReporterBlock : ValueBlock
     */
     public abstract string GetReporterStringValue(RobotBase operatingRobotBase);
 
+    private string ReporterStringValueCache = string.Empty;
+    private float ReporterNumberValueCache = 0;
     public float GetReporterNumberValue(RobotBase operatingRobotBase)
     {
-        return BlockUtility.ConvertStringToFloat(this.GetReporterStringValue(operatingRobotBase));
+        string reporterStringValue = this.GetReporterStringValue(operatingRobotBase);
+        if (reporterStringValue.Equals(ReporterStringValueCache))
+        {
+            return ReporterNumberValueCache;
+        }
+        else
+        {
+            ReporterNumberValueCache = BlockUtility.ConvertStringToFloat(reporterStringValue);
+            ReporterStringValueCache = reporterStringValue; //save value to cache
+            return ReporterNumberValueCache;
+        }
+
+       
 
     }
 

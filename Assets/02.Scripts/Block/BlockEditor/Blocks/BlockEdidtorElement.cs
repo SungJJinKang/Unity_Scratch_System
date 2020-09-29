@@ -62,7 +62,10 @@ public abstract class BlockEditorElement : MonoBehaviour
     {
     }
 
-    public abstract void Release();
+    public virtual void Release()
+    {
+        PoolManager.Instance.releaseObject(gameObject);
+    }
 
     [SerializeField]
     protected List<Image> ColoredBlockImage;

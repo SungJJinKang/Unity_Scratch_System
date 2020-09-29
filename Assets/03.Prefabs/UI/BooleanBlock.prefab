@@ -54,11 +54,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 20
-    m_Right: 20
+    m_Left: 40
+    m_Right: 40
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 3
+  m_ChildAlignment: 4
   m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   IsShopBlock: 0
   IsRemovable: 1
   MainBlockTransform: {fileID: 6294924629121269235}
-  _ParentInputSpaceElementOfBlockUnit: {fileID: 0}
+  ParentInputDefinitionOfBlockEditorUnit: {fileID: 0}
 --- !u!222 &-32267182389799391
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -153,10 +153,3 @@ MonoBehaviour:
   _RectTransform: {fileID: 0}
   images:
   - {fileID: 8397872953269959540}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}

@@ -4,13 +4,16 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: -8085704610093440946
-    second: BlocksSlices1_0
+    second: ReporterBlcok
   - first:
       213: 7478680968245343821
-    second: BlocksSlices1_1
+    second: BooleanBlock
   - first:
       213: 6590811841298100467
-    second: BlocksSlices1_2
+    second: HatBlock
+  - first:
+      213: -6617066528693979928
+    second: CapBlock
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -96,16 +99,16 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BlocksSlices1_0
+      name: ReporterBlcok
       rect:
         serializedVersion: 2
         x: 51
-        y: 128
+        y: 896
         width: 154
         height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 60, y: 0, z: 60, w: 0}
+      border: {x: 60, y: 10, z: 60, w: 10}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -117,22 +120,85 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BlocksSlices1_1
+      name: BooleanBlock
       rect:
         serializedVersion: 2
         x: 51
-        y: 0
+        y: 768
         width: 154
         height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 72, y: 0, z: 72, w: 0}
+      border: {x: 72, y: 10, z: 72, w: 10}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: d46fcb487bc99c760800000000000000
       internalID: 7478680968245343821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HatBlock
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 835
+        width: 139
+        height: 189
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 110, y: 32, z: 10, w: 35}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f0f2063374477b50800000000000000
+      internalID: 6590811841298100467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StackBlock
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 835
+        width: 139
+        height: 164
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 110, y: 32, z: 10, w: 32}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d22347596da0aa2d0800000000000000
+      internalID: -3266786662957174227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CapBlock
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 857
+        width: 139
+        height: 142
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 110, y: 10, z: 10, w: 32}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e471160d057b24a0800000000000000
+      internalID: -6617066528693979928
       vertices: []
       indices: 
       edges: []

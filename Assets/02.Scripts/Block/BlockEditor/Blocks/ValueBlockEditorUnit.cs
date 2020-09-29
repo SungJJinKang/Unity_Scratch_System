@@ -33,7 +33,6 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
         else
         {
             base.AttachableEditorElement = topInputDefinitionOfBlockEditorUnit;
-            Debug.Log("topInputSpaceElementOfBlockUnit hit" + base.AttachableEditorElement?.OwnerBlockEditorUnit?.name);
             return true;
         }
 

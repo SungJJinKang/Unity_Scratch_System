@@ -44,6 +44,21 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
         }
     }
 
+    sealed public override void Release()
+    {
+        //Set DropDown Show First Item
+        if (this.inputtedValueBlockEditorUnit != null)
+        {
+            this.inputtedValueBlockEditorUnit.Release();
+            this.inputtedValueBlockEditorUnit = null;
+        }
+           
+
+
+
+        base.Release();
+    }
+
     public bool IsEmpty => InputtedValueBlockEditorUnit == null;
     /// <summary>
     /// 1 ~ 4
@@ -55,7 +70,6 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
         protected get;
     }
 
-    private ContentSizeFitter AttachPointRectTransformContentSizeFitter;
     [SerializeField]
     private RectTransform attachPointRectTransform;
     public RectTransform AttachPointRectTransform => attachPointRectTransform;
@@ -63,27 +77,9 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
 
 
 
-    [SerializeField]
-    private List<Image> MockUpImage;
-
-    public void OnRootMockUpSet(BlockEditorUnit attachedBlockEditorUnit, bool isSet)
+    public void OnRootMockUpSet(BlockEditorUnit attachedBlockEditorUnit)
     {
-        if(this.MockUpImage != null)
-        {
-            Color color = isSet ? Color.gray : Color.white;
-            for (int i = 0; i < this.MockUpImage.Count; i++)
-            {
-                this.MockUpImage[i].color = color;
-            }
-        }
-        
-        /*
-        if (_ContentSizeFitterOfAttachPointRectTransform == null)
-            _ContentSizeFitterOfAttachPointRectTransform = this.attachPointRectTransform.GetComponentInParent<ContentSizeFitter>();
-
-        _ContentSizeFitterOfAttachPointRectTransform.SetLayoutHorizontal();
-        DefaultReporterBlockInputObj.SetActive(!isSet);
-        */
+        //If isSet is true, Draw White Outline 
     }
 
     protected override void Awake()

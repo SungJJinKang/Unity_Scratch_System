@@ -101,7 +101,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
             this.DefinitionOfBlockEditorUnitList.Clear();
         }
 
-        PoolManager.Instance.releaseObject(gameObject);
+        base.Release();
     }
 
 
@@ -116,7 +116,6 @@ public abstract class BlockEditorUnit : BlockEditorElement
     /// <returns></returns>
     public abstract bool IsAttatchable();
     public virtual bool AttachBlock() { return true; }
-    public virtual Vector3 GetAttachPoint() { return Vector3.zero; }
     public IAttachableEditorElement AttachableEditorElement
     {
         protected set;

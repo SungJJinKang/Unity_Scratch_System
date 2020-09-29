@@ -20,20 +20,20 @@ public abstract class DefinitionOfBlockEditorUnit : BlockEditorElement
     }
 
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected override void Start()
     {
-
+        base.Start();
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-
+        
     }
 
-    protected virtual void OnEnable()
+    protected override void OnEnable()
     {
-
+        base.OnEnable();
     }
 
     protected virtual void OnDisable()
@@ -46,12 +46,13 @@ public abstract class DefinitionOfBlockEditorUnit : BlockEditorElement
 
     }
 
-    sealed public override void Release()
+    public override void Release()
     {
         // never touch element of targetBlock. Block is seperate from BlockEditorUnit
         // Removing BlockEditorUnit, Element Of BlockUnit don't effect to Block instance
-        OwnerBlockEditorUnit = null;
-        PoolManager.Instance.releaseObject(gameObject);
+        this.OwnerBlockEditorUnit = null;
+
+        base.Release();
     }
 
 }

@@ -283,6 +283,14 @@ public class BlockEditorController : MonoBehaviour
     [SerializeField]
     private RectTransform BlockWorkSpaceContentBody;
 
+    public void SetBlockHoverOnBlockWorkSpaceContentBody(BlockEditorElement blockEditorElement)
+    {
+        if (blockEditorElement == null)
+            return;
+
+        blockEditorElement.transform.SetParent(BlockWorkSpaceContentBody);
+    }
+
     /// <summary>
     /// Make This Flow Block EditorUnit RootBlock
     /// This block will not have previous block
@@ -301,8 +309,11 @@ public class BlockEditorController : MonoBehaviour
     [SerializeField]
     private RectTransform BlockEditorBodyTransform;
 
-    Vector2 screenPointWhenMouseClicked;
-    Vector2 MousePosOnBlockEditorBodyTransform;
+    private Vector2 screenPointWhenMouseClicked;
+    private Vector2 mousePosOnBlockEditorBodyTransform;
+
+    private Vector3 controllOffset;
+
     private void UpdateControllingBlockEdidtorElement()
     {
         if (Input.GetMouseButtonDown(0))
@@ -320,13 +331,17 @@ public class BlockEditorController : MonoBehaviour
                 {   // If Move Mouse After Clicking Block, it start control clicked block
                     //Set this.ControllingBlockEditorUnit 
 
-                    this.ControllingBlockEditorUnit = this.PinchingBlockEditorUnit.IsShopBlock == true ? this.PinchingBlockEditorUnit.Duplicate(this.BlockEditorBodyTransform) : this.PinchingBlockEditorUnit;
+                    bool IsShopBlock = this.PinchingBlockEditorUnit.IsShopBlock;
+                    this.ControllingBlockEditorUnit = IsShopBlock  == true ? this.PinchingBlockEditorUnit.Duplicate(this.BlockEditorBodyTransform) : this.PinchingBlockEditorUnit;
 
                     if (this.ControllingBlockEditorUnit != null)
                     {
-                        this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 10;
+                        Vector3 mouseWorldPos = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition);
+                        this.controllOffset = IsShopBlock == true ? Vector3.zero : mouseWorldPos - this.ControllingBlockEditorUnit.transform.position ;
+                        this.ControllingBlockEditorUnit.transform.position = mouseWorldPos - controllOffset;
 
-                        
+
+
                     }
                     else
                     {
@@ -337,8 +352,9 @@ public class BlockEditorController : MonoBehaviour
             }
             else
             {
-                this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - Vector3.right * 10;
-             
+                this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - controllOffset;
+
+
             }
 
 
@@ -361,9 +377,9 @@ public class BlockEditorController : MonoBehaviour
                     }
                 }
                 else
-                {//if player end controlling block on BlockWorkdSpace UI
+                {//if player end controlling block on BlockWorkSpace UI
 
-                    this.ControllingBlockEditorUnit.transform.SetParent(this.BlockWorkSpaceContentBody);
+                    this.SetBlockHoverOnBlockWorkSpaceContentBody(this.ControllingBlockEditorUnit);
                     
                     if (this.ControllingBlockEditorUnit.IsAttatchable() == true)
                     {//if block can attach to other block as flowbloc or valueblock
@@ -492,9 +508,9 @@ public class BlockEditorController : MonoBehaviour
                 {
                     this.HideBlockMockUp();
                     if (this.previousIAttachableEditorElement != null)
-                        this.previousIAttachableEditorElement.OnRootMockUpSet(null, false);
+                        this.previousIAttachableEditorElement.OnRootMockUpSet(null);
 
-                    this.ControllingBlockEditorUnit.AttachableEditorElement.OnRootMockUpSet(this.ControllingBlockEditorUnit, true);
+                    this.ControllingBlockEditorUnit.AttachableEditorElement.OnRootMockUpSet(this.ControllingBlockEditorUnit);
                     this.PreviousIAttachableEditorElement = this.ControllingBlockEditorUnit.AttachableEditorElement;
                 }
             }
@@ -502,7 +518,7 @@ public class BlockEditorController : MonoBehaviour
             {
                 this.HideBlockMockUp();
                 if (this.previousIAttachableEditorElement != null)
-                    this.previousIAttachableEditorElement.OnRootMockUpSet(null, false);
+                    this.previousIAttachableEditorElement.OnRootMockUpSet(null);
                 this.PreviousIAttachableEditorElement = null;
             }
 
@@ -528,8 +544,8 @@ public class BlockEditorController : MonoBehaviour
         if (parentRect == null)
             return Vector3.zero;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, _Canvas.worldCamera, out MousePosOnBlockEditorBodyTransform);
-        return parentRect.TransformPoint(MousePosOnBlockEditorBodyTransform);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, _Canvas.worldCamera, out mousePosOnBlockEditorBodyTransform);
+        return parentRect.TransformPoint(mousePosOnBlockEditorBodyTransform);
     }
 #endregion
 

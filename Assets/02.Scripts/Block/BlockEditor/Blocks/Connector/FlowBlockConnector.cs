@@ -33,21 +33,30 @@ public class FlowBlockConnector : MonoBehaviour, IAttachableEditorElement
 
     private float OriginalRectHeight;
  
-    public void SetRectHeightDoubling(bool isDoubling)
+    public void SetRectHeightScaling(int scaledNum)
     {
-        _RectTransform.sizeDelta = new Vector2(_RectTransform.sizeDelta.x, isDoubling ? OriginalRectHeight * 2 : OriginalRectHeight);
+        _RectTransform.sizeDelta = new Vector2(_RectTransform.sizeDelta.x, OriginalRectHeight * scaledNum);
     }
 
-    public void OnRootMockUpSet(BlockEditorUnit attachedBlockEditorUnit, bool isSet)
+    public void OnRootMockUpSet(BlockEditorUnit attachedBlockEditorUnit)
     {
         FlowBlockEditorUnit flowBlockEditorUnit = attachedBlockEditorUnit as FlowBlockEditorUnit;
 
-        if (isSet == true)
-            flowBlockEditorUnit.SetBlockMockUp(this);
+        if (flowBlockEditorUnit != null)
+        {
+            flowBlockEditorUnit.CreateFlowBlockMockUp(this);
+            //If this FlowBlockConnector is UpNotch Type, MockUpHeight
+            if (_ConnectorType == FlowBlockConnector.ConnectorType.UpNotch)
+            {
+                this.SetRectHeightScaling(flowBlockEditorUnit.DescendantBlockCount + 2);
+            }
 
-        //If this FlowBlockConnector is UpNotch Type, MockUpHeight
-        if (_ConnectorType == FlowBlockConnector.ConnectorType.UpNotch)
-            this.SetRectHeightDoubling(isSet);
+
+        }
+        else
+        {
+            this.SetRectHeightScaling(1);
+        }
     }
 
 
@@ -76,10 +85,12 @@ public class FlowBlockConnector : MonoBehaviour, IAttachableEditorElement
 
         this.OriginalRectHeight = _RectTransform.sizeDelta.y;
 
+        /*
         this._RectTransform.anchorMax = _ConnectorType == FlowBlockConnector.ConnectorType.UpNotch ? Vector2.up : Vector2.zero;
         this._RectTransform.anchorMin = _ConnectorType == FlowBlockConnector.ConnectorType.UpNotch ? Vector2.up : Vector2.zero;
 
         this.connectionPointRectTransform.anchorMax = _ConnectorType == FlowBlockConnector.ConnectorType.UpNotch ? Vector2.zero : Vector2.up;
         this.connectionPointRectTransform.anchorMin = _ConnectorType == FlowBlockConnector.ConnectorType.UpNotch ? Vector2.zero : Vector2.up;
+        */
     }
 }

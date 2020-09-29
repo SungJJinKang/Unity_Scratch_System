@@ -4,6 +4,10 @@ public interface IAttachableEditorElement
     BlockEditorUnit OwnerBlockEditorUnit { get; }
     RectTransform AttachPointRectTransform { get; }
 
-    void OnRootMockUpSet(BlockEditorUnit attachedBlockEditorUnit, bool isSet);
+    /// <summary>
+    /// when MockUp is Removed(destroyed), pass null,  
+    /// </summary>
+    /// <param name="attachedBlockEditorUnit"></param>
+    void OnRootMockUpSet(BlockEditorUnit attachedBlockEditorUnit);
 
 }

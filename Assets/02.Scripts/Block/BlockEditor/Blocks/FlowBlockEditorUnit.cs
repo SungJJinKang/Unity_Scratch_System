@@ -343,7 +343,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
     /// <param name="expectedConnectorType">Expected connector type. if this value is 2 , UpNotch, DownBump is ok</param>
     private FlowBlockConnector GetTopFlowBlockConnector(Vector2 worldPoint, FlowBlockConnector.ConnectorType expectedConnectorTypeFlag)
     {
-        return BlockEditorController.instance.GetTopBlockEditorElementWithWorldPoint<FlowBlockConnector>(worldPoint, FlowBlockConnector.FlowBlockConnectorTag, x => expectedConnectorTypeFlag.HasFlag(x._ConnectorType) == true);
+        return UiUtility.GetTopBlockEditorElementWithWorldPoint<FlowBlockConnector>(worldPoint, FlowBlockConnector.FlowBlockConnectorTag, x => expectedConnectorTypeFlag.HasFlag(x._ConnectorType) == true);
     }
 
     #endregion

@@ -17,8 +17,6 @@ public class BlockEditorController : MonoBehaviour
 
     [SerializeField]
     private Canvas _Canvas;
-    private GraphicRaycaster _GraphicRaycaster;
-    private PointerEventData _PointerEventData;
 
     private Camera _Camera;
     private void Awake()
@@ -37,8 +35,6 @@ public class BlockEditorController : MonoBehaviour
         _GUIStyle.active.textColor = Color.red;
 #endif
 
-        _GraphicRaycaster = _Canvas.GetComponent<GraphicRaycaster>();
-        _PointerEventData = new PointerEventData(null);
         _Camera = _Canvas.worldCamera;
     }
 
@@ -47,7 +43,11 @@ public class BlockEditorController : MonoBehaviour
         this.InitBlockMockUp();
     }
 
-   
+
+    private void OnEnable()
+    {
+        UiUtility.SetTargetCanvas(_Canvas);
+    }
 
     void Update()
     {
@@ -57,99 +57,9 @@ public class BlockEditorController : MonoBehaviour
 
     #region RayHitBlock
 
-    private List<RaycastResult> hitUiList;
-
-
-    public List<RaycastResult> GetUiRayHitListWithWorldPoint(Vector3 worldPoint)
-    {
-        return this.GetUiRayHitListWithScreenPoint(RectTransformUtility.WorldToScreenPoint(_Camera, worldPoint));
-    }
-
-    /// <summary>
-    /// Dont Call this at every tick(update)
-    /// </summary>
-    /// <param name="screenPoint"></param>
-    public List<RaycastResult> GetUiRayHitListWithScreenPoint(Vector3 screenPoint)
-    {
-        if (this.hitUiList == null)
-            this.hitUiList = new List<RaycastResult>(15);
-
-        this.hitUiList.Clear();
-
-        _PointerEventData.position = screenPoint;
-        _GraphicRaycaster.Raycast(_PointerEventData, this.hitUiList);
-        return this.hitUiList;
-    }
-
-    public T GetTopBlockEditorElementWithWorldPoint<T>(Vector3 worldPoint, string compareTag, Predicate<T> match = null) where T : BlockEditorElement
-    {
-        return this.GetTopBlockEditorElementWithScreenPoint<T>(RectTransformUtility.WorldToScreenPoint(_Camera, worldPoint), compareTag, match);
-    }
-
-   
-    private T GetTopBlockEditorElementWithScreenPoint<T>(Vector3 screenPoint, string compareTag, Predicate<T> match = null) where T : BlockEditorElement
-    {
-        List<RaycastResult> raycastResults = this.GetUiRayHitListWithScreenPoint(screenPoint);
-        if (raycastResults.Count > 0)
-        {
-            for (int i = 0; i < raycastResults.Count; i++)
-            {//Top Object comes first
-
-                if(string.IsNullOrEmpty(compareTag) == false)
-                {//if compareTag exists
-                    if (raycastResults[i].gameObject.CompareTag(compareTag) == false)
-                        continue; // tag is different
-                }
-
-                T hitBlockEditorElement = raycastResults[i].gameObject.GetComponent<T>();
-                if(hitBlockEditorElement != null)
-                {//find type t hitObj
-                    if(match != null && match(hitBlockEditorElement) == false)
-                    {// if match exists and match fail
-                        continue;
-                    }
-                    return hitBlockEditorElement;
-                }
-
-            }
-        }
-
-        return null;
-    }
-
-    private void UpdateTopHitBlockEdidtorElement()
-    {
-        this.GetUiRayHitListWithScreenPoint(Input.mousePosition);
-
-        this.TopBlockEditorUnit = null;
-        //this.TopElementOfBlockUnit = null;
-
-        if (this.hitUiList.Count > 0)
-        {
-            for (int i = 0; i < this.hitUiList.Count; i++)
-            {//Top Object comes first
-
-                if (this.TopBlockEditorUnit == null && this.hitUiList[i].gameObject.CompareTag(BlockEditorUnit.BlockEditorUnitTag))
-                {
-                    this.TopBlockEditorUnit = this.hitUiList[i].gameObject.GetComponent<BlockEditorUnit>();
-
-                    if (this.TopBlockEditorUnit != null)
-                        continue;
-                }
-
-
-            }
-        }
-
-
-#if UNITY_EDITOR
-        DebugHitUiList();
-#endif
-    }
-
     private ScrollRect UpdateHoveringBodyScrollRect()
     {
-        List<RaycastResult> raycastResults = this.GetUiRayHitListWithScreenPoint(Input.mousePosition);
+        List<RaycastResult> raycastResults = UiUtility.GetUiRayHitListWithScreenPoint(Input.mousePosition);
         for (int i = 0; i < raycastResults.Count; i++)
         {
             if (raycastResults[i].gameObject.CompareTag(HoveringBodyTag))
@@ -166,7 +76,6 @@ public class BlockEditorController : MonoBehaviour
 
         return null;
     }
-
 
 
 
@@ -219,10 +128,8 @@ public class BlockEditorController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            this.UpdateTopHitBlockEdidtorElement();
-
             this.screenPointWhenMouseClicked = Input.mousePosition;
-            this.PinchingBlockEditorUnit = this.TopBlockEditorUnit ;
+            this.PinchingBlockEditorUnit = UiUtility.GetTopBlockEditorElementWithScreenPoint<BlockEditorUnit>(Input.mousePosition, BlockEditorUnit.BlockEditorUnitTag); ;
         }
         else if (Input.GetMouseButton(0))
         {
@@ -237,7 +144,7 @@ public class BlockEditorController : MonoBehaviour
 
                     if (this.ControllingBlockEditorUnit != null)
                     {
-                        Vector3 mouseWorldPos = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition);
+                        Vector3 mouseWorldPos = UiUtility.GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition);
                         this.controllOffset = IsShopBlock == true ? Vector3.zero : mouseWorldPos - this.ControllingBlockEditorUnit.transform.position ;
                         this.ControllingBlockEditorUnit.transform.position = mouseWorldPos - controllOffset;
 
@@ -253,7 +160,7 @@ public class BlockEditorController : MonoBehaviour
             }
             else
             {
-                this.ControllingBlockEditorUnit.transform.position = GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - controllOffset;
+                this.ControllingBlockEditorUnit.transform.position = UiUtility.GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - controllOffset;
 
 
             }
@@ -264,7 +171,7 @@ public class BlockEditorController : MonoBehaviour
         {
             if (this.ControllingBlockEditorUnit != null)
             {
-                this.UpdateTopHitBlockEdidtorElement();
+                ScrollRect HoveringBodyScrollRect = this.UpdateHoveringBodyScrollRect();
 
                 if (HoveringBodyScrollRect == null || HoveringBodyScrollRect == this.BlockShopScrollRect.gameObject)
                 {//if player end controlling block on BlockShop UI or Outside of Editor UI
@@ -297,7 +204,6 @@ public class BlockEditorController : MonoBehaviour
 
             this.ControllingBlockEditorUnit = null;
             this.PinchingBlockEditorUnit = null;
-            this.HoveringBodyScrollRect = null;
         }
 
     }
@@ -433,23 +339,7 @@ public class BlockEditorController : MonoBehaviour
 
     private BlockEditorUnit PinchingBlockEditorUnit;
 
-
-    private BlockEditorUnit TopBlockEditorUnit;
-
-    /// <summary>
-    /// Set Ui Position To Mouse point
-    /// </summary>
-    /// <param name="uiTransform"></param>
-    /// <param name="parentRect"></param>
-    /// <param name="offset"></param>
-    private Vector3 GetUiWorldPos( RectTransform parentRect, Vector3 ScreenPos)
-    {
-        if (parentRect == null)
-            return Vector3.zero;
-
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, _Canvas.worldCamera, out Vector2 mousePosOnBlockEditorBodyTransform);
-        return parentRect.TransformPoint(mousePosOnBlockEditorBodyTransform);
-    }
+    
 #endregion
 
 
@@ -495,11 +385,11 @@ public class BlockEditorController : MonoBehaviour
     StringBuilder stringBuilder;
     string pointHitResultStr;
 
+    /*
     private void DebugHitUiList()
     {
         stringBuilder.Clear();
 
-        stringBuilder.Append("TopBlockEditorUnit : " + this.TopBlockEditorUnit?.name + "\n");
         //stringBuilder.Append("TopElementOfBlockUnit : " + this.TopElementOfBlockUnit?.name + "\n");
         stringBuilder.Append("PinchingBlockEditorUnit : " + this.PinchingBlockEditorUnit?.name + "\n");
         stringBuilder.Append("ControllingBlockEditorUnit : " + this.ControllingBlockEditorUnit?.name);
@@ -512,6 +402,7 @@ public class BlockEditorController : MonoBehaviour
 
         this.pointHitResultStr = stringBuilder.ToString();
     }
+    */
 
     public GUIStyle _GUIStyle;
     [SerializeField]
@@ -522,6 +413,7 @@ public class BlockEditorController : MonoBehaviour
         GUI.Label(this.rectPos, this.pointHitResultStr, this._GUIStyle);
     }
 
+    /*
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -529,7 +421,7 @@ public class BlockEditorController : MonoBehaviour
         if(_PointerEventData != null)
             Gizmos.DrawSphere(Camera.main.ScreenToWorldPoint(_PointerEventData.position), 0.2f);
     }
-
+    */
 
 #endif
     #endregion

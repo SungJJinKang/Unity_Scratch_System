@@ -20,6 +20,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
     {
         base.Awake();
 
+        gameObject.tag = BlockEditorUnitTag;
         _BlockMockupHelper = GetComponent<BlockMockupHelper>();
 
         this.IsRemovable = true;

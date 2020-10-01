@@ -25,7 +25,7 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
 
     sealed public override bool IsAttatchable()
     {
-        InputDefinitionOfBlockEditorUnit topInputDefinitionOfBlockEditorUnit = BlockEditorController.instance.GetTopBlockEditorElementWithWorldPoint<InputDefinitionOfBlockEditorUnit>(transform.position, InputDefinitionOfBlockEditorUnit.InputDefinitionOfBlockEditorUnitTag, x => x.GetType() == this.TargetEditorBlockType);
+        InputDefinitionOfBlockEditorUnit topInputDefinitionOfBlockEditorUnit = UiUtility.GetTopBlockEditorElementWithWorldPoint<InputDefinitionOfBlockEditorUnit>(transform.position, InputDefinitionOfBlockEditorUnit.InputDefinitionOfBlockEditorUnitTag, x => x.GetType() == this.TargetEditorBlockType);
         //Debug.Log("topInputSpaceElementOfBlockUnit " + topInputSpaceElementOfBlockUnit?.OwnerBlockEditorUnit?.name);
         if (topInputDefinitionOfBlockEditorUnit == null || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit == this || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit.IsShopBlock == true || topInputDefinitionOfBlockEditorUnit.IsEmpty == false)
         {

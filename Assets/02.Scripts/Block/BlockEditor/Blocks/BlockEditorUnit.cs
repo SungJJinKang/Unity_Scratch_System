@@ -22,8 +22,6 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
         _BlockMockupHelper = GetComponent<BlockMockupHelper>();
 
-        gameObject.tag = BlockEditorUnitTag;
-
         this.IsRemovable = true;
         this.IsShopBlock = false;
 
@@ -168,6 +166,10 @@ public abstract class BlockEditorUnit : BlockEditorElement
                     this.targetBlock = value;
                     this.OnSetTargetBlock();
                 }
+                else
+                {
+                    Debug.LogError("You set wrong Block Type");
+                }
             }
 
 
@@ -210,7 +212,11 @@ public abstract class BlockEditorUnit : BlockEditorElement
       
     }
 
-
+    public Color BlockColor
+    {
+        private set;
+        get;
+    }
     private void InitBlockColor()
     {
         if (base.ColoredBlockImage == null || base.ColoredBlockImage.Count == 0 || this.TargetBlock == null)
@@ -222,11 +228,11 @@ public abstract class BlockEditorUnit : BlockEditorElement
         BlockColorCategoryAttribute blockColorCategoryAttribute = Utility.GetAncestorAttribute<BlockColorCategoryAttribute>(this.TargetBlock.GetType());
         if (blockColorCategoryAttribute != null)
         {
-            Color color = blockColorCategoryAttribute.Color;
+            BlockColor = blockColorCategoryAttribute.Color;
             for (int i = 0; i < base.ColoredBlockImage.Count; i++)
             {
-                color.a = base.ColoredBlockImage[i].color.a;
-                base.ColoredBlockImage[i].color = color;
+                //BlockColor.a = base.ColoredBlockImage[i].color.a;
+                base.ColoredBlockImage[i].color = BlockColor;
             }
         }
         else

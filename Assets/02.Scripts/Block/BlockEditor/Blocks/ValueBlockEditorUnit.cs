@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public abstract class ValueBlockEditorUnit : BlockEditorUnit
@@ -23,7 +25,7 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
 
     sealed public override bool IsAttatchable()
     {
-        InputDefinitionOfBlockEditorUnit topInputDefinitionOfBlockEditorUnit = BlockEditorController.instance.GetTopInputSpaceElementOfBlockUnit(this.TargetEditorBlockType, transform.position);
+        InputDefinitionOfBlockEditorUnit topInputDefinitionOfBlockEditorUnit = BlockEditorController.instance.GetTopBlockEditorElementWithWorldPoint<InputDefinitionOfBlockEditorUnit>(transform.position, InputDefinitionOfBlockEditorUnit.InputDefinitionOfBlockEditorUnitTag, x => x.GetType() == this.TargetEditorBlockType);
         //Debug.Log("topInputSpaceElementOfBlockUnit " + topInputSpaceElementOfBlockUnit?.OwnerBlockEditorUnit?.name);
         if (topInputDefinitionOfBlockEditorUnit == null || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit == this || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit.IsShopBlock == true || topInputDefinitionOfBlockEditorUnit.IsEmpty == false)
         {
@@ -38,17 +40,12 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
 
     }
 
-
-
     sealed public override bool AttachBlock()
     {
         if (base.AttachableEditorElement != null)
         {
-            
             InputDefinitionOfBlockEditorUnit inputDefinitionOfBlockEditorUnit = base.AttachableEditorElement as InputDefinitionOfBlockEditorUnit;
             inputDefinitionOfBlockEditorUnit.InputtedValueBlockEditorUnit = this;
-
-
             return true;
         }
         else

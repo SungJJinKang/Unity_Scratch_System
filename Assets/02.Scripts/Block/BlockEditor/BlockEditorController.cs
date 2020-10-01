@@ -51,77 +51,83 @@ public class BlockEditorController : MonoBehaviour
 
     void Update()
     {
-        //this.UpdateTopBlockEdidtorElementAtMouse();
-
         this.UpdateControllingBlockEdidtorElement();
     }
 
 
-    /*
-    [SerializeField]
-    public BlockEdidtorElement TopBlockEdidtorElementAtMousePoint
-    {
-        get;
-        private set;
-    }
-    */
     #region RayHitBlock
 
     private List<RaycastResult> hitUiList;
 
+
+    public List<RaycastResult> GetUiRayHitListWithWorldPoint(Vector3 worldPoint)
+    {
+        return this.GetUiRayHitListWithScreenPoint(RectTransformUtility.WorldToScreenPoint(_Camera, worldPoint));
+    }
+
     /// <summary>
     /// Dont Call this at every tick(update)
     /// </summary>
-    /// <param name="screenPos"></param>
-    private void UpdateHitUiList(Vector3 screenPos)
+    /// <param name="screenPoint"></param>
+    public List<RaycastResult> GetUiRayHitListWithScreenPoint(Vector3 screenPoint)
     {
         if (this.hitUiList == null)
-            this.hitUiList = new List<RaycastResult>();
+            this.hitUiList = new List<RaycastResult>(15);
 
         this.hitUiList.Clear();
 
-        _PointerEventData.position = screenPos;
+        _PointerEventData.position = screenPoint;
         _GraphicRaycaster.Raycast(_PointerEventData, this.hitUiList);
+        return this.hitUiList;
     }
 
-    /// <summary>
-    /// Dont Call this at every tick(update)
-    /// </summary>
-    /// <param name="screenPos"></param>
-    private void UpdateHitUiList(params Vector3[] screenPos)
+    public T GetTopBlockEditorElementWithWorldPoint<T>(Vector3 worldPoint, string compareTag, Predicate<T> match = null) where T : BlockEditorElement
     {
-        if (this.hitUiList == null)
-            this.hitUiList = new List<RaycastResult>();
-
-        this.hitUiList.Clear();
-
-        for (int i = 0; i < screenPos.Length; i++)
-        {
-            _PointerEventData.position = screenPos[i];
-            _GraphicRaycaster.Raycast(_PointerEventData, this.hitUiList);
-        }
+        return this.GetTopBlockEditorElementWithScreenPoint<T>(RectTransformUtility.WorldToScreenPoint(_Camera, worldPoint), compareTag, match);
     }
 
+   
+    private T GetTopBlockEditorElementWithScreenPoint<T>(Vector3 screenPoint, string compareTag, Predicate<T> match = null) where T : BlockEditorElement
+    {
+        List<RaycastResult> raycastResults = this.GetUiRayHitListWithScreenPoint(screenPoint);
+        if (raycastResults.Count > 0)
+        {
+            for (int i = 0; i < raycastResults.Count; i++)
+            {//Top Object comes first
 
+                if(string.IsNullOrEmpty(compareTag) == false)
+                {//if compareTag exists
+                    if (raycastResults[i].gameObject.CompareTag(compareTag) == false)
+                        continue; // tag is different
+                }
+
+                T hitBlockEditorElement = raycastResults[i].gameObject.GetComponent<T>();
+                if(hitBlockEditorElement != null)
+                {//find type t hitObj
+                    if(match != null && match(hitBlockEditorElement) == false)
+                    {// if match exists and match fail
+                        continue;
+                    }
+                    return hitBlockEditorElement;
+                }
+
+            }
+        }
+
+        return null;
+    }
 
     private void UpdateTopHitBlockEdidtorElement()
     {
-        this.UpdateHitUiList(Input.mousePosition);
+        this.GetUiRayHitListWithScreenPoint(Input.mousePosition);
 
         this.TopBlockEditorUnit = null;
         //this.TopElementOfBlockUnit = null;
-        this.HoveringBodyScrollRect = null;
 
         if (this.hitUiList.Count > 0)
         {
             for (int i = 0; i < this.hitUiList.Count; i++)
             {//Top Object comes first
-
-                if (this.TopBlockEditorUnit != null && HoveringBodyScrollRect != null)
-                    break;
-
-                //if (this.TopBlockEditorUnit != null && this.TopElementOfBlockUnit != null && HoveringBodyScrollRect != null)
-                //    break;
 
                 if (this.TopBlockEditorUnit == null && this.hitUiList[i].gameObject.CompareTag(BlockEditorUnit.BlockEditorUnitTag))
                 {
@@ -131,33 +137,7 @@ public class BlockEditorController : MonoBehaviour
                         continue;
                 }
 
-                /*
-                if (this.TopElementOfBlockUnit == null && this.hitUiList[i].gameObject.CompareTag(ElementOfBlockUnit.ElementOfBlockUnitTag))
-                {
-                    this.TopElementOfBlockUnit = this.hitUiList[i].gameObject.GetComponent<ElementOfBlockUnit>();
 
-                    if (this.TopElementOfBlockUnit != null)
-                        continue;
-                }
-                */
-
-                if (this.HoveringBodyScrollRect == null && this.hitUiList[i].gameObject.CompareTag(HoveringBodyTag))
-                {
-                    if (this.hitUiList[i].gameObject == BlockShopScrollRect.gameObject)
-                    {
-                        HoveringBodyScrollRect = BlockShopScrollRect;
-                        continue;
-                    }
-
-                    if (this.hitUiList[i].gameObject == BlockWorkSpaceScrollRect.gameObject)
-                    {
-                        HoveringBodyScrollRect = BlockWorkSpaceScrollRect;
-                        continue;
-                    }
-
-                    if (this.HoveringBodyScrollRect != null)
-                        continue;
-                }
             }
         }
 
@@ -167,105 +147,28 @@ public class BlockEditorController : MonoBehaviour
 #endif
     }
 
-    /// <summary>
-    /// Gets the top flow block connector.
-    /// </summary>
-    /// <returns>The top flow block connector.</returns>
-    /// <param name="worldPos">World position.</param>
-    /// <param name="exceptedUnitList">Excepted unit list.</param>
-    /// <param name="expectedConnectorType">Expected connector type. if this value is 2 , UpNotch, DownBump is ok</param>
-    public FlowBlockConnector GetTopFlowBlockConnector(Vector2 worldPos, List<FlowBlockEditorUnit> exceptedUnitList, FlowBlockConnector.ConnectorType expectedConnectorTypeFlag)
+    private ScrollRect UpdateHoveringBodyScrollRect()
     {
-        this.UpdateHitUiList(RectTransformUtility.WorldToScreenPoint(_Camera, worldPos));
-
-        if (this.hitUiList.Count > 0)
+        List<RaycastResult> raycastResults = this.GetUiRayHitListWithScreenPoint(Input.mousePosition);
+        for (int i = 0; i < raycastResults.Count; i++)
         {
-            FlowBlockConnector TopUpNotchFlowBlockConnector = null;
-
-            for (int i = 0; i < this.hitUiList.Count; i++)
-            {//Top Object comes first
-             
-                if(this.hitUiList[i].gameObject.CompareTag(FlowBlockConnector.FlowBlockConnectorTag))
+            if (raycastResults[i].gameObject.CompareTag(HoveringBodyTag))
+            {
+                if (raycastResults[i].gameObject == BlockShopScrollRect.gameObject || raycastResults[i].gameObject == BlockWorkSpaceScrollRect.gameObject)
                 {
-                    FlowBlockConnector flowBlockConnector = this.hitUiList[i].gameObject.GetComponent<FlowBlockConnector>();
-                    if(flowBlockConnector != null)
-                    {
-                        if (expectedConnectorTypeFlag.HasFlag(flowBlockConnector._ConnectorType) == true)
-                        {
-                            return flowBlockConnector;
-                        }
-                      
-                       /*
-                       bool hit = true;
-
-                       if (expectedConnectorTypeFlag.HasFlag(flowBlockConnector._ConnectorType) == false)
-                       {
-                           continue;
-                       }
-
-
-                       for (int j = 0; j < exceptedUnitList.Count; j++)
-                       {
-                           if (exceptedUnitList[j] == flowBlockConnector.OwnerFlowBlockEditorUnit)
-                           {
-                               hit = false;
-                               break;
-                           }
-                       }
-
-
-                       if (hit == true)
-                       {
-                           if(flowBlockConnector._ConnectorType == FlowBlockConnector.ConnectorType.DownBump)
-                           {// find downbump connector preferentially
-                               return flowBlockConnector;
-                           }
-                           else
-                           {// save up notch connector
-                               if(TopUpNotchFlowBlockConnector == null)
-                                   TopUpNotchFlowBlockConnector = flowBlockConnector;
-                           }
-
-                       }
-                       */
-                    }
+                    return BlockShopScrollRect;
                 }
+
             }
-            return TopUpNotchFlowBlockConnector; //if fail to find topDownBump FlowBlock Connector, return TopUpNotchFlowBlockConnector
         }
+
+        //this.GetTopBlockEditorElementWithScreenPoint<>
+
         return null;
     }
 
-    public InputDefinitionOfBlockEditorUnit GetTopInputSpaceElementOfBlockUnit(Type t, Vector2 worldPos) 
-    {
-#if UNITY_EDITOR
-        if(t.IsSubclassOf(typeof(InputDefinitionOfBlockEditorUnit)) == false)
-        {
-            Debug.LogError("parameter t should be subclass of InputSpaceElementOfBlockUnit");
-        }
 
-#endif
 
-        this.UpdateHitUiList(RectTransformUtility.WorldToScreenPoint(_Camera, worldPos));
-
-        if (this.hitUiList.Count > 0)
-        {
-            for (int i = 0; i < this.hitUiList.Count; i++)
-            {//Top Object comes first
-
-                if (this.hitUiList[i].gameObject.CompareTag(InputDefinitionOfBlockEditorUnit.InputDefinitionOfBlockEditorUnitTag))
-                {
-                    InputDefinitionOfBlockEditorUnit inputDefinitionOfBlockEditorUnit = this.hitUiList[i].gameObject.GetComponent<InputDefinitionOfBlockEditorUnit>();
-                    if (inputDefinitionOfBlockEditorUnit != null && inputDefinitionOfBlockEditorUnit.GetType() == t)
-                    {
-                        return inputDefinitionOfBlockEditorUnit;
-
-                    }
-                }
-            }
-        }
-        return null;
-    }
 
     #endregion
 
@@ -303,14 +206,12 @@ public class BlockEditorController : MonoBehaviour
         blockEditorElement.transform.SetParent(_Canvas.transform);
     }
 
-    private ScrollRect HoveringBodyScrollRect;
-
+ 
 
     [SerializeField]
     private RectTransform BlockEditorBodyTransform;
 
     private Vector2 screenPointWhenMouseClicked;
-    private Vector2 mousePosOnBlockEditorBodyTransform;
 
     private Vector3 controllOffset;
 
@@ -425,7 +326,7 @@ public class BlockEditorController : MonoBehaviour
 
                 this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
 
-                this.HideBlockMockUp();
+                this.ReleaseAllBlockMockUp();
             }
             else if (originalControllingBlockEditorUnit != this.controllingBlockEditorUnit)
             {//If controllingBlockEditorUnit is not null and controllingBlockEditorUnit changed from originalControllingBlockEditorUnit
@@ -437,8 +338,8 @@ public class BlockEditorController : MonoBehaviour
                 this.BlockWorkSpaceScrollRect.StopMovement();
                 this.BlockWorkSpaceScrollRect.enabled = false;
 
-                this.HideBlockMockUp();
-                StartUpdateIsControllingBlockEditorUnitAttachableCoroutine();
+                this.ReleaseAllBlockMockUp();
+                this.StartUpdateIsControllingBlockEditorUnitAttachableCoroutine();
 
                 this.ControllingBlockEditorUnit.OnStartControllingByPlayer();
             }
@@ -459,6 +360,8 @@ public class BlockEditorController : MonoBehaviour
             StopCoroutine(this.UpdateIsControllingBlockEditorUnitAttachableCoroutine);
             this.UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
         }
+
+        this.PreviousIAttachableEditorElement = null;
     }
 
     private Coroutine UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
@@ -475,14 +378,14 @@ public class BlockEditorController : MonoBehaviour
         {
             if(this.previousIAttachableEditorElement != null)
             {
-                
+                this.previousIAttachableEditorElement.OnSetIsAttachable(null);
             }
 
             this.previousIAttachableEditorElement = value;
 
             if (this.previousIAttachableEditorElement != null)
             {
-                
+                this.previousIAttachableEditorElement.OnSetIsAttachable(this.ControllingBlockEditorUnit);
             }
         }
     }
@@ -506,7 +409,7 @@ public class BlockEditorController : MonoBehaviour
             {
                 if (this.PreviousIAttachableEditorElement != this.ControllingBlockEditorUnit.AttachableEditorElement)
                 {
-                    this.HideBlockMockUp();
+                    this.ReleaseAllBlockMockUp();
                     if (this.previousIAttachableEditorElement != null)
                         this.previousIAttachableEditorElement.OnRootMockUpSet(null);
 
@@ -516,7 +419,7 @@ public class BlockEditorController : MonoBehaviour
             }
             else
             {
-                this.HideBlockMockUp();
+                this.ReleaseAllBlockMockUp();
                 if (this.previousIAttachableEditorElement != null)
                     this.previousIAttachableEditorElement.OnRootMockUpSet(null);
                 this.PreviousIAttachableEditorElement = null;
@@ -544,7 +447,7 @@ public class BlockEditorController : MonoBehaviour
         if (parentRect == null)
             return Vector3.zero;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, _Canvas.worldCamera, out mousePosOnBlockEditorBodyTransform);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, _Canvas.worldCamera, out Vector2 mousePosOnBlockEditorBodyTransform);
         return parentRect.TransformPoint(mousePosOnBlockEditorBodyTransform);
     }
 #endregion
@@ -570,7 +473,7 @@ public class BlockEditorController : MonoBehaviour
 
 
 
-    private void HideBlockMockUp()
+    private void ReleaseAllBlockMockUp()
     {
         if (this.SpawnedBlockMockUp == null)
             return;
@@ -598,7 +501,6 @@ public class BlockEditorController : MonoBehaviour
 
         stringBuilder.Append("TopBlockEditorUnit : " + this.TopBlockEditorUnit?.name + "\n");
         //stringBuilder.Append("TopElementOfBlockUnit : " + this.TopElementOfBlockUnit?.name + "\n");
-        stringBuilder.Append("HoveringBodyScrollRect : " + this.HoveringBodyScrollRect?.name + "\n");
         stringBuilder.Append("PinchingBlockEditorUnit : " + this.PinchingBlockEditorUnit?.name + "\n");
         stringBuilder.Append("ControllingBlockEditorUnit : " + this.ControllingBlockEditorUnit?.name);
         stringBuilder.Append("\n\n\n");

@@ -51,7 +51,6 @@ public abstract class BlockEditorElement : MonoBehaviour
 
     protected virtual void Awake()
     {
-
         _RectTransform = GetComponent<RectTransform>();
     }
     protected virtual void Start()

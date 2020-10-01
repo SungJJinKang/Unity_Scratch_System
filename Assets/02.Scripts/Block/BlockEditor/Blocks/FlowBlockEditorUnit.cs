@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.CompilerServices;
+using UnityEngine.EventSystems;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -246,9 +247,6 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
     /// <returns></returns>
     sealed public override bool IsAttatchable()
     {
-        List<FlowBlockEditorUnit> exceptedCheckBlockList = this.DescendantBlockList;
-        exceptedCheckBlockList.Add(this);
-
         FlowBlockConnector.ConnectorType expectedConnectorTypeFlag = FlowBlockConnector.ConnectorType.None;
 
         if (IsPreviousBlockEditorUnitAssignable == true && PreviousFlowBlockEditorUnit == null)
@@ -261,11 +259,13 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         }
 
 
-        FlowBlockConnector flowBlockConnector = BlockEditorController.instance.GetTopFlowBlockConnector(transform.position, exceptedCheckBlockList, expectedConnectorTypeFlag);
+        FlowBlockConnector flowBlockConnector = this.GetTopFlowBlockConnector(transform.position, expectedConnectorTypeFlag);
         if (flowBlockConnector == null && this.NextFlowBlockEditorUnit != null)
-        {
-            FlowBlockEditorUnit lowestDescendantBlockUnit = this.LowestDescendantBlockUnit;
-            flowBlockConnector = BlockEditorController.instance.GetTopFlowBlockConnector(lowestDescendantBlockUnit.transform.position, exceptedCheckBlockList, FlowBlockConnector.ConnectorType.UpNotch);
+        {//if Fail to find flowblockconnector
+
+            //Find Top Block Connector at LowestDescendantBlock Postion
+            FlowBlockEditorUnit lowestDescendantBlockUnit = this.LowestDescendantBlockUnit; 
+            flowBlockConnector = this.GetTopFlowBlockConnector(lowestDescendantBlockUnit.transform.position, FlowBlockConnector.ConnectorType.UpNotch); 
         }
 
 
@@ -334,7 +334,21 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         }
     }
 
+    /// <summary>
+    /// Gets the top flow block connector.
+    /// </summary>
+    /// <returns>The top flow block connector.</returns>
+    /// <param name="worldPoint">World position.</param>
+    /// <param name="exceptedUnitList">Excepted unit list.</param>
+    /// <param name="expectedConnectorType">Expected connector type. if this value is 2 , UpNotch, DownBump is ok</param>
+    private FlowBlockConnector GetTopFlowBlockConnector(Vector2 worldPoint, FlowBlockConnector.ConnectorType expectedConnectorTypeFlag)
+    {
+        return BlockEditorController.instance.GetTopBlockEditorElementWithWorldPoint<FlowBlockConnector>(worldPoint, FlowBlockConnector.FlowBlockConnectorTag, x => expectedConnectorTypeFlag.HasFlag(x._ConnectorType) == true);
+    }
+
     #endregion
+
+
 
 #if UNITY_EDITOR
 
@@ -351,6 +365,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 #endif
 }
 
+#region EDITOR
 #if UNITY_EDITOR
 
 [CustomEditor(typeof(FlowBlockEditorUnit), true)]
@@ -431,3 +446,4 @@ public class FlowBlockEditorUnitEditor : Editor
 
 
 #endif
+#endregion

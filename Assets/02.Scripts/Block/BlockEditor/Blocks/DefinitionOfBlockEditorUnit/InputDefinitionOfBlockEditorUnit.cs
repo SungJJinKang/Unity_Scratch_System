@@ -87,6 +87,7 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
         base.Awake();
 
         gameObject.tag = InputDefinitionOfBlockEditorUnitTag;
+        _Image = GetComponent<Image>();
     }
 
     // Start is called before the first frame update
@@ -109,5 +110,12 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
     protected override void OnDisable()
     {
         base.OnDisable();
+    }
+
+    private Image _Image;
+    public static Color AttachableColor = Color.cyan;
+    public void OnSetIsAttachable(BlockEditorUnit attachedBlockEditorUnit = null)
+    {
+        _Image.color = attachedBlockEditorUnit != null ? attachedBlockEditorUnit.BlockColor : Color.white;
     }
 }

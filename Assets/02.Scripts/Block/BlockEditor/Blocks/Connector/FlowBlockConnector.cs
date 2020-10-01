@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlowBlockConnector : MonoBehaviour, IAttachableEditorElement
+public class FlowBlockConnector : BlockEditorElement, IAttachableEditorElement
 {
-    private RectTransform _RectTransform;
-
     public const string FlowBlockConnectorTag = "FlowBlockConnector";
 
     [HideInInspector]
     public FlowBlockEditorUnit OwnerFlowBlockEditorUnit;
     public BlockEditorUnit OwnerBlockEditorUnit => OwnerFlowBlockEditorUnit;
+    public override BlockEditorElement ParentBlockEditorElement => OwnerFlowBlockEditorUnit;
 
     [SerializeField]
     private RectTransform connectionPointRectTransform;
@@ -30,6 +29,7 @@ public class FlowBlockConnector : MonoBehaviour, IAttachableEditorElement
 
     }
 
+   
 
     private float OriginalRectHeight;
  
@@ -59,8 +59,11 @@ public class FlowBlockConnector : MonoBehaviour, IAttachableEditorElement
         }
     }
 
+    public void OnSetIsAttachable(BlockEditorUnit attachedBlockEditorUnit = null)
+    {
 
-   
+    }
+
 
     public enum ConnectorType
     {
@@ -73,9 +76,9 @@ public class FlowBlockConnector : MonoBehaviour, IAttachableEditorElement
 
 
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
-        _RectTransform = GetComponent<RectTransform>();
+        base.Awake();
 
         gameObject.tag = FlowBlockConnectorTag;
 

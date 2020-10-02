@@ -74,14 +74,6 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
     private RectTransform attachPointRectTransform;
     public RectTransform AttachPointRectTransform => attachPointRectTransform;
 
-
-
-
-    public void OnRootMockUpSet(BlockEditorUnit attachedBlockEditorUnit)
-    {
-        //If isSet is true, Draw White Outline 
-    }
-
     protected override void Awake()
     {
         base.Awake();
@@ -114,7 +106,7 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
 
     private Image _Image;
     public static Color AttachableColor = Color.cyan;
-    public void OnSetIsAttachable(BlockEditorUnit attachedBlockEditorUnit = null)
+    public void ShowIsAttachable(BlockEditorUnit attachedBlockEditorUnit = null)
     {
         _Image.color = attachedBlockEditorUnit != null ? attachedBlockEditorUnit.BlockColor : Color.white;
     }

@@ -2160,6 +2160,7 @@ GameObject:
   - component: {fileID: 1733285916}
   - component: {fileID: 1733285918}
   - component: {fileID: 1733285917}
+  - component: {fileID: 1733285919}
   m_Layer: 5
   m_Name: SourceCodeEditor
   m_TagString: Untagged
@@ -2225,6 +2226,98 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733285915}
   m_CullTransparentMesh: 0
+--- !u!114 &1733285919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733285915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c90f5fbe9ad214eebb76c980fd7f36b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BlockEditorUnitContentSpace: {fileID: 191250119}
+  BlockShopScrollRect: {fileID: 1065784254}
+  BlockShopContentBody: {fileID: 1800445524}
+  BlockWorkSpaceScrollRect: {fileID: 1348673956}
+  BlockEditorBodyTransform: {fileID: 917930467}
+  BlockMockUpPrefab: {fileID: 7230540196876139837, guid: cc02e433c71694275a671efef9ebc9e5,
+    type: 3}
+  _GUIStyle:
+    m_Name: 
+    m_Normal:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Hover:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Active:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Focused:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnNormal:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnHover:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnActive:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_OnFocused:
+      m_Background: {fileID: 0}
+      m_ScaledBackgrounds: []
+      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+    m_Border:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Margin:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Padding:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Overflow:
+      m_Left: 0
+      m_Right: 0
+      m_Top: 0
+      m_Bottom: 0
+    m_Font: {fileID: 0}
+    m_FontSize: 0
+    m_FontStyle: 0
+    m_Alignment: 0
+    m_WordWrap: 0
+    m_RichText: 1
+    m_TextClipping: 0
+    m_ImagePosition: 0
+    m_ContentOffset: {x: 0, y: 0}
+    m_FixedWidth: 0
+    m_FixedHeight: 0
+    m_StretchWidth: 1
+    m_StretchHeight: 0
+  rectPos:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
 --- !u!1 &1742991222
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,7 +2331,6 @@ GameObject:
   - component: {fileID: 1742991224}
   - component: {fileID: 1742991223}
   - component: {fileID: 1742991227}
-  - component: {fileID: 1742991228}
   m_Layer: 5
   m_Name: BlockEditorCanvas
   m_TagString: Untagged
@@ -2338,6 +2430,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb200a375fb4140e18e3bf3528a472a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  editingRobotSourceCode:
+    IsEditing: 0
+    sourceCodeName: 
+    InstalledRobotList: []
   BlockShopContentTransform: {fileID: 1800445524}
   BlockWorkSpaceContentTransform: {fileID: 191250119}
   booleanBlockEditorUnit: {fileID: -105569658993342339, guid: 2fd1355999d5fa146bd18c071a5762b5,
@@ -2359,99 +2455,6 @@ MonoBehaviour:
     type: 3}
   textInBlockElement: {fileID: 7023778121665784658, guid: aa3f084ec33944c4e9841c3b4fb8bd5c,
     type: 3}
---- !u!114 &1742991228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1742991222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e935cdf1bf0df564fb2b82e49985fa1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _Canvas: {fileID: 1742991225}
-  BlockShopScrollRect: {fileID: 1065784254}
-  BlockShopContentBody: {fileID: 1800445524}
-  BlockWorkSpaceScrollRect: {fileID: 1348673956}
-  BlockWorkSpaceContentBody: {fileID: 191250119}
-  BlockEditorBodyTransform: {fileID: 917930467}
-  BlockMockUpPrefab: {fileID: 7230540196876139837, guid: cc02e433c71694275a671efef9ebc9e5,
-    type: 3}
-  _GUIStyle:
-    m_Name: 
-    m_Normal:
-      m_Background: {fileID: 0}
-      m_ScaledBackgrounds: []
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
-    m_Hover:
-      m_Background: {fileID: 0}
-      m_ScaledBackgrounds: []
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
-    m_Active:
-      m_Background: {fileID: 0}
-      m_ScaledBackgrounds: []
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
-    m_Focused:
-      m_Background: {fileID: 0}
-      m_ScaledBackgrounds: []
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
-    m_OnNormal:
-      m_Background: {fileID: 0}
-      m_ScaledBackgrounds: []
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
-    m_OnHover:
-      m_Background: {fileID: 0}
-      m_ScaledBackgrounds: []
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
-    m_OnActive:
-      m_Background: {fileID: 0}
-      m_ScaledBackgrounds: []
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
-    m_OnFocused:
-      m_Background: {fileID: 0}
-      m_ScaledBackgrounds: []
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
-    m_Border:
-      m_Left: 0
-      m_Right: 0
-      m_Top: 0
-      m_Bottom: 0
-    m_Margin:
-      m_Left: 0
-      m_Right: 0
-      m_Top: 0
-      m_Bottom: 0
-    m_Padding:
-      m_Left: 0
-      m_Right: 0
-      m_Top: 0
-      m_Bottom: 0
-    m_Overflow:
-      m_Left: 0
-      m_Right: 0
-      m_Top: 0
-      m_Bottom: 0
-    m_Font: {fileID: 0}
-    m_FontSize: 0
-    m_FontStyle: 0
-    m_Alignment: 0
-    m_WordWrap: 0
-    m_RichText: 1
-    m_TextClipping: 0
-    m_ImagePosition: 0
-    m_ContentOffset: {x: 0, y: 0}
-    m_FixedWidth: 0
-    m_FixedHeight: 0
-    m_StretchWidth: 1
-    m_StretchHeight: 0
-  rectPos:
-    serializedVersion: 2
-    x: 10
-    y: 10
-    width: 300
-    height: 1000
 --- !u!1 &1800445523
 GameObject:
   m_ObjectHideFlags: 0

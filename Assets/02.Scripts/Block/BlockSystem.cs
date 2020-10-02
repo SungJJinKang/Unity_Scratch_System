@@ -14,6 +14,22 @@ public class BlockSystem : MonoBehaviour
 
     private List<RobotSourceCode> StoredRobotSourceCodeList;
 
+    private bool AddToStoredRobotSourceCodeList(RobotSourceCode robotSourceCode)
+    {
+        if (this.StoredRobotSourceCodeList.Contains(robotSourceCode) == true)
+            return false;
+
+        this.StoredRobotSourceCodeList.Add(robotSourceCode);
+        return true;
+    }
+
+    public RobotSourceCode CreateRobotSourceCode(string sourceCodeName)
+    {
+        RobotSourceCode createdRobotSourceCode = new RobotSourceCode(sourceCodeName);
+        this.AddToStoredRobotSourceCodeList(createdRobotSourceCode);
+        return createdRobotSourceCode;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

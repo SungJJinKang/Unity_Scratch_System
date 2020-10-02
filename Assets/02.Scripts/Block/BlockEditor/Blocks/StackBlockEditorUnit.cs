@@ -1,4 +1,4 @@
-﻿[BlockEditorUnitAttribute(typeof(StackBlock))]
+﻿[BlockShapeAttribute(typeof(StackBlock))]
 public sealed class StackBlockEditorUnit : FlowBlockEditorUnit
 {
 

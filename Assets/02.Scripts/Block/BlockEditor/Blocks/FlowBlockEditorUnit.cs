@@ -37,6 +37,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
     }
 
+    /*
     /// <summary>
     /// Create MockUp Under IAttachableEditorElement
     /// </summary>
@@ -46,8 +47,8 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         if (flowBlockConnector == null)
             return;
 
-        BlockMockupHelper spawnedMockUp = PoolManager.SpawnObject(BlockEditorController.instance.BlockMockUpPrefab).GetComponent<BlockMockupHelper>();
-        BlockEditorController.instance.AddToSpawnedBlockMockUp(spawnedMockUp);
+        BlockMockupHelper spawnedMockUp = PoolManager.SpawnObject(RobotSourceCodeEditorWindow.instance.BlockMockUpPrefab).GetComponent<BlockMockupHelper>();
+        RobotSourceCodeEditorWindow.instance.AddToSpawnedBlockMockUp(spawnedMockUp);
 
 
         spawnedMockUp.CopyTargetBlock(this);
@@ -66,10 +67,8 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         {
             this.NextFlowBlockEditorUnit.CreateFlowBlockMockUp(flowBlockConnector, siblingIndex + 1);
         }
-
-
     }
-
+    */
 
 
     [SerializeField]
@@ -207,7 +206,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
                 newChildBlock.PreviousFlowBlockEditorUnit = null;
             }
 
-            BlockEditorController.instance.SetBlockHoverOnBlockWorkSpaceContentBody(newChildBlock);
+            RobotSourceCodeEditorWindow.instance.SetBlockHoverOnBlockWorkSpaceContentBody(newChildBlock);
             return;
         }
 
@@ -350,19 +349,6 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
 
 
-#if UNITY_EDITOR
-
-    private string debugStr;
-    void OnGUI()
-    {
-        GUI.color = Color.white;
-        GUI.Label(_RectTransform.rect, this.debugStr, BlockEditorController.instance._GUIStyle);
-
-    }
-
-   
-
-#endif
 }
 
 #region EDITOR

@@ -52,6 +52,7 @@ public abstract class BlockEditorElement : MonoBehaviour
     protected virtual void Awake()
     {
         _RectTransform = GetComponent<RectTransform>();
+        this.IsSpawned = false;
     }
     protected virtual void Start()
     {
@@ -61,8 +62,24 @@ public abstract class BlockEditorElement : MonoBehaviour
     {
     }
 
+    protected virtual void OnDisable()
+    {
+    }
+
+    public bool IsSpawned
+    {
+        private set;
+        get;
+    }
+
+    public virtual void OnSpawned()
+    {
+        this.IsSpawned = true;
+    }
+
     public virtual void Release()
     {
+        this.IsSpawned = false;
         PoolManager.Instance.releaseObject(gameObject);
     }
 

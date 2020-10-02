@@ -1,9 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection.Emit;
-using System.Text;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,22 +9,16 @@ using UnityEngine.UI;
 #if UNITY_EDITOR
 #endif
 
-public class BlockEditorController : MonoBehaviour
+public class RobotSourceCodeEditorWindow : BlockEditorWindow
 {
-    public static BlockEditorController instance;
+    public static RobotSourceCodeEditorWindow instance;
 
-    [SerializeField]
-    private Canvas _Canvas;
-
-    private Camera _Camera;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         instance = this;
 
 #if UNITY_EDITOR
-        stringBuilder = new StringBuilder();
-
-
         _GUIStyle = new GUIStyle();
         _GUIStyle.fontSize = 65;
         _GUIStyle.fontStyle = FontStyle.Bold;
@@ -35,22 +27,107 @@ public class BlockEditorController : MonoBehaviour
         _GUIStyle.active.textColor = Color.red;
 #endif
 
-        _Camera = _Canvas.worldCamera;
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         this.InitBlockMockUp();
     }
 
-
-    private void OnEnable()
+    protected override void OnSetEditingRobotSourceCode(RobotSourceCode robotSourceCode)
     {
-        UiUtility.SetTargetCanvas(_Canvas);
+        base.OnSetEditingRobotSourceCode(robotSourceCode);
+
+        if (robotSourceCode != null)
+        {
+            this.InitCustomBlockOnBlockShop();
+            this.InitRobotGlobalVariableOnBlockShop();
+        }
     }
 
-    void Update()
+    protected override void ClearEditingRobotSourceCode()
     {
+        base.ClearEditingRobotSourceCode();
+
+        //Should Clear This
+        //this.InitCustomBlockOnBlockShop();
+        //this.InitRobotGlobalVariableOnBlockShop();
+    }
+
+    private List<BlockEditorUnit> BlockEditorUnitsInBlockShop;
+    private void InitBlockShop()
+    {
+        foreach (Type type in BlockReflector.GetAllSealedBlockTypeContainingBlockTitleAttribute())
+        {
+            if (type.GetConstructor(Type.EmptyTypes) == null)
+            {
+                Debug.LogWarning(" \" " + type.Name + " \" Dont Have Default Constructor");
+                continue; // If Type don't have default constructor, continue loop
+            }
+
+
+            if (type.GetCustomAttribute(typeof(NotAutomaticallyMadeOnBlockShopAttribute), true) != null)
+            {
+                Debug.LogWarning(" \" " + type.Name + " \" Containing NotAutomaticallyMadeOnBlockShopAttribute");
+                continue;
+            }
+
+
+
+            BlockEditorUnit createdBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(type, this.BlockShopContentBody);
+            if (createdBlockEditorUnit != null)
+            {
+                createdBlockEditorUnit.IsShopBlock = true;
+            }
+
+            if (this.BlockEditorUnitsInBlockShop == null)
+                this.BlockEditorUnitsInBlockShop = new List<BlockEditorUnit>();
+
+            this.BlockEditorUnitsInBlockShop.Add(createdBlockEditorUnit);
+        }
+    }
+
+ 
+
+
+    private void InitCustomBlockOnBlockShop()
+    {
+        if (this.EditingRobotSourceCode == null)
+            return;
+    }
+
+    private void InitRobotGlobalVariableOnBlockShop()
+    {
+        if (this.EditingRobotSourceCode == null)
+            return;
+    }
+
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+     
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        //clear all spawned BlockEditorElement
+
+        this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
+        this.ControllingBlockEditorUnit = null;
+        this.originalControllingBlockEditorUnit = null;
+        this.AttachableEditorElement = null;
+        this.PinchingBlockEditorUnit = null;
+        this.ReleaseAllBlockMockUp();
+    }
+
+    protected override void Update()
+    {
+        base.Update();
         this.UpdateControllingBlockEdidtorElement();
     }
 
@@ -92,27 +169,25 @@ public class BlockEditorController : MonoBehaviour
 
     [SerializeField]
     private ScrollRect BlockWorkSpaceScrollRect;
-    [SerializeField]
-    private RectTransform BlockWorkSpaceContentBody;
 
     public void SetBlockHoverOnBlockWorkSpaceContentBody(BlockEditorElement blockEditorElement)
     {
         if (blockEditorElement == null)
             return;
 
-        blockEditorElement.transform.SetParent(BlockWorkSpaceContentBody);
+        blockEditorElement.transform.SetParent(base.BlockEditorUnitContentSpace);
     }
 
     /// <summary>
     /// Make This Flow Block EditorUnit RootBlock
     /// This block will not have previous block
     /// </summary>
-    public void SetBlockHoverOnEditorWindow(BlockEditorElement blockEditorElement)
+    public void SetBlockHoverOnEditorWindow(BlockEditorUnit blockEditorUnit)
     {
-        if (blockEditorElement == null)
+        if (blockEditorUnit == null)
             return; 
 
-        blockEditorElement.transform.SetParent(_Canvas.transform);
+        blockEditorUnit.transform.SetParent(_Canvas.transform);
     }
 
  
@@ -248,6 +323,7 @@ public class BlockEditorController : MonoBehaviour
                 this.StartUpdateIsControllingBlockEditorUnitAttachableCoroutine();
 
                 this.ControllingBlockEditorUnit.OnStartControllingByPlayer();
+                this.SetBlockHoverOnEditorWindow(this.ControllingBlockEditorUnit);
             }
            
         }
@@ -267,31 +343,35 @@ public class BlockEditorController : MonoBehaviour
             this.UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
         }
 
-        this.PreviousIAttachableEditorElement = null;
+        this.AttachableEditorElement = null;
     }
 
     private Coroutine UpdateIsControllingBlockEditorUnitAttachableCoroutine = null;
 
 
-    private IAttachableEditorElement previousIAttachableEditorElement = null;
-    private IAttachableEditorElement PreviousIAttachableEditorElement
+    private IAttachableEditorElement attachableEditorElement = null;
+    private IAttachableEditorElement AttachableEditorElement
     {
         get
         {
-            return this.previousIAttachableEditorElement;
+            return this.attachableEditorElement;
         }
         set
         {
-            if(this.previousIAttachableEditorElement != null)
+            if (this.attachableEditorElement == value)
+                return; // if same value passed, return 
+
+            if(this.attachableEditorElement != null)
             {
-                this.previousIAttachableEditorElement.OnSetIsAttachable(null);
+                this.attachableEditorElement.ShowIsAttachable(null);
+                this.ReleaseAllBlockMockUp();
             }
 
-            this.previousIAttachableEditorElement = value;
+            this.attachableEditorElement = value;
 
-            if (this.previousIAttachableEditorElement != null)
+            if (this.attachableEditorElement != null)
             {
-                this.previousIAttachableEditorElement.OnSetIsAttachable(this.ControllingBlockEditorUnit);
+                this.attachableEditorElement.ShowIsAttachable(this.ControllingBlockEditorUnit);
             }
         }
     }
@@ -313,22 +393,11 @@ public class BlockEditorController : MonoBehaviour
 
             if (this.ControllingBlockEditorUnit.IsAttatchable() == true && this.ControllingBlockEditorUnit.AttachableEditorElement != null)
             {
-                if (this.PreviousIAttachableEditorElement != this.ControllingBlockEditorUnit.AttachableEditorElement)
-                {
-                    this.ReleaseAllBlockMockUp();
-                    if (this.previousIAttachableEditorElement != null)
-                        this.previousIAttachableEditorElement.OnRootMockUpSet(null);
-
-                    this.ControllingBlockEditorUnit.AttachableEditorElement.OnRootMockUpSet(this.ControllingBlockEditorUnit);
-                    this.PreviousIAttachableEditorElement = this.ControllingBlockEditorUnit.AttachableEditorElement;
-                }
+                this.AttachableEditorElement = this.ControllingBlockEditorUnit.AttachableEditorElement;
             }
             else
             {
-                this.ReleaseAllBlockMockUp();
-                if (this.previousIAttachableEditorElement != null)
-                    this.previousIAttachableEditorElement.OnRootMockUpSet(null);
-                this.PreviousIAttachableEditorElement = null;
+                this.AttachableEditorElement = null;
             }
 
             yield return new WaitForSeconds(0.1f);
@@ -338,6 +407,7 @@ public class BlockEditorController : MonoBehaviour
 
 
     private BlockEditorUnit PinchingBlockEditorUnit;
+
 
     
 #endregion
@@ -382,7 +452,6 @@ public class BlockEditorController : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    StringBuilder stringBuilder;
     string pointHitResultStr;
 
     /*

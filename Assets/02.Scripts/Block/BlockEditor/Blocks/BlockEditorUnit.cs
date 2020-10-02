@@ -126,7 +126,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
     /// </summary>
     public virtual void OnStartControllingByPlayer()
     {
-        BlockEditorController.instance.SetBlockHoverOnEditorWindow(this);
+       
     }
 
       public virtual void OnEndControlling()
@@ -156,7 +156,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
                 return;
             }
 
-            if (BlockEditorUnitAttribute == null)
+            if (BlockShapeAttribute == null)
             {
                 Debug.LogError("blockEditorUnitAttribute is null, Fail Set TargetBlock");
             }
@@ -177,17 +177,17 @@ public abstract class BlockEditorUnit : BlockEditorElement
         }
     }
 
-    private BlockEditorUnitAttribute blockEditorUnitAttributeCache;
-    private BlockEditorUnitAttribute BlockEditorUnitAttribute
+    private BlockShapeAttribute blockShapeAttributeCache;
+    private BlockShapeAttribute BlockShapeAttribute
     {
         get
         {
-            if (this.blockEditorUnitAttributeCache == null)
+            if (this.blockShapeAttributeCache == null)
             {
-                this.blockEditorUnitAttributeCache = this.GetType().GetAttribute<BlockEditorUnitAttribute>();
+                this.blockShapeAttributeCache = this.GetType().GetAttribute<BlockShapeAttribute>();
             }
 
-            return this.blockEditorUnitAttributeCache;
+            return this.blockShapeAttributeCache;
         }
     }
     /// <summary>
@@ -198,7 +198,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
     {
         get
         {
-            return BlockEditorUnitAttribute.BlockType;
+            return BlockShapeAttribute.BlockType;
         }
     }
 
@@ -268,11 +268,11 @@ public abstract class BlockEditorUnit : BlockEditorElement
             {
                 if (blockDefinitions[i] != null)
                 {
-                    if (blockDefinitions[i].GetType() == typeof(string))
+                    if (blockDefinitions[i] is string)
                     {
                         this.AddDefinitionOfBlockEditorUnit(new TextDefinitionContentOfBlock((string)blockDefinitions[i]));
                     }
-                    else if (blockDefinitions[i].GetType() == typeof(BlockDefinitionAttribute.BlockDefinitionType))
+                    else if (blockDefinitions[i] is BlockDefinitionAttribute.BlockDefinitionType)
                     {
                         switch ((BlockDefinitionAttribute.BlockDefinitionType)blockDefinitions[i])
                         {
@@ -356,6 +356,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
         definitionOfBlockEditorUnit.transform.SetSiblingIndex(this.MainBlockTransform.childCount); // place elementOfBlockUnit To the last space of blockeditorunit
         definitionOfBlockEditorUnit.OwnerBlockEditorUnit = this;
         definitionOfBlockEditorUnit.SetDefinitionContentOfBlock(definitionContentOfBlock);
+        definitionOfBlockEditorUnit.OnSpawned();
         return definitionOfBlockEditorUnit;
     }
 

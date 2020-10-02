@@ -2,9 +2,9 @@
 using UnityEngine;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-public sealed class BlockEditorUnitAttribute : Attribute
+public sealed class BlockShapeAttribute : Attribute
 {
-    public BlockEditorUnitAttribute(Type t)
+    public BlockShapeAttribute(Type t)
     {
         if (t.IsSubclassOf(typeof(Block)) == false)
         {

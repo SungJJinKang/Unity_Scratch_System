@@ -24,7 +24,6 @@ public class UiUtility : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Clear MousePointRaycastResultCache");
         MousePointRaycastResultCache = null;
         MousePointRaycastResultCacheDeepCopied = false;
     }
@@ -76,7 +75,6 @@ public class UiUtility : MonoBehaviour
         {
             MousePointRaycastResultCache.AddRange(MousePointRaycastResultCache.ToArray());
             MousePointRaycastResultCacheDeepCopied = true;
-            Debug.Log("MousePointRaycastResultCacheDeepCopied");
         }
             
         if (hitUiList == null)
@@ -90,7 +88,6 @@ public class UiUtility : MonoBehaviour
         if(isMousePoint == true && MousePointRaycastResultCache == null)
         { // save to MousePointRaycastResultCache
             MousePointRaycastResultCache = hitUiList;
-            Debug.Log("save MousePointRaycastResultCache");
         }
         
 

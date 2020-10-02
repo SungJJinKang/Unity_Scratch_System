@@ -1,4 +1,4 @@
-﻿[BlockEditorUnitAttribute(typeof(HatBlock))]
+﻿[BlockShapeAttribute(typeof(HatBlock))]
 public sealed class HatBlockEditorUnit : FlowBlockEditorUnit
 {
 

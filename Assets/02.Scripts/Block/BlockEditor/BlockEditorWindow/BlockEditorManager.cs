@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 #if UNITY_EDITOR
 using UnityEditor;
+using System.Linq;
 #endif
 
 public class BlockEditorManager : MonoBehaviour
@@ -21,31 +22,11 @@ public class BlockEditorManager : MonoBehaviour
     {
         this.InitBlockEditorSystem();
 
-        this.EditingRobotSourceCode = new RobotSourceCode("123");
     }
 
 
 
-    private RobotSourceCode editingRobotSourceCode;
-    public RobotSourceCode EditingRobotSourceCode
-    {
-        get
-        {
-            return this.editingRobotSourceCode;
-        }
-        set
-        {
-            this.editingRobotSourceCode = value;
-
-            if (this.editingRobotSourceCode != null)
-            {
-                this.InitCustomBlockOnBlockShop();
-                this.InitRobotGlobalVariableOnBlockShop();
-
-                this.InitBlockWorkSpace();
-            }
-        }
-    }
+ 
 
 
     private void InitBlockEditorSystem()
@@ -53,57 +34,10 @@ public class BlockEditorManager : MonoBehaviour
         WarmPoolBlockEditorUnit();
         WarmPoolInitElementOfBlockUnit();
 
-        InitBlockShop();
-
         System.GC.Collect();
     }
 
-    #region BlockShop
-    [SerializeField]
-    private Transform BlockShopContentTransform;
-    private void InitBlockShop()
-    {
-        foreach (Type type in BlockReflector.GetAllSealedBlockTypeContainingBlockTitleAttribute())
-        {
-            if (type.GetConstructor(Type.EmptyTypes) == null)
-            {
-                Debug.LogWarning(" \" " + type.Name + " \" Dont Have Default Constructor");
-                continue; // If Type don't have default constructor, continue loop
-            }
-
-
-            if (type.GetCustomAttribute(typeof(NotAutomaticallyMadeOnBlockShopAttribute), true) != null)
-            {
-                Debug.LogWarning(" \" " + type.Name + " \" Containing NotAutomaticallyMadeOnBlockShopAttribute");
-                continue;
-            }
-
-
-
-            BlockEditorUnit createdBlockEditorUnit = this.CreateBlockEditorUnit(type, this.BlockShopContentTransform);
-            if (createdBlockEditorUnit != null)
-            {
-                createdBlockEditorUnit.IsShopBlock = true;
-            }
-
-
-        }
-    }
-
-
-    private void InitCustomBlockOnBlockShop()
-    {
-        if (this.EditingRobotSourceCode == null)
-            return;
-    }
-
-    private void InitRobotGlobalVariableOnBlockShop()
-    {
-        if (this.EditingRobotSourceCode == null)
-            return;
-    }
-
-    #endregion
+  
 
     #region BlockWorkSpace
 
@@ -123,43 +57,27 @@ public class BlockEditorManager : MonoBehaviour
         return true;
     }
 
-
-    private void InitBlockWorkSpace()
+    public BlockEditorUnit GetBlockEditorUnit(Block block)
     {
-        if (this.EditingRobotSourceCode == null)
-            return;
+        if (this.SpawnedBlockEditorUnitDictionary.ContainsKey(block) == false)
+            return null;
 
-
-        //Spawn Hat Blocks
-        BlockEditorUnit initBlockEditorUnit = this.SpawnFlowBlockEditorUnitRecursive(this.EditingRobotSourceCode.InitBlock);
-        BlockEditorUnit loopedBlockEditorUnit = this.SpawnFlowBlockEditorUnitRecursive(this.EditingRobotSourceCode.LoopedBlock);
-
-        if(initBlockEditorUnit != null)
-        {
-            initBlockEditorUnit._RectTransform.anchoredPosition = Vector2.zero;
-            initBlockEditorUnit.IsRemovable = false;
-            initBlockEditorUnit.BackupUiTransform();
-        }
-
-        if (loopedBlockEditorUnit != null)
-        {
-            loopedBlockEditorUnit._RectTransform.anchoredPosition = Vector2.zero;
-            loopedBlockEditorUnit.IsRemovable = false;
-            loopedBlockEditorUnit.BackupUiTransform();
-        }
-
-
-        EventBlock[] eventBlocks = this.EditingRobotSourceCode.StoredEventBlocks;
-        if (eventBlocks != null)
-        {
-            foreach (var eventBlock in this.EditingRobotSourceCode.StoredEventBlocks)
-            {
-                this.SpawnFlowBlockEditorUnitRecursive(eventBlock);
-            }
-        }
-       
-        //
+        return this.SpawnedBlockEditorUnitDictionary[block];
     }
+
+    public void ClearAllSpawnedBlockEditorUnits()
+    {
+        BlockEditorUnit[] allSpawnedBlockEditorUnits = this.SpawnedBlockEditorUnitDictionary.Values.ToArray();
+        for (int i = 0; i < allSpawnedBlockEditorUnits.Length; i++)
+        {
+            if(allSpawnedBlockEditorUnits[i].IsSpawned)
+                allSpawnedBlockEditorUnits[i].Release();
+        }
+        this.SpawnedBlockEditorUnitDictionary.Clear();
+    }
+
+
+ 
 
     /// <summary>
     /// Spawn Flow Block Recursivly
@@ -167,12 +85,12 @@ public class BlockEditorManager : MonoBehaviour
     /// and spawned child block create child of block of that ..........
     /// </summary>
     /// <param name="flowBlock"></param>
-    private FlowBlockEditorUnit SpawnFlowBlockEditorUnitRecursive(FlowBlock createdNewFlowBlock, FlowBlockEditorUnit parentBlockEditorUnit = null)
+    public FlowBlockEditorUnit SpawnFlowBlockEditorUnit(FlowBlock createdNewFlowBlock, FlowBlockEditorUnit parentBlockEditorUnit, Transform parent)
     {
         if (createdNewFlowBlock == null)
             return null;
 
-        FlowBlockEditorUnit blockEditorUnit = this.CreateBlockEditorUnit(createdNewFlowBlock, this.BlockWorkSpaceContentTransform) as FlowBlockEditorUnit;
+        FlowBlockEditorUnit blockEditorUnit = this.CreateBlockEditorUnit(createdNewFlowBlock, parent) as FlowBlockEditorUnit;
 
         if(parentBlockEditorUnit != null)
         {
@@ -181,7 +99,7 @@ public class BlockEditorManager : MonoBehaviour
 
         if(createdNewFlowBlock.NextBlock != null)
         {
-            this.SpawnFlowBlockEditorUnitRecursive(createdNewFlowBlock.NextBlock, blockEditorUnit);
+            this.SpawnFlowBlockEditorUnit(createdNewFlowBlock.NextBlock, blockEditorUnit, parent);
         }
 
     
@@ -284,6 +202,9 @@ public class BlockEditorManager : MonoBehaviour
             }
 
             this.AddToSpawnedBlockEditorUnitList(blockEditorUnit.TargetBlock, blockEditorUnit);
+
+
+            blockEditorUnit.OnSpawned();
         }
 
 

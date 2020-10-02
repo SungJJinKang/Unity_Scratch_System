@@ -2,7 +2,6 @@
 /// This works like Memory_GetValue
 /// But Memory_GetValue doesn't exist. This replace that
 /// </summary>
-[BlockTitle("Variable")]
 [System.Serializable]
 [NotAutomaticallyMadeOnBlockShop]
 public sealed class VariableBlock : ReporterBlock, IVariableBlockType

@@ -1,7 +1,7 @@
 ﻿[System.Serializable]
 public sealed class BooleanBlockInputOfBlockUnit : InputDefinitionOfBlockEditorUnit
 {
-   
+
 
     // Start is called before the first frame update
     protected override void Start()

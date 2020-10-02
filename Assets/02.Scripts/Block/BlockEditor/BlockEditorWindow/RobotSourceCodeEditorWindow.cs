@@ -34,6 +34,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
         base.Start();
 
         this.InitBlockMockUp();
+        this.InitBlockShop();
     }
 
     protected override void OnSetEditingRobotSourceCode(RobotSourceCode robotSourceCode)
@@ -45,18 +46,16 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
             this.InitCustomBlockOnBlockShop();
             this.InitRobotGlobalVariableOnBlockShop();
         }
+        else
+        {
+            //Should Clear This
+            //this.InitCustomBlockOnBlockShop();
+            //this.InitRobotGlobalVariableOnBlockShop();
+        }
     }
 
-    protected override void ClearEditingRobotSourceCode()
-    {
-        base.ClearEditingRobotSourceCode();
 
-        //Should Clear This
-        //this.InitCustomBlockOnBlockShop();
-        //this.InitRobotGlobalVariableOnBlockShop();
-    }
 
-    private List<BlockEditorUnit> BlockEditorUnitsInBlockShop;
     private void InitBlockShop()
     {
         foreach (Type type in BlockReflector.GetAllSealedBlockTypeContainingBlockTitleAttribute())
@@ -75,32 +74,29 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
             }
 
 
-
             BlockEditorUnit createdBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(type, this.BlockShopContentBody);
             if (createdBlockEditorUnit != null)
             {
                 createdBlockEditorUnit.IsShopBlock = true;
+                //base.AddToSpawnedBlockEditorUnitList(createdBlockEditorUnit);
             }
 
-            if (this.BlockEditorUnitsInBlockShop == null)
-                this.BlockEditorUnitsInBlockShop = new List<BlockEditorUnit>();
 
-            this.BlockEditorUnitsInBlockShop.Add(createdBlockEditorUnit);
         }
     }
 
- 
+
 
 
     private void InitCustomBlockOnBlockShop()
     {
-        if (this.EditingRobotSourceCode == null)
+        if (this._RobotSourceCode == null)
             return;
     }
 
     private void InitRobotGlobalVariableOnBlockShop()
     {
-        if (this.EditingRobotSourceCode == null)
+        if (this._RobotSourceCode == null)
             return;
     }
 
@@ -109,7 +105,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     {
         base.OnEnable();
 
-     
+
     }
 
     protected override void OnDisable()
@@ -124,6 +120,8 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
         this.PinchingBlockEditorUnit = null;
         this.ReleaseAllBlockMockUp();
     }
+
+
 
     protected override void Update()
     {
@@ -185,12 +183,12 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     public void SetBlockHoverOnEditorWindow(BlockEditorUnit blockEditorUnit)
     {
         if (blockEditorUnit == null)
-            return; 
+            return;
 
         blockEditorUnit.transform.SetParent(_Canvas.transform);
     }
 
- 
+
 
     [SerializeField]
     private RectTransform BlockEditorBodyTransform;
@@ -215,12 +213,13 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
                     //Set this.ControllingBlockEditorUnit 
 
                     bool IsShopBlock = this.PinchingBlockEditorUnit.IsShopBlock;
-                    this.ControllingBlockEditorUnit = IsShopBlock  == true ? this.PinchingBlockEditorUnit.Duplicate(this.BlockEditorBodyTransform) : this.PinchingBlockEditorUnit;
+
+                    this.ControllingBlockEditorUnit = IsShopBlock == true ? this.DuplicateBlockEditorUnit(this.PinchingBlockEditorUnit, this.BlockEditorBodyTransform) : this.PinchingBlockEditorUnit;
 
                     if (this.ControllingBlockEditorUnit != null)
                     {
                         Vector3 mouseWorldPos = UiUtility.GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition);
-                        this.controllOffset = IsShopBlock == true ? Vector3.zero : mouseWorldPos - this.ControllingBlockEditorUnit.transform.position ;
+                        this.controllOffset = IsShopBlock == true ? Vector3.zero : mouseWorldPos - this.ControllingBlockEditorUnit.transform.position;
                         this.ControllingBlockEditorUnit.transform.position = mouseWorldPos - controllOffset;
 
 
@@ -250,7 +249,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
 
                 if (HoveringBodyScrollRect == null || HoveringBodyScrollRect == this.BlockShopScrollRect.gameObject)
                 {//if player end controlling block on BlockShop UI or Outside of Editor UI
-                    if(this.ControllingBlockEditorUnit.IsRemovable == true)
+                    if (this.ControllingBlockEditorUnit.IsRemovable == true)
                     {
                         this.ControllingBlockEditorUnit.Release();
                     }
@@ -263,7 +262,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
                 {//if player end controlling block on BlockWorkSpace UI
 
                     this.SetBlockHoverOnBlockWorkSpaceContentBody(this.ControllingBlockEditorUnit);
-                    
+
                     if (this.ControllingBlockEditorUnit.IsAttatchable() == true)
                     {//if block can attach to other block as flowbloc or valueblock
                         this.controllingBlockEditorUnit.AttachBlock();
@@ -281,6 +280,14 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
             this.PinchingBlockEditorUnit = null;
         }
 
+    }
+
+    private BlockEditorUnit DuplicateBlockEditorUnit(BlockEditorUnit blockEditorUnit, Transform parent)
+    {
+        BlockEditorUnit createdBlockEditorUnit = blockEditorUnit.Duplicate(parent);
+        base.AddToSpawnedBlockEditorUnitInSourceCode(createdBlockEditorUnit);
+
+        return createdBlockEditorUnit;
     }
 
     private BlockEditorUnit originalControllingBlockEditorUnit;
@@ -325,7 +332,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
                 this.ControllingBlockEditorUnit.OnStartControllingByPlayer();
                 this.SetBlockHoverOnEditorWindow(this.ControllingBlockEditorUnit);
             }
-           
+
         }
     }
 
@@ -361,7 +368,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
             if (this.attachableEditorElement == value)
                 return; // if same value passed, return 
 
-            if(this.attachableEditorElement != null)
+            if (this.attachableEditorElement != null)
             {
                 this.attachableEditorElement.ShowIsAttachable(null);
                 this.ReleaseAllBlockMockUp();
@@ -383,13 +390,13 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     /// <returns></returns>
     private IEnumerator UpdateIsControllingBlockEditorUnitAttachableIEnumerator()
     {
-        
+
         while (true)
         {
             if (this.ControllingBlockEditorUnit == null)
                 yield break;
 
-            
+
 
             if (this.ControllingBlockEditorUnit.IsAttatchable() == true && this.ControllingBlockEditorUnit.AttachableEditorElement != null)
             {
@@ -409,8 +416,8 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     private BlockEditorUnit PinchingBlockEditorUnit;
 
 
-    
-#endregion
+
+    #endregion
 
 
     #region BlockMockUp
@@ -438,7 +445,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
         if (this.SpawnedBlockMockUp == null)
             return;
 
-        for(int i=0;i< this.SpawnedBlockMockUp.Count;i++)
+        for (int i = 0; i < this.SpawnedBlockMockUp.Count; i++)
         {
             PoolManager.ReleaseObject(this.SpawnedBlockMockUp[i].gameObject);
         }

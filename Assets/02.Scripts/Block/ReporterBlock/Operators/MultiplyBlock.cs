@@ -1,4 +1,4 @@
-﻿[BlockTitle("Multiply")]
+﻿
 [BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "x", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class MultiplyBlock : ArithmeticBlock
 {

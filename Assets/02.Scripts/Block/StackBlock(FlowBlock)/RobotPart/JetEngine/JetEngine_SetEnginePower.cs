@@ -1,4 +1,5 @@
-﻿[BlockTitle("SetEnginePower")]
+﻿
+[BlockDefinitionAttribute("Set EnginePower", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class JetEngine_SetEnginePower : StackBlock, IContainingParameter<ReporterBlock>, IJetEngineBlockType
 {
     public ReporterBlock Input1 { get; set; }

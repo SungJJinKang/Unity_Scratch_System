@@ -1,4 +1,4 @@
-﻿[BlockTitle("OrBlock")]
+﻿
 [BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput, "or", BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput)]
 public sealed class OrBlock : BinaryComparisonTwoBooleanBlock
 {

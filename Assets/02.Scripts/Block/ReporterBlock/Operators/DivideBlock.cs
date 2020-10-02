@@ -1,4 +1,4 @@
-﻿[BlockTitle("Divide")]
+﻿
 [BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "/", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class DivideBlock : ArithmeticBlock
 {

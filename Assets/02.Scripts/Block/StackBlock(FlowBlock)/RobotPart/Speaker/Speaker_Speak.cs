@@ -1,4 +1,4 @@
-﻿[BlockTitle("Speak")]
+﻿
 public class Speaker_Speak : StackBlock, IContainingParameter<ReporterBlock>, IVariableBlockType
 {
     public ReporterBlock Input1 { get; set; }

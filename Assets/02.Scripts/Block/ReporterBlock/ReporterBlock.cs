@@ -25,7 +25,7 @@ public abstract class ReporterBlock : ValueBlock
             return ReporterNumberValueCache;
         }
 
-       
+
 
     }
 

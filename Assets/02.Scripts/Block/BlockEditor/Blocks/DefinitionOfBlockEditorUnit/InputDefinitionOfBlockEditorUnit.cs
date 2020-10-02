@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -10,6 +9,7 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
 
     [SerializeField]
     protected GameObject DefaultBlockInputObj;
+
 
     private ValueBlockEditorUnit inputtedValueBlockEditorUnit;
     public ValueBlockEditorUnit InputtedValueBlockEditorUnit
@@ -24,10 +24,10 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
             {
                 this.inputtedValueBlockEditorUnit.ParentInputDefinitionOfBlockEditorUnit = null;
             }
-        
+
             this.inputtedValueBlockEditorUnit = value;
 
-            if(this.inputtedValueBlockEditorUnit != null)
+            if (this.inputtedValueBlockEditorUnit != null)
             {
                 this.inputtedValueBlockEditorUnit._RectTransform.SetParent(this.AttachPointRectTransform);
                 this.inputtedValueBlockEditorUnit._RectTransform.SetSiblingIndex(this.inputtedValueBlockEditorUnit._RectTransform.childCount - 1);
@@ -52,14 +52,14 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
             this.inputtedValueBlockEditorUnit.Release();
             this.inputtedValueBlockEditorUnit = null;
         }
-           
+
 
 
 
         base.Release();
     }
 
-    public bool IsEmpty => InputtedValueBlockEditorUnit == null;
+    public bool IsEmpty => this.InputtedValueBlockEditorUnit == null;
     /// <summary>
     /// 1 ~ 4
     /// </summary>

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [System.Serializable]
 public abstract class ValueBlockEditorUnit : BlockEditorUnit
@@ -17,7 +15,7 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
     {
         base.OnStartControllingByPlayer();
 
-        if(ParentInputDefinitionOfBlockEditorUnit != null)
+        if (ParentInputDefinitionOfBlockEditorUnit != null)
         {
             ParentInputDefinitionOfBlockEditorUnit.InputtedValueBlockEditorUnit = null;
         }

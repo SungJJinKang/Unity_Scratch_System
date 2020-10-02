@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +11,11 @@ public class UiWindowHeader : MonoBehaviour
     private void Awake()
     {
         this.TargetUiParent = TargetUi.parent.GetComponent<RectTransform>();
+    }
+
+    private void OnDisable()
+    {
+        this.IsControlling = false;
     }
 
     private bool isControlling;
@@ -31,14 +35,14 @@ public class UiWindowHeader : MonoBehaviour
     private Vector3 controllOffset;
     private void Update()
     {
-        
+
         if (Input.GetMouseButtonDown(0))
         {
             this.CheckHit();
         }
         else if (Input.GetMouseButton(0))
         {
-            if(this.IsControlling == true)
+            if (this.IsControlling == true)
             {
                 TargetUi.transform.position = UiUtility.GetUiWorldPos(this.TargetUiParent, Input.mousePosition) - this.controllOffset;
             }

@@ -2,7 +2,6 @@
 /// This works like Memory_GetValue
 /// But Memory_GetValue doesn't exist. This replace that
 /// </summary>
-[BlockTitle("CustomBlockLocalVariable")]
 [System.Serializable]
 [NotAutomaticallyMadeOnBlockShop]
 public sealed class CustomBlockLocalParameterVariableBlock : ReporterBlock

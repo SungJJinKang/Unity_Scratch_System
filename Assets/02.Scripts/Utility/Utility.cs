@@ -25,7 +25,7 @@ public static class Utility
         if (t == null)
             return null;
 
-        if(t.IsInterface == false)
+        if (t.IsInterface == false)
         {
             Type[] inheritedInterface = t.GetInterfaces();
 
@@ -36,7 +36,7 @@ public static class Utility
                     return type;
             }
         }
-        
+
 
         T blockColorCategoryAttribute = t.GetCustomAttribute<T>();
         if (blockColorCategoryAttribute != null)

@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
-using System.Runtime.CompilerServices;
-using UnityEngine.EventSystems;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -180,7 +178,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         {
             int count = 0;
             FlowBlockEditorUnit flowBlockEditorUnit = this.NextFlowBlockEditorUnit;
-            while(flowBlockEditorUnit != null)
+            while (flowBlockEditorUnit != null)
             {
                 count++;
                 flowBlockEditorUnit = flowBlockEditorUnit.NextFlowBlockEditorUnit;
@@ -263,8 +261,8 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         {//if Fail to find flowblockconnector
 
             //Find Top Block Connector at LowestDescendantBlock Postion
-            FlowBlockEditorUnit lowestDescendantBlockUnit = this.LowestDescendantBlockUnit; 
-            flowBlockConnector = this.GetTopFlowBlockConnector(lowestDescendantBlockUnit.transform.position, FlowBlockConnector.ConnectorType.UpNotch); 
+            FlowBlockEditorUnit lowestDescendantBlockUnit = this.LowestDescendantBlockUnit;
+            flowBlockConnector = this.GetTopFlowBlockConnector(lowestDescendantBlockUnit.transform.position, FlowBlockConnector.ConnectorType.UpNotch);
         }
 
 
@@ -305,7 +303,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
     }
 
-   
+
 
     sealed public override bool AttachBlock()
     {
@@ -416,7 +414,7 @@ public class FlowBlockEditorUnitEditor : Editor
     private void DebugBlockFlowRecursive(FlowBlock flowBlock, ref StringBuilder stringBuilder)
     {
         if (flowBlock != null)
-        { 
+        {
             if (flowBlock != null)
             {
                 stringBuilder.Append(flowBlock.GetType().Name);

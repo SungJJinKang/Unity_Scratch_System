@@ -29,12 +29,12 @@ public class PoolManager : Singleton<PoolManager>
         {
             throw new Exception("Pool for prefab " + prefab.name + " has already been created");
         }
-        var pool = new ObjectPool<GameObject>(() => 
+        var pool = new ObjectPool<GameObject>(() =>
         {
             GameObject item = InstantiatePrefab(prefab);
             item.SetActive(false);
-            return item; 
-        
+            return item;
+
         }, size);
         prefabLookup[prefab] = pool;
 

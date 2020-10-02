@@ -14,7 +14,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
     [HideInInspector]
     public BlockMockupHelper _BlockMockupHelper;
 
-   
+
 
     protected override void Awake()
     {
@@ -26,7 +26,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
         this.IsRemovable = true;
         this.IsShopBlock = false;
 
-       
+
     }
 
     protected override void Start()
@@ -38,7 +38,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
     {
         base.OnEnable();
     }
- 
+
 
     [HideInInspector]
     public bool IsShopBlock = false;
@@ -90,18 +90,11 @@ public abstract class BlockEditorUnit : BlockEditorElement
         // Removing BlockEditorUnit, Element Of BlockUnit shouldn't effect to Block instance
         this.targetBlock = null;
 
-        if (this.DefinitionOfBlockEditorUnitList != null && this.DefinitionOfBlockEditorUnitList.Count > 0)
-        {
-            for (int i = 0; i < this.DefinitionOfBlockEditorUnitList.Count; i++)
-            {
-                this.DefinitionOfBlockEditorUnitList[i].Release();
-            }
-
-            this.DefinitionOfBlockEditorUnitList.Clear();
-        }
+        ClearDefinitionOfBlockEditorUnit();
 
         base.Release();
     }
+
 
 
     #region AttachBlock
@@ -126,17 +119,17 @@ public abstract class BlockEditorUnit : BlockEditorElement
     /// </summary>
     public virtual void OnStartControllingByPlayer()
     {
-       
+
     }
 
-      public virtual void OnEndControlling()
+    public virtual void OnEndControlling()
     {
 
     }
 
     #endregion
 
-  
+
 
 
     #region TargetBlock
@@ -210,7 +203,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
         InitBlockColor();
         InitElementsOfBlockUnit();
-      
+
     }
 
     public Color BlockColor
@@ -259,6 +252,8 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
     private void InitElementsOfBlockUnit()
     {
+        this.ClearDefinitionOfBlockEditorUnit();
+
         BlockDefinitionAttribute blockDefinition = this.TargetBlock.GetType().GetCustomAttribute<BlockDefinitionAttribute>();
         if (blockDefinition != null)
         {//If Block class have ElementContentAttribute
@@ -360,6 +355,20 @@ public abstract class BlockEditorUnit : BlockEditorElement
         return definitionOfBlockEditorUnit;
     }
 
+    private void ClearDefinitionOfBlockEditorUnit()
+    {
+        if (this.DefinitionOfBlockEditorUnitList != null && this.DefinitionOfBlockEditorUnitList.Count > 0)
+        {
+            for (int i = 0; i < this.DefinitionOfBlockEditorUnitList.Count; i++)
+            {
+                this.DefinitionOfBlockEditorUnitList[i].Release();
+            }
+
+            this.DefinitionOfBlockEditorUnitList.Clear();
+        }
+    }
+
+
     #endregion
 
 
@@ -374,7 +383,7 @@ public class BlockEditorUnitEditor : Editor
     {
         base.DrawDefaultInspector();
 
-        
+
     }
 }
 

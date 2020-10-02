@@ -2,17 +2,30 @@
 
 public sealed class JetEngine : RobotPart
 {
-    public float EnginePower;
+    private float maxEnginePower;
+
+    private float enginePower;
+    public float EnginePower
+    {
+        get
+        {
+            return this.enginePower;
+        }
+        set
+        {
+            this.enginePower = Mathf.Clamp(value, 0, this.maxEnginePower);
+        }
+    }
 
 
-    Vector2 vec2Cache;
+    public Vector2 Destination;
 
 
     protected override void Awake()
     {
         base.Awake();
 
-        vec2Cache = new Vector2();
+        Destination = new Vector2();
     }
 
     protected override void Start()
@@ -20,12 +33,9 @@ public sealed class JetEngine : RobotPart
         base.Start();
     }
 
-    public void Move(float x, float y)
+    private void Update()
     {
-        vec2Cache.x = x;
-        vec2Cache.y = y;
-
-        //transform.Translate(vec2Cache * );
+        base.MotherRobotBase.transform.position = Vector3.MoveTowards(base.MotherRobotBase.transform.position, this.Destination, Time.deltaTime * this.EnginePower);
     }
 
 

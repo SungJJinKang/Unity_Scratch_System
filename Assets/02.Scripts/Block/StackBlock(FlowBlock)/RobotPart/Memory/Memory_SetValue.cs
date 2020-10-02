@@ -1,4 +1,4 @@
-﻿[BlockTitle("SetEnginePower")]
+﻿
 public sealed class Memory_SetValue : StackBlock, IContainingParameter<VariableBlock, ReporterBlock>, IVariableBlockType
 {
     /// <summary>

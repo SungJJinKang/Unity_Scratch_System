@@ -30,7 +30,7 @@ public class UiUtility : MonoBehaviour
 
     private static bool MousePointRaycastResultCacheDeepCopied = false;
     private static List<RaycastResult> MousePointRaycastResultCache;
-    
+
     public static List<RaycastResult> hitUiList
     {
         private set;
@@ -70,13 +70,13 @@ public class UiUtility : MonoBehaviour
             Debug.Log("MousePointRaycastResultCache hit");
             return MousePointRaycastResultCache; // hit mouse point raycastResultCache hit
         }
-      
-        if(isMousePoint == false && MousePointRaycastResultCache != null && MousePointRaycastResultCacheDeepCopied == false)
+
+        if (isMousePoint == false && MousePointRaycastResultCache != null && MousePointRaycastResultCacheDeepCopied == false)
         {
             MousePointRaycastResultCache.AddRange(MousePointRaycastResultCache.ToArray());
             MousePointRaycastResultCacheDeepCopied = true;
         }
-            
+
         if (hitUiList == null)
             hitUiList = new List<RaycastResult>(15);
 
@@ -85,11 +85,11 @@ public class UiUtility : MonoBehaviour
         _PointerEventData.position = screenPoint;
         _GraphicRaycaster.Raycast(_PointerEventData, hitUiList);
 
-        if(isMousePoint == true && MousePointRaycastResultCache == null)
+        if (isMousePoint == true && MousePointRaycastResultCache == null)
         { // save to MousePointRaycastResultCache
             MousePointRaycastResultCache = hitUiList;
         }
-        
+
 
         return hitUiList;
     }

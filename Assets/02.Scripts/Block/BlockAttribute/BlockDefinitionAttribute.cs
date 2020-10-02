@@ -23,7 +23,7 @@ public sealed class BlockDefinitionAttribute : Attribute
     {
         _BlockDefinitions = blockDefinitions;
 
-        
+
     }
 
     public readonly object[] _BlockDefinitions;

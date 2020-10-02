@@ -9,12 +9,14 @@ using UnityEngine;
 /// This is Robot, There is no Robot class !!!!!!!!!!!!
 /// This contains Every Robot Parts Attached To Robot
 /// </summary>
+[System.Serializable]
 public sealed class RobotBase : RobotPart
 {
     protected override void Awake()
     {
         base.Awake();
         base.MotherRobotBase = this; // set itsetf to mother robotbase
+        RobotPartCache = new Dictionary<Type, RobotPart>();
     }
 
     protected override void Start()
@@ -53,6 +55,9 @@ public sealed class RobotBase : RobotPart
 
         this.AttacehdRobotParts.Add(robotPart);
         robotPart.MotherRobotBase = this;
+
+        RobotPartCache.Add(robotPart.GetType(), robotPart);
+
         return true;
     }
 
@@ -85,20 +90,23 @@ public sealed class RobotBase : RobotPart
         return this.AttacehdRobotParts.Remove(robotPart);
     }
 
+    private Dictionary<Type, RobotPart> RobotPartCache;
+
     /// <summary>
     /// Get Attached RobotPart Instance of Robot Instance
+    /// 
+    /// This method need optimisation
+    /// need Robot Part Cache
+    /// 
     /// </summary>
     /// <returns>The robot part.</returns>
     /// <typeparam name="T">Robot Part Type</typeparam>
     public T GetRobotPart<T>() where T : RobotPart
     {
-        for (int i = 0; i < this.AttacehdRobotParts.Count; i++)
-        {
-            if (this.AttacehdRobotParts[i] is T)
-                return this.AttacehdRobotParts[i] as T;
-        }
-
-        return null;
+        if (this.RobotPartCache.ContainsKey(typeof(T)))
+            return RobotPartCache[typeof(T)] as T;
+        else
+            return null;
     }
 
     #endregion

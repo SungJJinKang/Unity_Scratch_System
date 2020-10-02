@@ -1,4 +1,4 @@
-﻿[BlockTitle("GetRobotLocationX")]
+﻿
 public sealed class GPS_GetRobotLocationX : ReporterBlock, IGPSBlockType
 {
     public override string GetReporterStringValue(RobotBase operatingRobotBase)

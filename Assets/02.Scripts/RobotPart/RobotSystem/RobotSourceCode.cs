@@ -100,7 +100,7 @@ public class RobotSourceCode
     {
         get
         {
-            if(this.StoredEventBlockDictonary != null)
+            if (this.StoredEventBlockDictonary != null)
             {
                 return this.StoredEventBlockDictonary.Values.ToArray();
             }

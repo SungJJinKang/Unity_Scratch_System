@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FlowBlockConnector : BlockEditorElement, IAttachableEditorElement
 {
@@ -30,10 +28,10 @@ public class FlowBlockConnector : BlockEditorElement, IAttachableEditorElement
 
     }
 
-   
+
 
     private float OriginalRectHeight;
- 
+
     public void SetRectHeightScaling(int scaledNum)
     {
         _RectTransform.sizeDelta = new Vector2(_RectTransform.sizeDelta.x, OriginalRectHeight * scaledNum);
@@ -59,7 +57,7 @@ public class FlowBlockConnector : BlockEditorElement, IAttachableEditorElement
         }
     }
 
- 
+
     /// <summary>
     /// Creates the flow block mock up.
     /// </summary>

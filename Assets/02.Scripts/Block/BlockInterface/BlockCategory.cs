@@ -1,8 +1,5 @@
-﻿
-using UnityEngine;
-
-public interface IBlockCategory
-{ 
+﻿public interface IBlockCategory
+{
 }
 
 [BlockColorCategoryAttribute(0.2980392f, 0.5921569f, 1)]
@@ -25,8 +22,8 @@ public interface IVariableBlockType : IBlockCategory
 
 [BlockColorCategoryAttribute(1, 0.4f, 0.5019608f)]
 [BlockMainCategoryAttribute("CustomBlock")]
-public interface CustomBlockType : IBlockCategory 
-{ 
+public interface CustomBlockType : IBlockCategory
+{
 }
 
 

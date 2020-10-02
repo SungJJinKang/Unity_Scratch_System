@@ -1,4 +1,4 @@
-﻿[BlockTitle("LessOrEqual")]
+﻿
 [BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "<=", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class LessOrEqualBlock : BinaryComparisonTwoReporterBlock
 {

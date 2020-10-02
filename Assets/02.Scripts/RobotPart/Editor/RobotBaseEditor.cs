@@ -7,7 +7,7 @@ using UnityEditorInternal;
 using UnityEngine;
 
 [CustomEditor(typeof(RobotBase), true)]
-public class RobotBaseEditor :Editor
+public class RobotBaseEditor : Editor
 {
     RobotBase robotBase;
 

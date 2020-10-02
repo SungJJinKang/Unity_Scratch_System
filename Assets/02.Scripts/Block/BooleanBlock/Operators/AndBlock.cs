@@ -1,4 +1,4 @@
-﻿[BlockTitle("AndBlock")]
+﻿
 [BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "and", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class AndBlock : BinaryComparisonTwoBooleanBlock
 {

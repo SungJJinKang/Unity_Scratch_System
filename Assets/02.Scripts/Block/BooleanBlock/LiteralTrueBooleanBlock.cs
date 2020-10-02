@@ -1,4 +1,4 @@
-﻿[BlockTitle("LiteralTrue")]
+﻿
 [BlockDefinitionAttribute("True")]
 public sealed class LiteralTrueBooleanBlock : BooleanBlock, IOperatorBlockType
 {

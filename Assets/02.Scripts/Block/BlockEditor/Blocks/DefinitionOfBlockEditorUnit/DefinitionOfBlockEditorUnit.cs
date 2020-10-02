@@ -6,7 +6,7 @@ public abstract class DefinitionOfBlockEditorUnit : BlockEditorElement
     sealed public override BlockEditorElement ParentBlockEditorElement => OwnerBlockEditorUnit;
 
 
-   [SerializeField]
+    [SerializeField]
     public BlockEditorUnit OwnerBlockEditorUnit
     {
         get;
@@ -28,7 +28,7 @@ public abstract class DefinitionOfBlockEditorUnit : BlockEditorElement
     // Update is called once per frame
     protected virtual void Update()
     {
-        
+
     }
 
     protected override void OnEnable()

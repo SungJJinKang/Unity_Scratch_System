@@ -1,4 +1,4 @@
-﻿[BlockTitle("GetEnginePower")]
+﻿
 public sealed class JetEngine_GetEnginePower : ReporterBlock, IJetEngineBlockType
 {
     public override string GetReporterStringValue(RobotBase operatingRobotBase)

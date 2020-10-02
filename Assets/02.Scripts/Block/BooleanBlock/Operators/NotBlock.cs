@@ -1,4 +1,4 @@
-﻿[BlockTitle("NotBlock")]
+﻿
 [BlockDefinitionAttribute("not", BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput)]
 public sealed class NotBlock : BooleanBlock, IContainingParameter<BooleanBlock>, IOperatorBlockType
 {

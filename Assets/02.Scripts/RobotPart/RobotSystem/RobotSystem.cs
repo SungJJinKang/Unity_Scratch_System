@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -18,15 +17,21 @@ public class RobotSystem : MonoBehaviour
 
         this.SpawnedRobotDictionary = new Dictionary<string, RobotBase>();
         this.SpawnedRobotList = new List<RobotBase>();
+        this.StoredRobotSourceCode = new Dictionary<string, RobotSourceCode>();
     }
 
     private void Start()
     {
-        StartExecuteRobotsWaitingBlockCoroutine();
+        //StartExecuteRobotsWaitingBlockCoroutine();
+    }
+
+    private void Update()
+    {
+        this.ExecuteRobotsWaitingBlock(Time.deltaTime);
     }
 
     #region ExecuteRobotsWaitingBlock
-
+    /*
     private void StartExecuteRobotsWaitingBlockCoroutine()
     {
         StopExecuteRobotsWaitingBlockCoroutine();
@@ -62,6 +67,9 @@ public class RobotSystem : MonoBehaviour
     /// </summary>
     public const float ExecuteRobotsWaitingBlockRate = 0.5f;
 
+    */
+
+
     /// <summary>
     /// Executes all spawned the robot's waiting block.
     /// </summary>
@@ -82,6 +90,7 @@ public class RobotSystem : MonoBehaviour
     /// The spawned robot list.
     /// This is updated when SpawnedRobotDictionary is dirty For Performance!!!!!
     /// </summary>
+    [SerializeField]
     private List<RobotBase> SpawnedRobotList;
 
     private Dictionary<string, RobotBase> SpawnedRobotDictionary;

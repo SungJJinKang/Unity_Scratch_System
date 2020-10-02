@@ -1,4 +1,4 @@
-﻿[BlockTitle("Minus")]
+﻿
 [BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "-", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
 public sealed class MinusBlock : ArithmeticBlock
 {

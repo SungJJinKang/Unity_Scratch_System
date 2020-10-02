@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-using System.Reflection;
 #if UNITY_EDITOR
 using UnityEditor;
-using System.Linq;
 #endif
 
 public class BlockEditorManager : MonoBehaviour
@@ -15,18 +12,18 @@ public class BlockEditorManager : MonoBehaviour
     private void Awake()
     {
         instnace = this;
-        this.SpawnedBlockEditorUnitDictionary = new Dictionary<Block, BlockEditorUnit>();
+        this.InitBlockEditorSystem();
     }
 
     private void Start()
     {
-        this.InitBlockEditorSystem();
+
 
     }
 
 
 
- 
+
 
 
     private void InitBlockEditorSystem()
@@ -37,47 +34,13 @@ public class BlockEditorManager : MonoBehaviour
         System.GC.Collect();
     }
 
-  
+
 
     #region BlockWorkSpace
 
-    [SerializeField]
-    private Transform BlockWorkSpaceContentTransform;
-
-    /// <summary>
-    /// Match One Block Instance To One BlockEditorUnit Object(Instance)
-    /// </summary>
-    private Dictionary<Block, BlockEditorUnit> SpawnedBlockEditorUnitDictionary;
-    private bool AddToSpawnedBlockEditorUnitList(Block block, BlockEditorUnit blockEditorUnit)
-    {
-        if (this.SpawnedBlockEditorUnitDictionary.ContainsKey(block) == true)
-            return false;
-
-        this.SpawnedBlockEditorUnitDictionary.Add(block, blockEditorUnit);
-        return true;
-    }
-
-    public BlockEditorUnit GetBlockEditorUnit(Block block)
-    {
-        if (this.SpawnedBlockEditorUnitDictionary.ContainsKey(block) == false)
-            return null;
-
-        return this.SpawnedBlockEditorUnitDictionary[block];
-    }
-
-    public void ClearAllSpawnedBlockEditorUnits()
-    {
-        BlockEditorUnit[] allSpawnedBlockEditorUnits = this.SpawnedBlockEditorUnitDictionary.Values.ToArray();
-        for (int i = 0; i < allSpawnedBlockEditorUnits.Length; i++)
-        {
-            if(allSpawnedBlockEditorUnits[i].IsSpawned)
-                allSpawnedBlockEditorUnits[i].Release();
-        }
-        this.SpawnedBlockEditorUnitDictionary.Clear();
-    }
 
 
- 
+
 
     /// <summary>
     /// Spawn Flow Block Recursivly
@@ -92,22 +55,22 @@ public class BlockEditorManager : MonoBehaviour
 
         FlowBlockEditorUnit blockEditorUnit = this.CreateBlockEditorUnit(createdNewFlowBlock, parent) as FlowBlockEditorUnit;
 
-        if(parentBlockEditorUnit != null)
+        if (parentBlockEditorUnit != null)
         {
             FlowBlockEditorUnit.ConnectFlowBlockEditorUnit(parentBlockEditorUnit, blockEditorUnit);
         }
 
-        if(createdNewFlowBlock.NextBlock != null)
+        if (createdNewFlowBlock.NextBlock != null)
         {
             this.SpawnFlowBlockEditorUnit(createdNewFlowBlock.NextBlock, blockEditorUnit, parent);
         }
 
-    
+
 
         return blockEditorUnit;
     }
 
-   
+
 
     #endregion
 
@@ -125,7 +88,9 @@ public class BlockEditorManager : MonoBehaviour
     public BlockEditorUnit CreateBlockEditorUnit(Type blockType, Transform parent = null)
     {
         if (blockType == null)
+        {
             return null;
+        }
 
         return this.CreateBlockEditorUnit(Block.CreatBlock(blockType), parent);
     }
@@ -200,8 +165,6 @@ public class BlockEditorManager : MonoBehaviour
             {
 
             }
-
-            this.AddToSpawnedBlockEditorUnitList(blockEditorUnit.TargetBlock, blockEditorUnit);
 
 
             blockEditorUnit.OnSpawned();

@@ -6,7 +6,7 @@ using UnityEngine;
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
 /// </summary>
 [System.Serializable]
-public abstract class Block 
+public abstract class Block
 {
     public byte BlockIndexInSouceCode;
 
@@ -57,105 +57,51 @@ public abstract class Block
 
     #region Parameter
 
-
-    private bool IsCachedParametersPropertyInfos = false;
-    private void CachingParametersPropertyInfos()
-    {
-        int paramaterCount = this.ParamaterCount;
-
-        if (paramaterCount == 0)
-        {
-            this.parametersPropertyInfosCache = null;
-        }
-        else
-        {
-            this.parametersPropertyInfosCache = new PropertyInfo[paramaterCount];
-
-            for (int i = 1; i <= paramaterCount; i++)
-            {
-                this.parametersPropertyInfosCache[i - 1] = this.GetType().GetProperty("Input" + i.ToString()); // Set Cache Variable
-            }
-        }
-
-        this.IsCachedParametersPropertyInfos = true;
-    }
-
-
-    private PropertyInfo[] parametersPropertyInfosCache;
-    private PropertyInfo[] ParametersPropertyInfos
+    private bool isParametersInitialized = false;
+    private ValueBlock[] parameters;
+    private ValueBlock[] Parameters
     {
         get
         {
-            if (this.IsCachedParametersPropertyInfos == false)
-                CachingParametersPropertyInfos();
+            if (isParametersInitialized == false)
+                this.InitParameters();
 
-            return this.parametersPropertyInfosCache;
+            return this.parameters;
         }
     }
-
-    /// <summary>
-    /// Gets the parameter property info.
-    /// </summary>
-    /// <returns>The parameter property info.</returns>
-    /// <param name="parameterIndex">Index. 1 ~ 4</param>
-    private PropertyInfo GetParameterPropertyInfo(int parameterIndex)
+    private void InitParameters()
     {
-        PropertyInfo[] parameterPropertyInfos = ParametersPropertyInfos;
+        if (this.ParametersTypes == null)
+            return;
 
-        if (parameterIndex - 1 < 0 || parameterIndex - 1 >= parameterPropertyInfos.Length)
-        {
-            Debug.LogError("parameterIndex is not proper");
-            return null;
-        }
-
-
-        if (parameterIndex - 1 < parameterPropertyInfos.Length)
-        {
-            return parameterPropertyInfos[parameterIndex - 1];
-        }
-        else
-        {
-            Debug.LogError("inputIndex is out of index(parameterPropertyInfos) ");
-            return null;
-        }
+        this.parameters = new ValueBlock[ParametersTypes.Length];
+        this.isParametersInitialized = true;
     }
 
-
-
-    /// <summary>
-    /// Passes the parameter to block
-    /// </summary>
-    /// <param name="inputIndex">Input index. 1 ~ 4</param>
-    /// <param name="valueBlock">Value block. Passed Parameter Value Block</param>
-    public void PassParameter(int inputIndex, ValueBlock valueBlock)
+    public bool IsParameterPassable(int index, ValueBlock value)
     {
-        PropertyInfo parameterPropertyInfo = GetParameterPropertyInfo(inputIndex);
-        if (parameterPropertyInfo != null)
-        {
-            parameterPropertyInfo.SetValue(this, valueBlock);
-        }
-    }
-
-    /// <summary>
-    /// Tries the get parameter value.
-    /// </summary>
-    /// <returns><c>true</c>, if get parameter value was tryed, <c>false</c> otherwise.</returns>
-    /// <param name="inputIndex">Input index. 1 ~ 4</param>
-    /// <param name="parameterValue">Parameter value.</param>
-    public bool TryGetParameterValue(int inputIndex, out ValueBlock parameterValue)
-    {
-        PropertyInfo parameterPropertyInfo = GetParameterPropertyInfo(inputIndex);
-        if (parameterPropertyInfo != null)
-        {
-            parameterValue = parameterPropertyInfo.GetValue(inputIndex) as ValueBlock;
-            return true;
-        }
-        else
-        {
-            parameterValue = null;
+        if (value == null)
             return false;
-        }
+
+        if (this.Parameters.Length <= index || this.ParametersTypes.Length <= index)
+            return false;
+
+        Type valueType = value.GetType();
+        if (this.ParametersTypes[index] != valueType || valueType.IsSubclassOf(this.ParametersTypes[index]) == false)
+            return false; // different type
+        else
+            return true;
     }
+
+    public bool PassParameter(int index, ValueBlock value)
+    {
+        if (this.IsParameterPassable(index, value) == false)
+            return false;
+
+        this.Parameters[index] = value;
+        return true;
+    }
+
     /// <summary>
     /// Check If All parameters is filled?
     /// This is called just one time when modify sourrcede, so this expensive performance is accepted
@@ -164,35 +110,29 @@ public abstract class Block
     {
         get
         {
-            if (this.ParamaterCount == 0)
+            if (this.Parameters.Length == 0)
             {
                 return true;
             }
             else
             {
-                PropertyInfo[] parametersPropertyInfos = ParametersPropertyInfos;
-                if (parametersPropertyInfos == null)
+                for (int i = 0; i < this.Parameters.Length; i++)
                 {
-                    return true;
+                    if (this.Parameters[i] == null)
+                        return false;
                 }
 
-
-                else
-                {
-                    for (int i = 0; i < parametersPropertyInfos.Length; i++)
-                    {
-                        if (parametersPropertyInfos[i].GetValue(this) == null) // Please Test !!!!!!!!!!!!!!!!
-                            return false;
-                    }
-
-                    return true;
-                }
+                return true;
             }
         }
     }
 
 
     private bool IsParametersTypesCached = false;
+
+  
+
+
     private Type[] parametersTypes;
     /// <summary>
     /// Type of Parameters
@@ -204,21 +144,6 @@ public abstract class Block
         {
             if (this.IsParametersTypesCached == false)
             {
-                /*
-                Type t = this.GetType();
-                if (typeof(IContainingParameter).IsAssignableFrom(t))
-                {
-                    foreach (Type intType in t.GetInterfaces())
-                    {
-                        if (typeof(IContainingParameter).IsAssignableFrom(intType) && intType.IsGenericType)
-                        {
-                            this.parametersTypes = intType.GetGenericArguments(); // Caching
-                            break;
-                        }
-                    }
-                }
-                */
-
                 if (this is IContainingParameter)
                 {
                     foreach (Type interfaceType in this.GetType().GetInterfaces())
@@ -243,26 +168,17 @@ public abstract class Block
         }
     }
 
-    private int paramaterCountCache = -1;
     public int ParamaterCount
     {
         get
         {
-            if (this.paramaterCountCache == -1)
-                CachingParamaterCount();
-
-            return this.paramaterCountCache;
+            if (this.ParametersTypes == null)
+                return 0;
+            else
+                return ParametersTypes.Length;
         }
     }
 
-    private void CachingParamaterCount()
-    {
-        Type[] pTypes = ParametersTypes;
-        if (pTypes == null)
-            this.paramaterCountCache = 0;
-        else
-            this.paramaterCountCache = pTypes.Length;
-    }
     #endregion
 
 

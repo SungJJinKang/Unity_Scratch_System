@@ -1,5 +1,5 @@
-﻿using UnityEngine.UI;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 [System.Serializable]
 public sealed class ReporterBlockInputOfBlockUnit : InputDefinitionOfBlockEditorUnit
 {

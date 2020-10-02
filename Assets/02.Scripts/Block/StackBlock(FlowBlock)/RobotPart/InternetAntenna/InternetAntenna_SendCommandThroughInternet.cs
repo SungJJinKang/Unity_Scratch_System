@@ -1,4 +1,4 @@
-﻿[BlockTitle("SendCommandThroughInternet")]
+﻿
 public sealed class InternetAntenna_SendCommandThroughInternet : StackBlock, IContainingParameter<ReporterBlock, ReporterBlock>, IInternetAntennaBlockType
 {
     /// <summary>

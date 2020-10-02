@@ -259,6 +259,8 @@ public abstract class BlockEditorUnit : BlockEditorElement
         {//If Block class have ElementContentAttribute
 
             object[] blockDefinitions = blockDefinition._BlockDefinitions;
+
+           
             for (int i = 0; i < blockDefinitions.Length; i++)
             {
                 if (blockDefinitions[i] != null)
@@ -326,6 +328,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
     }
 
+    private int parameterIndex = 0;
     /// <summary>
     /// Add Element Of Block Unit In Block Unit UI
     /// </summary>
@@ -349,7 +352,19 @@ public abstract class BlockEditorUnit : BlockEditorElement
         definitionOfBlockEditorUnit.transform.SetParent(this.MainBlockTransform);
         definitionOfBlockEditorUnit.transform.localScale = Vector3.one;
         definitionOfBlockEditorUnit.transform.SetSiblingIndex(this.MainBlockTransform.childCount); // place elementOfBlockUnit To the last space of blockeditorunit
+        
         definitionOfBlockEditorUnit.OwnerBlockEditorUnit = this;
+
+        //
+       
+        if(definitionOfBlockEditorUnit is ParameterDefinitionOfBlockEditorUnit)
+        {
+            ParameterDefinitionOfBlockEditorUnit parameterDefinitionOfBlockEditorUnit = definitionOfBlockEditorUnit as ParameterDefinitionOfBlockEditorUnit;
+            parameterDefinitionOfBlockEditorUnit.ParameterIndex = this.parameterIndex;
+            this.parameterIndex++;
+        }
+        //
+
         definitionOfBlockEditorUnit.SetDefinitionContentOfBlock(definitionContentOfBlock);
         definitionOfBlockEditorUnit.OnSpawned();
         return definitionOfBlockEditorUnit;
@@ -366,6 +381,8 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
             this.DefinitionOfBlockEditorUnitList.Clear();
         }
+
+        this.parameterIndex = 0;
     }
 
 
@@ -379,11 +396,20 @@ public abstract class BlockEditorUnit : BlockEditorElement
 [CustomEditor(typeof(BlockEditorUnit), true)]
 public class BlockEditorUnitEditor : Editor
 {
+    BlockEditorUnit targetBlockEditorUnit;
+    private void Awake()
+    {
+        targetBlockEditorUnit = target as BlockEditorUnit;
+    }
+
     public override void OnInspectorGUI()
     {
         base.DrawDefaultInspector();
 
-
+        if(GUILayout.Button("Debug Target Block Parameter"))
+        {
+            targetBlockEditorUnit.TargetBlock.DebugParameters();
+        }
     }
 }
 

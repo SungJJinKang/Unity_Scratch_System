@@ -1,22 +1,27 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 [System.Serializable]
 public sealed class ReporterBlockInputOfBlockUnit : InputDefinitionOfBlockEditorUnit
 {
 
-    private ReporterBlock DefaultInputtedReporterBlock
+    [SerializeField]
+    private InputField DefaultReporterBlockInputField;
+
+    public void OnEndEditDefaultReporterBlockInputField()
+    {
+        base.PassParameterToTargetBlock();
+    }
+
+    sealed protected override Type TargetParameterBlockType => typeof(ReporterBlock);
+
+    sealed protected override ValueBlock DefaultValue 
     {
         get
         {
             return new LiteralReporterBlock(DefaultReporterBlockInputField.text);
         }
     }
-
-
-    [SerializeField]
-    private InputField DefaultReporterBlockInputField;
-
-
 
 
 

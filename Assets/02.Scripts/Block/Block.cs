@@ -57,49 +57,112 @@ public abstract class Block
 
     #region Parameter
 
-    private bool isParametersInitialized = false;
-    private ValueBlock[] parameters;
-    private ValueBlock[] Parameters
+    private PropertyInfo[] parametersPropertyInfosCache;
+    private PropertyInfo[] ParametersPropertyInfos
     {
         get
         {
-            if (isParametersInitialized == false)
-                this.InitParameters();
+            if (this.IsCachedParametersPropertyInfos == false)
+                CachingParametersPropertyInfos();
 
-            return this.parameters;
+            return this.parametersPropertyInfosCache;
         }
     }
-    private void InitParameters()
+
+    private bool IsCachedParametersPropertyInfos = false;
+    private void CachingParametersPropertyInfos()
     {
-        if (this.ParametersTypes == null)
-            return;
+        int paramaterCount = this.ParamaterCount;
 
-        this.parameters = new ValueBlock[ParametersTypes.Length];
-        this.isParametersInitialized = true;
-    }
-
-    public bool IsParameterPassable(int index, ValueBlock value)
-    {
-        if (value == null)
-            return false;
-
-        if (this.Parameters.Length <= index || this.ParametersTypes.Length <= index)
-            return false;
-
-        Type valueType = value.GetType();
-        if (this.ParametersTypes[index] != valueType || valueType.IsSubclassOf(this.ParametersTypes[index]) == false)
-            return false; // different type
+        if (paramaterCount == 0)
+        {
+            this.parametersPropertyInfosCache = null;
+        }
         else
-            return true;
+        {
+            this.parametersPropertyInfosCache = new PropertyInfo[paramaterCount];
+
+            for (int i = 1; i <= paramaterCount; i++)
+            {
+                this.parametersPropertyInfosCache[i - 1] = this.GetType().GetProperty("Input" + i.ToString()); // Set Cache Variable
+            }
+        }
+
+        this.IsCachedParametersPropertyInfos = true;
     }
 
-    public bool PassParameter(int index, ValueBlock value)
-    {
-        if (this.IsParameterPassable(index, value) == false)
-            return false;
 
-        this.Parameters[index] = value;
-        return true;
+    
+
+    public void DebugParameters()
+    {
+        Utility.stringBuilderCache.Clear();
+        
+        for (int i = 0; i < ParametersPropertyInfos.Length; i++)
+        {
+            this.TryGetParameterValue(i, out ValueBlock paremeterValue);
+
+            Utility.stringBuilderCache.Append(i.ToString() + " : " + paremeterValue?.GetType().Name + "   ");
+        }
+
+        Debug.Log(GetType().Name + "s Parameter List : " + Utility.stringBuilderCache.ToString());
+        Utility.stringBuilderCache.Clear();
+    }
+
+    /// <summary>
+    /// Gets the parameter property info.
+    /// </summary>
+    /// <returns>The parameter property info.</returns>
+    /// <param name="parameterIndex">Index. 0 ~ 3</param>
+    private PropertyInfo GetParameterPropertyInfo(int parameterIndex)
+    {
+        PropertyInfo[] parameterPropertyInfos = ParametersPropertyInfos;
+
+        if (parameterIndex  < 0 || parameterIndex  >= parameterPropertyInfos.Length)
+        {
+            Debug.LogError("parameterIndex is not proper");
+            return null;
+        }
+
+
+        return parameterPropertyInfos[parameterIndex];
+    }
+
+
+
+    /// <summary>
+    /// Passes the parameter to block
+    /// </summary>
+    /// <param name="inputIndex">Input index. 0 ~ 3</param>
+    /// <param name="valueBlock">Value block. Passed Parameter Value Block</param>
+    public void PassParameter(int inputIndex, ValueBlock valueBlock)
+    {
+        PropertyInfo parameterPropertyInfo = GetParameterPropertyInfo(inputIndex);
+        if (parameterPropertyInfo != null)
+        {
+            parameterPropertyInfo.SetValue(this, valueBlock);
+        }
+    }
+
+    /// <summary>
+    /// Tries the get parameter value.
+    /// </summary>
+    /// <returns><c>true</c>, if get parameter value was tryed, <c>false</c> otherwise.</returns>
+    /// <param name="inputIndex">Input index. 1 ~ 4</param>
+    /// <param name="parameterValue">Parameter value.</param>
+    public bool TryGetParameterValue(int inputIndex, out ValueBlock parameterValue)
+    {
+        PropertyInfo parameterPropertyInfo = GetParameterPropertyInfo(inputIndex);
+        if (parameterPropertyInfo != null)
+        {
+            parameterValue = parameterPropertyInfo.GetValue(this) as ValueBlock;
+            return true;
+        }
+        else
+        {
+            parameterValue = null;
+            return false;
+        }
     }
 
     /// <summary>
@@ -110,29 +173,35 @@ public abstract class Block
     {
         get
         {
-            if (this.Parameters.Length == 0)
+            if (this.ParamaterCount == 0)
             {
                 return true;
             }
             else
             {
-                for (int i = 0; i < this.Parameters.Length; i++)
+                PropertyInfo[] parametersPropertyInfos = ParametersPropertyInfos;
+                if (parametersPropertyInfos == null)
                 {
-                    if (this.Parameters[i] == null)
-                        return false;
+                    return true;
                 }
 
-                return true;
+
+                else
+                {
+                    for (int i = 0; i < parametersPropertyInfos.Length; i++)
+                    {
+                        if (parametersPropertyInfos[i].GetValue(this) == null) // Please Test !!!!!!!!!!!!!!!!
+                            return false;
+                    }
+
+                    return true;
+                }
             }
         }
     }
 
 
-    private bool IsParametersTypesCached = false;
-
-  
-
-
+    private bool isParametersTypesCached;
     private Type[] parametersTypes;
     /// <summary>
     /// Type of Parameters
@@ -142,7 +211,7 @@ public abstract class Block
     {
         get
         {
-            if (this.IsParametersTypesCached == false)
+            if (this.isParametersTypesCached == false)
             {
                 if (this is IContainingParameter)
                 {
@@ -158,7 +227,7 @@ public abstract class Block
 
 
 
-                this.IsParametersTypesCached = true;
+                this.isParametersTypesCached = true;
 
 
             }
@@ -172,13 +241,14 @@ public abstract class Block
     {
         get
         {
-            if (this.ParametersTypes == null)
+            if (ParametersTypes == null)
                 return 0;
             else
                 return ParametersTypes.Length;
         }
     }
 
+  
     #endregion
 
 

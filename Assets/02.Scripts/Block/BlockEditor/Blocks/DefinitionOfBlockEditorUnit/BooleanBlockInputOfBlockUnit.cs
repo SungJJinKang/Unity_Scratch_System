@@ -1,6 +1,11 @@
-﻿[System.Serializable]
+﻿using System;
+
+[System.Serializable]
 public sealed class BooleanBlockInputOfBlockUnit : InputDefinitionOfBlockEditorUnit
 {
+    sealed protected override Type TargetParameterBlockType => typeof(BooleanBlock);
+
+    protected override ValueBlock DefaultValue => new LiteralTrueBooleanBlock();
 
 
     // Start is called before the first frame update

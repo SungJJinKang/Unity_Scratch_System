@@ -1,5 +1,5 @@
 ﻿
-[BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput, "and", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
+[BlockDefinitionAttribute(BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput, "and", BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput)]
 public sealed class AndBlock : BinaryComparisonTwoBooleanBlock
 {
     sealed public override bool GetBooleanValue(RobotBase operatingRobotBase)

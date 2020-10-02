@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [System.Serializable]
-public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditorUnit, IAttachableEditorElement
+public abstract class InputDefinitionOfBlockEditorUnit : ParameterDefinitionOfBlockEditorUnit, IAttachableEditorElement
 {
     public const string InputDefinitionOfBlockEditorUnitTag = "InputDefinitionOfBlockEditorUnitTag";
 
@@ -32,15 +32,27 @@ public abstract class InputDefinitionOfBlockEditorUnit : DefinitionOfBlockEditor
                 this.inputtedValueBlockEditorUnit._RectTransform.SetParent(this.AttachPointRectTransform);
                 this.inputtedValueBlockEditorUnit._RectTransform.SetSiblingIndex(this.inputtedValueBlockEditorUnit._RectTransform.childCount - 1);
 
-
+               
 
                 this.inputtedValueBlockEditorUnit.ParentInputDefinitionOfBlockEditorUnit = this;
             }
+
+            base.PassParameterToTargetBlock();
 
             if (DefaultBlockInputObj != null)
                 DefaultBlockInputObj.SetActive(this.inputtedValueBlockEditorUnit == null);
 
             base.RecursiveRefreshRectTransform();
+        }
+    }
+
+    protected abstract ValueBlock DefaultValue { get; }
+    sealed protected override ValueBlock PassedParameterValueBlock
+    {
+        get
+        {
+            return this.InputtedValueBlockEditorUnit != null ? this.InputtedValueBlockEditorUnit.TargetBlock as ValueBlock : this.DefaultValue;
+
         }
     }
 

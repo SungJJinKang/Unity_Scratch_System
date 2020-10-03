@@ -1,5 +1,5 @@
 ﻿[NotAutomaticallyMadeOnBlockShop]
-public sealed class LiteralBooleanBlock : BooleanBlock
+public sealed class LiteralBooleanBlock : BooleanBlock, ILiteralBooleanBlock
 {
     public LiteralBooleanBlock(bool value)
     {

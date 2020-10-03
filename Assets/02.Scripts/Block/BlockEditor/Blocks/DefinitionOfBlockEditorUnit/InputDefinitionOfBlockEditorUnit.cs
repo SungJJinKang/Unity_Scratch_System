@@ -46,12 +46,24 @@ public abstract class InputDefinitionOfBlockEditorUnit : ParameterDefinitionOfBl
         }
     }
 
-    protected abstract ValueBlock DefaultValue { get; }
+    protected abstract ILiteralBlock DefaultValue { set; get; }
     sealed protected override ValueBlock PassedParameterValueBlock
     {
+        set
+        {
+            if(value is ILiteralBlock)
+            {
+                DefaultValue = value as ILiteralBlock;
+                this.InputtedValueBlockEditorUnit = null;
+            }
+            else
+            {
+                this.InputtedValueBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(value) as ValueBlockEditorUnit;
+            }
+        }
         get
         {
-            return this.InputtedValueBlockEditorUnit != null ? this.InputtedValueBlockEditorUnit.TargetBlock as ValueBlock : this.DefaultValue;
+            return this.InputtedValueBlockEditorUnit != null ? this.InputtedValueBlockEditorUnit.TargetBlock as ValueBlock : this.DefaultValue as ValueBlock;
 
         }
     }

@@ -4,17 +4,9 @@
 public abstract class FlowBlock : Block
 {
 
-    /// <summary>
-    /// Should greater than 0
-    /// </summary>
-    [SerializeField]
-    private float durationTime;
-    public float DurationTime
+    public virtual float GetDurationTime(RobotBase operatingRobotBase)
     {
-        get
-        {
-            return this.durationTime;
-        }
+        return 1;
     }
 
 
@@ -86,7 +78,7 @@ public abstract class FlowBlock : Block
     /// </returns>
     public bool StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock)
     {
-        float durationTime = DurationTime;
+        float durationTime = this.GetDurationTime(operatingRobotBase);
         if (operatingRobotBase.WaitingTime >= durationTime - Mathf.Epsilon)
         {
             //RobotBase wait more than DurationTime
@@ -99,6 +91,8 @@ public abstract class FlowBlock : Block
             NextBlock = null;
             return false;
         }
+
+        Debug.Log("Start Flow Block : " + GetType().Name);
 
         this.Operation(operatingRobotBase); // Operate Block Work
         NextBlock = this.EndFlowBlock(operatingRobotBase);

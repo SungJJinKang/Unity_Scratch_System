@@ -10,7 +10,7 @@ public sealed class JetEngine_SetDestination : StackBlock, IContainingParameter<
         JetEngine jetEngine = operatingRobotBase.GetRobotPart<JetEngine>();
         if (jetEngine != null)
         {
-            jetEngine.Destination = new Vector2(Input1.GetReporterNumberValue(operatingRobotBase), Input1.GetReporterNumberValue(operatingRobotBase));
+            jetEngine.Destination = new Vector2(Input1.GetReporterNumberValue(operatingRobotBase), Input2.GetReporterNumberValue(operatingRobotBase));
         }
 
     }

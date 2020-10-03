@@ -15,8 +15,13 @@ public sealed class ReporterBlockInputOfBlockUnit : InputDefinitionOfBlockEditor
 
     sealed protected override Type TargetParameterBlockType => typeof(ReporterBlock);
 
-    sealed protected override ValueBlock DefaultValue 
+    sealed protected override ILiteralBlock DefaultValue 
     {
+        set
+        {
+            ILiteralReporterBlock literalReporterBlock = value as ILiteralReporterBlock;
+            DefaultReporterBlockInputField.text = literalReporterBlock.GetStringValue();
+        }
         get
         {
             return new LiteralReporterBlock(DefaultReporterBlockInputField.text);

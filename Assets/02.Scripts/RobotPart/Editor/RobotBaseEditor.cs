@@ -229,7 +229,6 @@ public class RobotBaseEditor : Editor
 
             EditorGUILayout.LabelField("Robot UniqueId : ", robotUniqueIdSP.stringValue, SubTitleGUIStyle);
 
-
             EditorGUILayout.Space(10);
 
             ShowAttachedRobotPartListInEditor();
@@ -243,9 +242,17 @@ public class RobotBaseEditor : Editor
             ShowCustomBlockParameterVariables();
 
             EditorGUILayout.Space(10);
-
+         
             ShowWaitBlockEditor();
 
+            EditorGUILayout.Space(10);
+
+            ShowInstalledRobotSourceCode();
+
+            if (GUILayout.Button("Install First Robot Source Code"))
+            {
+                robotBase.InstallRobotSourceCode(RobotSystem.instance.RobotSourceCodeList[0]);
+            }
 
             robotBaseSO.ApplyModifiedProperties();
         }
@@ -272,21 +279,19 @@ public class RobotBaseEditor : Editor
         EditorGUILayout.LabelField("BlockCallStack", SubSubTitleGUIStyle);
         List<FlowBlock> robotGlobalVariableKeyValuePair = robotBase.BlockCallStackList;
 
-        EditorGUI.indentLevel += 5;
-        if (robotGlobalVariableKeyValuePair != null)
+        EditorGUI.indentLevel += 2;
+        if (robotGlobalVariableKeyValuePair != null && robotGlobalVariableKeyValuePair.Count > 0)
         {
-            GUIStyle gUIStyle = new GUIStyle();
-            gUIStyle.alignment = TextAnchor.MiddleCenter;
 
-            EditorGUILayout.LabelField("Top", gUIStyle);
-            for (int i = robotGlobalVariableKeyValuePair.Count - 1; i >= 0; i++)
+            EditorGUILayout.LabelField("  Top", SubSubTitleGUIStyle);
+            for (int i = robotGlobalVariableKeyValuePair.Count - 1; i >= 0; i--)
             {
-                EditorGUILayout.LabelField(robotGlobalVariableKeyValuePair[i].GetType().Name, gUIStyle);
+                EditorGUILayout.LabelField(robotGlobalVariableKeyValuePair[i].GetType().Name, SubSubTitleGUIStyle);
             }
 
-            EditorGUILayout.LabelField("Bottom", gUIStyle);
+            EditorGUILayout.LabelField("  Bottom", SubSubTitleGUIStyle);
         }
-        EditorGUI.indentLevel -= 5;
+        EditorGUI.indentLevel -=2;
 
         EditorGUI.indentLevel -= 2;
     }
@@ -295,6 +300,7 @@ public class RobotBaseEditor : Editor
     {
         EditorGUILayout.LabelField("CustomBlock Parameter Variables", SubTitleGUIStyle);
 
+        GUI.enabled = false;
         List<KeyValuePair<DefinitionCustomBlock, Dictionary<string, string>>> customBlockParameterVariablesKeyValuePair = robotBase.CustomBlockParameterVariablesKeyValuePair;
 
         if (customBlockParameterVariablesKeyValuePair != null)
@@ -315,12 +321,14 @@ public class RobotBaseEditor : Editor
                 EditorGUI.indentLevel -= 2;
             }
         }
+        GUI.enabled = true;
     }
 
     private void ShowRobotGlobalVariableEditor()
     {
         EditorGUILayout.LabelField("Robot GlobalVariable List", SubTitleGUIStyle);
 
+        GUI.enabled = false;
         List<KeyValuePair<string, string>> robotGlobalVariableKeyValuePair = robotBase.RobotGlobalVariableKeyValuePair;
 
         if (robotGlobalVariableKeyValuePair != null)
@@ -332,21 +340,34 @@ public class RobotBaseEditor : Editor
             }
             EditorGUI.indentLevel -= 2;
         }
+        GUI.enabled = true;
     }
 
     private void ShowAttachedRobotPartListInEditor()
     {
         EditorGUILayout.LabelField("Attached RobotPart List", SubTitleGUIStyle);
 
+        GUI.enabled = false;
         EditorGUI.indentLevel += 2;
         for (int i = 0; i < attacehdRobotPartsSP.arraySize; i++)
         {
             SerializedProperty sp = attacehdRobotPartsSP.GetArrayElementAtIndex(i);
-            if (sp != null && sp.objectReferenceValue == null)
+            if (sp != null && sp.objectReferenceValue != null)
             {
                 EditorGUILayout.PropertyField(sp, new GUIContent(sp.objectReferenceValue.GetType().Name));
             }
         }
+        EditorGUI.indentLevel -= 2;
+        GUI.enabled = true;
+    }
+
+    private void ShowInstalledRobotSourceCode()
+    {
+        EditorGUILayout.LabelField("Installed Robot Source Code", SubTitleGUIStyle);
+        EditorGUI.indentLevel += 2;
+        GUI.enabled = false;
+        EditorGUILayout.TextField(robotBase?.InstalledRobotSourceCode?.SourceCodeName);
+        GUI.enabled = true;
         EditorGUI.indentLevel -= 2;
     }
 }

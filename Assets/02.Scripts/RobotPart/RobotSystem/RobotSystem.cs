@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// Robot system.
@@ -181,7 +182,7 @@ public class RobotSystem : MonoBehaviour
         return true;
     }
 
-    public RobotSourceCode GetRobotSourceCodeTemplate(string sourceCodeName)
+    public RobotSourceCode GetRobotSourceCode(string sourceCodeName)
     {
         if (this.StoredRobotSourceCode.ContainsKey(sourceCodeName) == false)
             return null;
@@ -189,6 +190,9 @@ public class RobotSystem : MonoBehaviour
 
         return this.StoredRobotSourceCode[sourceCodeName];
     }
+
+    public RobotSourceCode[] RobotSourceCodeList => StoredRobotSourceCode.Values.ToArray();
     #endregion
+
 
 }

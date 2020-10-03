@@ -22,6 +22,10 @@ public sealed class RobotBase : RobotPart
     protected override void Start()
     {
         base.Start();
+
+        //
+        //TEST
+        this.AttachRobotPart<JetEngine>();
     }
 
     [SerializeField]
@@ -48,15 +52,13 @@ public sealed class RobotBase : RobotPart
     [HideInInspector]
     [SerializeField]
     private List<RobotPart> AttacehdRobotParts;
-    public bool AttachRobotPart(RobotPart robotPart)
+    public bool AttachRobotPart<T>() where T : RobotPart
     {
-        if (robotPart is RobotBase || this.AttacehdRobotParts.Contains(robotPart) == true)
-            return false;
+        RobotPart newRobotPart = gameObject.AddComponent<T>();
+        this.AttacehdRobotParts.Add(newRobotPart);
+        newRobotPart.MotherRobotBase = this;
 
-        this.AttacehdRobotParts.Add(robotPart);
-        robotPart.MotherRobotBase = this;
-
-        RobotPartCache.Add(robotPart.GetType(), robotPart);
+        RobotPartCache.Add(typeof(T), newRobotPart);
 
         return true;
     }
@@ -300,9 +302,9 @@ public sealed class RobotBase : RobotPart
 
     public void StartEventBlock(string eventName)
     {
-        if (this.RobotSourceCode.IsEventBlockExist(eventName))
+        if (this.installedRobotSourceCode.IsEventBlockExist(eventName))
         {
-            EventBlock eventBlock = this.RobotSourceCode.GetEventBlock(eventName); // Set EventBlock To WaitingBlock
+            EventBlock eventBlock = this.installedRobotSourceCode.GetEventBlock(eventName); // Set EventBlock To WaitingBlock
             if (eventBlock != null)
             {
                 this.PushToBlockCallStack(this.waitingBlock);
@@ -349,12 +351,22 @@ public sealed class RobotBase : RobotPart
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// </summary>
     [SerializeField]
-    private Stack<FlowBlock> BlockCallStack;
+    private Stack<FlowBlock> blockCallStack;
+    private Stack<FlowBlock> BlockCallStack
+    {
+        get
+        {
+            if (this.blockCallStack == null)
+                this.blockCallStack = new Stack<FlowBlock>();
+
+            return this.blockCallStack;
+        }
+    }
 
 #if UNITY_EDITOR
 
     /*
-     *if you push 1, 2, 3, 4, 5 then ToList will give you 5, 4, 3, 2, 1. 
+     *  if you push 1, 2, 3, 4, 5 then ToList will give you 5, 4, 3, 2, 1. 
      */
     public List<FlowBlock> BlockCallStackList
     {
@@ -370,11 +382,6 @@ public sealed class RobotBase : RobotPart
 
     public void PushToBlockCallStack(FlowBlock returnedFlowBlock)
     {
-        if (this.BlockCallStack == null)
-        {
-            this.BlockCallStack = new Stack<FlowBlock>();
-        }
-
         if (returnedFlowBlock == null)
             return;
 
@@ -385,11 +392,6 @@ public sealed class RobotBase : RobotPart
 
     public FlowBlock PopBlockCallStack()
     {
-        if (this.BlockCallStack == null)
-        {
-            this.BlockCallStack = new Stack<FlowBlock>();
-        }
-
         if (this.BlockCallStack.Count > 0)
         {
             return this.BlockCallStack.Pop();
@@ -423,7 +425,7 @@ public sealed class RobotBase : RobotPart
         if (this.waitingBlock == null)
         {
             //Still WaitingBlock is null, Set Top Of LoopedBlock To WaitingBlock
-            this.SetWaitingBlock(this.RobotSourceCode.LoopedBlock);
+            this.SetWaitingBlock(this.installedRobotSourceCode.LoopedBlock);
         }
 
         if (this.waitingBlock == null)
@@ -442,7 +444,7 @@ public sealed class RobotBase : RobotPart
     private bool IsInitBlockCalled = false;
     public void SetInitBlockToWaitingBlock()
     {
-        if (this.RobotSourceCode.InitBlock == null)
+        if (this.installedRobotSourceCode.InitBlock == null)
         {
             Debug.LogError("this.RobotSourceCode.InitBlock is null");
             return;
@@ -451,7 +453,7 @@ public sealed class RobotBase : RobotPart
         this.IsInitBlockCalled = true;
 
         this.PushToBlockCallStack(this.waitingBlock);
-        this.SetWaitingBlock(this.RobotSourceCode.InitBlock);
+        this.SetWaitingBlock(this.installedRobotSourceCode.InitBlock);
     }
 
 
@@ -467,27 +469,42 @@ public sealed class RobotBase : RobotPart
     /// 
     /// If RobotSourceCodeTemplate is changed or RobotSourceCode is set newly, WaitingBlock is cleaned, ReStart SourceCode Newly From InitBlock To LoopedBlcok
     /// </summary>
-    private RobotSourceCode RobotSourceCode;
-    public string RobotSourceCodeName => this.RobotSourceCode.SourceCodeName;
+    private RobotSourceCode installedRobotSourceCode;
+#if UNITY_EDITOR
+    public RobotSourceCode InstalledRobotSourceCode => this.installedRobotSourceCode;
+#endif
+    public string RobotSourceCodeName => this.installedRobotSourceCode.SourceCodeName;
 
 
-    public bool SetRobotSourceCodeWithName(string robotSourceCodeName)
+    public bool InstallRobotSourceCodeWithName(string robotSourceCodeName)
     {
-        RobotSourceCode robotSourceCode = RobotSystem.instance.GetRobotSourceCodeTemplate(robotSourceCodeName);
+        RobotSourceCode robotSourceCode = RobotSystem.instance.GetRobotSourceCode(robotSourceCodeName);
         if (robotSourceCode == null)
         {
             Debug.LogError("Cant Find Robot SourceCode : " + robotSourceCodeName);
             return false;
         }
 
-        if (this.RobotSourceCode != null)
+        return this.InstallRobotSourceCode(robotSourceCode);
+    }
+
+
+    public bool InstallRobotSourceCode(RobotSourceCode robotSourceCode)
+    {
+        if (robotSourceCode == null)
         {
-            this.RobotSourceCode.RemoveFromInstalledRobotList(this);
-            this.RobotSourceCode = null; // Clear Reference Of Installed Robot Source Code
+            Debug.LogError("robotSourceCode is null");
+            return false;
         }
 
-        this.RobotSourceCode = robotSourceCode; //shallow Copy
-        this.RobotSourceCode.AddToInstalledRobotList(this);
+        if (this.installedRobotSourceCode != null)
+        {
+            this.installedRobotSourceCode.RemoveFromInstalledRobotList(this);
+            this.installedRobotSourceCode = null; // Clear Reference Of Installed Robot Source Code
+        }
+
+        this.installedRobotSourceCode = robotSourceCode; //shallow Copy
+        this.installedRobotSourceCode.AddToInstalledRobotList(this);
 
         OnSetRobotSourceCode(robotSourceCode);
 
@@ -508,9 +525,9 @@ public sealed class RobotBase : RobotPart
             }
         }
 
-        this.BlockCallStack.Push(this.RobotSourceCode.LoopedBlock); // After Init Block, Call LoopedBlock
+        this.BlockCallStack.Push(this.installedRobotSourceCode.LoopedBlock); // After Init Block, Call LoopedBlock
         this.SetInitBlockToWaitingBlock();
     }
-    #endregion
+#endregion
 
 }

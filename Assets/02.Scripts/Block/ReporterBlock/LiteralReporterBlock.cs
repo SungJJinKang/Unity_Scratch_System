@@ -1,7 +1,7 @@
 ﻿using System;
 
 [NotAutomaticallyMadeOnBlockShop]
-public sealed class LiteralReporterBlock : ReporterBlock
+public sealed class LiteralReporterBlock : ReporterBlock, ILiteralReporterBlock
 {
     public LiteralReporterBlock(string value = "")
     {
@@ -30,4 +30,8 @@ public sealed class LiteralReporterBlock : ReporterBlock
         return block;
     }
 
+    public string GetStringValue()
+    {
+        return this.GetReporterStringValue();
+    }
 }

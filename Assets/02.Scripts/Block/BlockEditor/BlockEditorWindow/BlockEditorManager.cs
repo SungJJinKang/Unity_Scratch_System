@@ -101,7 +101,7 @@ public class BlockEditorManager : MonoBehaviour
     /// <param name="block"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    private BlockEditorUnit CreateBlockEditorUnit(Block block, Transform parent = null)
+    public BlockEditorUnit CreateBlockEditorUnit(Block block, Transform parent = null)
     {
         if (block == null)
         {
@@ -121,27 +121,27 @@ public class BlockEditorManager : MonoBehaviour
         BlockEditorUnit blockEditorUnit = null;
         if (blockType.IsSubclassOf(typeof(BooleanBlock)))
         {
-            blockEditorUnit = PoolManager.SpawnObject(booleanBlockEditorUnit?.gameObject).GetComponent<BlockEditorUnit>();
+            blockEditorUnit = PoolManager.SpawnObject(booleanBlockEditorUnit?.gameObject)?.GetComponent<BlockEditorUnit>();
         }
         else if (blockType.IsSubclassOf(typeof(CapBlock)))
         {
-            blockEditorUnit = PoolManager.SpawnObject(capBlockEditorUnit?.gameObject).GetComponent<BlockEditorUnit>();
+            blockEditorUnit = PoolManager.SpawnObject(capBlockEditorUnit?.gameObject)?.GetComponent<BlockEditorUnit>();
         }
         else if (blockType.IsSubclassOf(typeof(CBlock)))
         {
-            blockEditorUnit = PoolManager.SpawnObject(cBlockEditorUnit?.gameObject).GetComponent<BlockEditorUnit>();
+            blockEditorUnit = PoolManager.SpawnObject(cBlockEditorUnit?.gameObject)?.GetComponent<BlockEditorUnit>();
         }
         else if (blockType.IsSubclassOf(typeof(HatBlock)))
         {
-            blockEditorUnit = PoolManager.SpawnObject(hatBlockEditorUnit?.gameObject).GetComponent<BlockEditorUnit>();
+            blockEditorUnit = PoolManager.SpawnObject(hatBlockEditorUnit?.gameObject)?.GetComponent<BlockEditorUnit>();
         }
         else if (blockType.IsSubclassOf(typeof(ReporterBlock)))
         {
-            blockEditorUnit = PoolManager.SpawnObject(reporterBlockEditorUnit?.gameObject).GetComponent<BlockEditorUnit>();
+            blockEditorUnit = PoolManager.SpawnObject(reporterBlockEditorUnit?.gameObject)?.GetComponent<BlockEditorUnit>();
         }
         else if (blockType.IsSubclassOf(typeof(StackBlock)))
         {
-            blockEditorUnit = PoolManager.SpawnObject(stackBlockEditorUnit?.gameObject).GetComponent<BlockEditorUnit>();
+            blockEditorUnit = PoolManager.SpawnObject(stackBlockEditorUnit?.gameObject)?.GetComponent<BlockEditorUnit>();
         }
 
         if (blockEditorUnit == null)
@@ -234,19 +234,19 @@ public class BlockEditorManager : MonoBehaviour
     {
         if (definitionContentOfBlock is BooleanBlockInputDefinitionContentOfBlock)
         {
-            return PoolManager.SpawnObject(booleanBlockInputInBlockElement?.gameObject).GetComponent<DefinitionOfBlockEditorUnit>();
+            return PoolManager.SpawnObject(booleanBlockInputInBlockElement?.gameObject)?.GetComponent<DefinitionOfBlockEditorUnit>();
         }
         else if (definitionContentOfBlock is GlobalVariableSelectorDefinitionContentOfBlock)
         {
-            return PoolManager.SpawnObject(globalVariableSelectorDropDownInBlockElement?.gameObject).GetComponent<DefinitionOfBlockEditorUnit>();
+            return PoolManager.SpawnObject(globalVariableSelectorDropDownInBlockElement?.gameObject)?.GetComponent<DefinitionOfBlockEditorUnit>();
         }
         else if (definitionContentOfBlock is ReporterBlockInputDefinitionContentOfBlock)
         {
-            return PoolManager.SpawnObject(reporterBlockInputInBlockElement?.gameObject).GetComponent<DefinitionOfBlockEditorUnit>();
+            return PoolManager.SpawnObject(reporterBlockInputInBlockElement?.gameObject)?.GetComponent<DefinitionOfBlockEditorUnit>();
         }
         else if (definitionContentOfBlock is TextDefinitionContentOfBlock)
         {
-            return PoolManager.SpawnObject(textInBlockElement?.gameObject).GetComponent<DefinitionOfBlockEditorUnit>();
+            return PoolManager.SpawnObject(textInBlockElement?.gameObject)?.GetComponent<DefinitionOfBlockEditorUnit>();
         }
         else
         {

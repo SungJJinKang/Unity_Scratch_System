@@ -2,7 +2,7 @@
 
 public sealed class JetEngine : RobotPart
 {
-    private float maxEnginePower;
+    private float maxEnginePower = 5;
 
     private float enginePower;
     public float EnginePower

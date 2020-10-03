@@ -308,10 +308,6 @@ public abstract class BlockEditorUnit : BlockEditorElement
                         {
                             this.AddDefinitionOfBlockEditorUnit(new BooleanBlockInputDefinitionContentOfBlock());
                         }
-                        else if (parameterTypes[i] == typeof(VariableBlock) || parameterTypes[i].IsSubclassOf(typeof(VariableBlock)))
-                        {
-                            this.AddDefinitionOfBlockEditorUnit(new GlobalVariableSelectorDefinitionContentOfBlock());
-                        }
                         else if (parameterTypes[i] == typeof(ReporterBlock) || parameterTypes[i].IsSubclassOf(typeof(ReporterBlock)))
                         {
                             this.AddDefinitionOfBlockEditorUnit(new ReporterBlockInputDefinitionContentOfBlock());

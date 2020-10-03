@@ -1,11 +1,11 @@
-﻿
-public sealed class Memory_SetValue : StackBlock, IContainingParameter<VariableBlock, ReporterBlock>, IVariableBlockType
+﻿[BlockDefinitionAttribute("set", BlockDefinitionAttribute.BlockDefinitionType.GlobalVariableSelector, "to", BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput)]
+public sealed class Memory_SetValue : StackBlock, IContainingParameter<ReporterBlock, ReporterBlock>, IVariableBlockType
 {
     /// <summary>
     /// Variable Key
     /// </summary>
     /// <value>The input1.</value>
-    public VariableBlock Input1 { get; set; }
+    public ReporterBlock Input1 { get; set; }
 
     /// <summary>
     /// Data set
@@ -17,7 +17,7 @@ public sealed class Memory_SetValue : StackBlock, IContainingParameter<VariableB
     {
         if (operatingRobotBase != null)
         {
-            operatingRobotBase.SetRobotGlobalVariable(Input1.VariableName, Input2.GetReporterStringValue(operatingRobotBase));
+            operatingRobotBase.SetRobotGlobalVariable(Input1.GetReporterStringValue(operatingRobotBase), Input2.GetReporterStringValue(operatingRobotBase));
         }
     }
 

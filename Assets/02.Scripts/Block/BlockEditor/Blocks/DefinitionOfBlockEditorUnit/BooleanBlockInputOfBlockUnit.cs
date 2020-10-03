@@ -5,7 +5,17 @@ public sealed class BooleanBlockInputOfBlockUnit : InputDefinitionOfBlockEditorU
 {
     sealed protected override Type TargetParameterBlockType => typeof(BooleanBlock);
 
-    protected override ValueBlock DefaultValue => new LiteralTrueBooleanBlock();
+   
+
+    protected override ILiteralBlock DefaultValue
+    {
+        get => new LiteralBooleanBlock(true);
+        set
+        {
+            //do nothing,
+            //because what BooleanBlockInputOfBlockUnit is empty means boolcean value true
+        }
+    }
 
 
     // Start is called before the first frame update

@@ -1,6 +1,9 @@
-﻿[System.Serializable]
+﻿using UnityEditorInternal;
+[System.Serializable]
 public abstract class ReporterBlock : ValueBlock
 {
+    public static ValueBlock DefaultValueBlock => new LiteralReporterBlock("");
+
     /*
     public virtual string GetReporterStringValue()
     {
@@ -14,6 +17,10 @@ public abstract class ReporterBlock : ValueBlock
     public float GetReporterNumberValue(RobotBase operatingRobotBase)
     {
         string reporterStringValue = this.GetReporterStringValue(operatingRobotBase);
+
+        if (string.IsNullOrEmpty(reporterStringValue))
+            return 0;
+
         if (reporterStringValue.Equals(ReporterStringValueCache))
         {
             return ReporterNumberValueCache;

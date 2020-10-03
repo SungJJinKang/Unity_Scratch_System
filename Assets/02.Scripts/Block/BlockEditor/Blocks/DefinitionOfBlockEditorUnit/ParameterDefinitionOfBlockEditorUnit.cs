@@ -13,6 +13,13 @@ public abstract class ParameterDefinitionOfBlockEditorUnit : DefinitionOfBlockEd
         }
         set
         {
+            if(value == -1)
+            {
+                this.parameterIndex = value;
+                Debug.Log("Reset Parameter Indexx");
+                return;
+            }
+
             if(value < 0 || value > 3)
             {
                 Debug.LogError("Improper parameterIndex");
@@ -28,13 +35,18 @@ public abstract class ParameterDefinitionOfBlockEditorUnit : DefinitionOfBlockEd
             }
 
             this.parameterIndex = value;
+
+            //Spawn ValueBlock
+            if(base.OwnerBlockEditorUnit.TargetBlock.TryGetParameterValue(this.parameterIndex, out ValueBlock parameterValueBlock) == true)
+            {
+                this.PassedParameterValueBlock = parameterValueBlock;
+            }
         }
-       
     }
 
     protected abstract Type TargetParameterBlockType { get; }
 
-    protected abstract ValueBlock PassedParameterValueBlock { get; }
+    protected abstract ValueBlock PassedParameterValueBlock { set; get; }
 
    
 

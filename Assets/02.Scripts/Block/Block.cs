@@ -82,18 +82,61 @@ public abstract class Block
         {
             this.parametersPropertyInfosCache = new PropertyInfo[paramaterCount];
 
-            for (int i = 1; i <= paramaterCount; i++)
+            for (int i = 0; i < paramaterCount; i++)
             {
-                this.parametersPropertyInfosCache[i - 1] = this.GetType().GetProperty("Input" + i.ToString()); // Set Cache Variable
+                this.parametersPropertyInfosCache[i] = this.GetType().GetProperty("Input" + (i+1).ToString()); // Set Cache Variable
             }
         }
 
         this.IsCachedParametersPropertyInfos = true;
+        this.SetDefaultValueToParameter(); // delete this line on build,
+
+       
+    }
+
+    private void LoadParameterData(params ValueBlock[] valueBlock)
+    {
+        for (int i = 0; i < valueBlock.Length; i++)
+        {
+            this.PassParameter(i, valueBlock[i]);
+        }
     }
 
 
-    
+    private void SetDefaultValueToParameter()
+    {
+        int parameterCount = this.ParamaterCount;
 
+
+        for (int i = 0; i < parameterCount; i++)
+        {
+            if(this.TryGetParameterValue(i, out ValueBlock parameterValue) == true && parameterValue == null )
+            {
+                //parameter exists, but it have null value
+                //set default valeu block
+                Type parameterType = this.GetParameterType(i);
+                if(parameterType == null)
+                {
+                    Debug.LogError("Cant Find parameterType");
+                    return;
+                }
+                else
+                {
+                    if (parameterType == typeof( ReporterBlock) || parameterType.IsSubclassOf(typeof(ReporterBlock)))
+                    {
+                        this.PassParameter(i, ReporterBlock.DefaultValueBlock);
+                    }
+                    else if (parameterType == typeof(BooleanBlock) || parameterType.IsSubclassOf(typeof(BooleanBlock)))
+                    {
+                        this.PassParameter(i, BooleanBlock.DefaultValueBlock);
+                    }
+                }
+            }
+        }
+    }
+
+
+    #if UNITY_EDITOR
     public void DebugParameters()
     {
         Utility.stringBuilderCache.Clear();
@@ -108,6 +151,7 @@ public abstract class Block
         Debug.Log(GetType().Name + "s Parameter List : " + Utility.stringBuilderCache.ToString());
         Utility.stringBuilderCache.Clear();
     }
+#endif
 
     /// <summary>
     /// Gets the parameter property info.
@@ -147,7 +191,7 @@ public abstract class Block
     /// <summary>
     /// Tries the get parameter value.
     /// </summary>
-    /// <returns><c>true</c>, if get parameter value was tryed, <c>false</c> otherwise.</returns>
+    /// <returns><c>true</c>, when parameter exist and return parameter, <c>false</c> otherwise.</returns>
     /// <param name="inputIndex">Input index. 1 ~ 4</param>
     /// <param name="parameterValue">Parameter value.</param>
     public bool TryGetParameterValue(int inputIndex, out ValueBlock parameterValue)
@@ -236,6 +280,20 @@ public abstract class Block
             return this.parametersTypes;
         }
     }
+
+    private Type GetParameterType(int index)
+    {
+        Type[] parameterTypes = this.ParametersTypes;
+        if (index < 0 || index >= parameterTypes.Length)
+        {
+            return null;
+        }
+        else
+        {
+            return parameterTypes[index];
+        }
+    }
+
 
     public int ParamaterCount
     {

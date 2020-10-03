@@ -18,10 +18,33 @@ public sealed class GlobalVariableSelectorDropDownOfBlockUnit : ParameterDefinit
         this.GlobalVariableNameListInDropDown = globalVariableNameList;
     }
 
-    sealed protected override Type TargetParameterBlockType => typeof(VariableBlock);
+    sealed protected override Type TargetParameterBlockType => typeof(ReporterBlock);
 
-    protected override ValueBlock PassedParameterValueBlock => new VariableBlock(this.GlobalVariableNameListInDropDown[_Dropdown.value]); // 
+    //Pass name of Global Variable
+    protected override ValueBlock PassedParameterValueBlock
+    {
+        set
+        {
+            LiteralReporterBlock passedParameter = value as LiteralReporterBlock;
+            this.SetDropDownValue(passedParameter?.GetReporterStringValue());
+        }
+        get => new LiteralReporterBlock(this.GlobalVariableNameListInDropDown[_Dropdown.value]); //
 
+    } 
+
+    private void SetDropDownValue(string value)
+    {
+        _Dropdown.value = 0;
+
+        for (int i = 0; i < this._Dropdown.options.Count; i++)
+        {
+            if(this._Dropdown.options[i].text.Equals(value))
+            {
+                _Dropdown.value = i;
+            }
+        }
+
+    }
     public void OnDropDownValueChanged()
     {
         base.PassParameterToTargetBlock();

@@ -192,6 +192,7 @@ public class RobotSystem : MonoBehaviour
     }
 
     public RobotSourceCode[] RobotSourceCodeList => StoredRobotSourceCode.Values.ToArray();
+    public int RobotSourceCodeCount => StoredRobotSourceCode.Count;
     #endregion
 
 

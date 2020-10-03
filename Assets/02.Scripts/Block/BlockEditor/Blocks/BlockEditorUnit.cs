@@ -254,6 +254,8 @@ public abstract class BlockEditorUnit : BlockEditorElement
     {
         this.ClearDefinitionOfBlockEditorUnit();
 
+        Type[] parameterTypes = this.TargetBlock.ParametersTypes;
+
         BlockDefinitionAttribute blockDefinition = this.TargetBlock.GetType().GetCustomAttribute<BlockDefinitionAttribute>();
         if (blockDefinition != null)
         {//If Block class have ElementContentAttribute
@@ -271,9 +273,26 @@ public abstract class BlockEditorUnit : BlockEditorElement
                     }
                     else if (blockDefinitions[i] is BlockDefinitionAttribute.BlockDefinitionType)
                     {
-                        switch ((BlockDefinitionAttribute.BlockDefinitionType)blockDefinitions[i])
+
+#if UNITY_EDITOR
+                        if(parameterTypes == null || this.parameterIndex >= parameterTypes.Length)
+                        {
+                            Debug.LogError("Can't add BlockInputDefinitionContent Please Change BlockDefinitionAttribute of Block ( " + this.TargetBlock.GetType().Name + " ) ");
+                            continue;
+                        }
+
+                        BlockDefinitionAttribute.BlockDefinitionType blockDefinitionType = (BlockDefinitionAttribute.BlockDefinitionType)blockDefinitions[i];
+
+                        if (this.GetIsProperBlockDefinitionType(parameterTypes[this.parameterIndex], blockDefinitionType) == false)
+                        {
+                            Debug.LogError("Can't add BlockInputDefinitionContent Please Change BlockDefinitionAttribute of Block ( " + this.TargetBlock.GetType().Name + " ) ");
+                            continue;
+                        }
+#endif
+                        switch (blockDefinitionType)
                         {
                             case BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput:
+
                                 this.AddDefinitionOfBlockEditorUnit(new BooleanBlockInputDefinitionContentOfBlock());
                                 break;
 
@@ -297,7 +316,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
 
             //Automatically add ElementOfBlockUnit 
-            Type[] parameterTypes = this.TargetBlock.ParametersTypes;
+            
             if (parameterTypes != null)
             {
                 for (int i = 0; i < parameterTypes.Length; i++)
@@ -324,6 +343,38 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
     }
 
+    private bool GetIsProperBlockDefinitionType(Type parameterType, BlockDefinitionAttribute.BlockDefinitionType blockDefinitionType)
+    {
+        switch(blockDefinitionType)
+        {
+            case BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput:
+                if(typeof(BooleanBlock) == parameterType || parameterType.IsSubclassOf(typeof(BooleanBlock)))
+                {
+                    return true;
+                }
+                break;
+                
+
+            case BlockDefinitionAttribute.BlockDefinitionType.GlobalVariableSelector:
+                if (typeof(ReporterBlock) == parameterType || parameterType.IsSubclassOf(typeof(BooleanBlock)))
+                {
+                    return true;
+                }
+                break;
+
+
+            case BlockDefinitionAttribute.BlockDefinitionType.ReporterBlockInput:
+                if (typeof(ReporterBlock) == parameterType || parameterType.IsSubclassOf(typeof(ReporterBlock)))
+                {
+                    return true;
+                }
+                break;
+
+        }
+
+        return false;
+    }
+
     private int parameterIndex = 0;
     /// <summary>
     /// Add Element Of Block Unit In Block Unit UI
@@ -338,6 +389,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
             Debug.LogError("Cant Find Proper Type : " + definitionContentOfBlock.GetType().Name);
             return null;
         }
+
 
         if (this.DefinitionOfBlockEditorUnitList == null)
             this.DefinitionOfBlockEditorUnitList = new List<DefinitionOfBlockEditorUnit>();

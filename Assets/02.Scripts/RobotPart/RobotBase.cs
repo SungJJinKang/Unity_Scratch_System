@@ -170,6 +170,7 @@ public sealed class RobotBase : RobotPart
         if (this.RobotGlobalVariable.ContainsKey(key) == false)
         {
             Debug.LogError("RobotGlobalVariableTemplate Dont Have Key : " + key);
+            return;
         }
 
         this.RobotGlobalVariable[key] = text;

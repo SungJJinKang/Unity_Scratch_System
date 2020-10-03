@@ -14,9 +14,25 @@ public class BlockEditorWindow : MonoBehaviour
 
     protected virtual void Start()
     {
-        _RobotSourceCode = RobotSystem.instance.CreateRobotSourceCode("fdf");
+#if UNITY_EDITOR
+        tempSetRobotSourceCode();
+#endif
     }
+#if UNITY_EDITOR
+    private void tempSetRobotSourceCode()
+    {
+        if(RobotSystem.instance.RobotSourceCodeCount == 0)
+        {
+            _RobotSourceCode = RobotSystem.instance.CreateRobotSourceCode("fdf");
+        }
+        else
+        {
+            _RobotSourceCode = RobotSystem.instance.RobotSourceCodeList[0];
+        }
 
+        
+    }
+#endif
     protected virtual void OnEnable()
     {
         if (ActiveBlockEditorWindow == null)
@@ -34,6 +50,9 @@ public class BlockEditorWindow : MonoBehaviour
 
         UiUtility.SetTargetCanvas(_Canvas);
 
+#if UNITY_EDITOR
+        tempSetRobotSourceCode();
+#endif
 
     }
 

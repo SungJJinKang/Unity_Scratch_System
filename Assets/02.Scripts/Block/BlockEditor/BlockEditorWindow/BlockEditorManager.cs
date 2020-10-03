@@ -117,6 +117,13 @@ public class BlockEditorManager : MonoBehaviour
             return null;
         }
 
+#if UNITY_EDITOR
+        if(typeof(ILiteralBlock).IsAssignableFrom(blockType) == true)
+        {
+            Debug.LogError("Cang Make BlockEditrUnit Of LiteralBlock");
+            return null;
+        }
+#endif
 
         BlockEditorUnit blockEditorUnit = null;
         if (blockType.IsSubclassOf(typeof(BooleanBlock)))

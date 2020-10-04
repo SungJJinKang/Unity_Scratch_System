@@ -1,9 +1,22 @@
 ﻿using System;
 using System.Reflection;
 using System.Text;
+using UnityEngine;
 
 public static class Utility
 {
+    private static Camera mainCamera;
+    public static Camera MainCamera
+    {
+        get
+        {
+            if (mainCamera == null)
+                mainCamera = Camera.main;
+
+            return mainCamera;
+        }
+    }
+
     public static bool IsNumeric(this string str)
     {
         float f;

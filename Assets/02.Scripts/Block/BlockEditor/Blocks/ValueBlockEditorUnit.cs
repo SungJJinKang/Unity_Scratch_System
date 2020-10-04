@@ -10,6 +10,7 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
     public InputDefinitionOfBlockEditorUnit ParentInputDefinitionOfBlockEditorUnit;
 
     sealed public override BlockEditorElement ParentBlockEditorElement => ParentInputDefinitionOfBlockEditorUnit?.OwnerBlockEditorUnit;
+    sealed public override BlockEditorUnit ParentBlockEditorUnit => ParentInputDefinitionOfBlockEditorUnit?.OwnerBlockEditorUnit;
 
     public override void OnStartControllingByPlayer()
     {

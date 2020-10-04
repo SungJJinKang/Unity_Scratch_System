@@ -58,7 +58,7 @@ public abstract class InputDefinitionOfBlockEditorUnit : ParameterDefinitionOfBl
             }
             else
             {
-                this.InputtedValueBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(value) as ValueBlockEditorUnit;
+                this.InputtedValueBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(value, base.OwnerBlockEditorUnit.ParentBlockEditorWindow) as ValueBlockEditorUnit;
             }
         }
         get

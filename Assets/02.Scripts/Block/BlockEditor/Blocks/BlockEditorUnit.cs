@@ -14,6 +14,13 @@ public abstract class BlockEditorUnit : BlockEditorElement
     [HideInInspector]
     public BlockMockupHelper _BlockMockupHelper;
 
+    public abstract BlockEditorUnit ParentBlockEditorUnit { get; }
+
+    /// <summary>
+    /// Return Is RootBlock ( not included or connected to other block )
+    /// </summary>
+    /// <value><c>true</c> if is root block; otherwise, <c>false</c>.</value>
+    public bool IsRootBlock => this.ParentBlockEditorUnit == null;
 
 
     protected override void Awake()
@@ -39,7 +46,13 @@ public abstract class BlockEditorUnit : BlockEditorElement
         base.OnEnable();
     }
 
+    public enum BlockEditorUnitFlag
+    {
+        IsRemovable = 0,
+        IsAttachable = 1<<1,
+        IsC
 
+    }
     [HideInInspector]
     public bool IsShopBlock = false;
     [HideInInspector]
@@ -49,13 +62,13 @@ public abstract class BlockEditorUnit : BlockEditorElement
     private Vector3 backupedPos;
     private Transform backupedParentTransform;
 
-    public void BackupUiTransform()
+    public void BackupTransformInfo()
     {
         this.backupedPos = transform.position;
         this.backupedParentTransform = transform.parent;
     }
 
-    public void RevertUiPos()
+    public void RevertTransformInfo()
     {
         if (backupedParentTransform == null)
             Debug.LogError("not backuped yet");
@@ -74,8 +87,55 @@ public abstract class BlockEditorUnit : BlockEditorElement
     /// <returns></returns>
     public BlockEditorUnit Duplicate(Transform parent = null)
     {
-        return BlockEditorManager.instnace.CreateBlockEditorUnit(this.TargetBlock.GetType(), parent);
+        return BlockEditorManager.instnace.CreateBlockEditorUnit(this.TargetBlock.GetType(), this.ParentBlockEditorWindow, parent);
     }
+
+    public void SaveUnitAnchoredPosition()
+    {
+        if(this.TargetBlock != null)
+            this.TargetBlock.BlockEditorUnitAnchoredPosition = _RectTransform.anchoredPosition;
+    }
+
+    public bool ReturnToSavedUnitAnchoredPosition()
+    {
+        if (this.TargetBlock != null && this.TargetBlock.IsBlockEditorUnitAnchoredPositionSaved && this.IsRootBlock)
+        {
+            _RectTransform.anchoredPosition = this.TargetBlock.BlockEditorUnitAnchoredPosition;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+           
+    }
+
+    private BlockEditorWindow parentBlockEditorWindow;
+    public BlockEditorWindow ParentBlockEditorWindow
+    {
+        get
+        {
+            return this.parentBlockEditorWindow;
+        }
+        set
+        {
+            if (this.parentBlockEditorWindow == value)
+                return;
+
+            if (this.parentBlockEditorWindow != null)
+            {
+                this.parentBlockEditorWindow.RemoveFromSpawnedBlockEditorUnitInSourceCode(this);
+            }
+
+            this.parentBlockEditorWindow = value;
+
+            if (this.parentBlockEditorWindow != null)
+            {
+                this.parentBlockEditorWindow.AddToSpawnedBlockEditorUnitInSourceCode(this);
+            }
+        }
+    }
+
 
     /// <summary>
     /// Release(Destroy) BlockEditorUnit
@@ -85,9 +145,10 @@ public abstract class BlockEditorUnit : BlockEditorElement
     /// </summary>
     public override void Release()
     {
-
+        this.SaveUnitAnchoredPosition();
         // never touch element of targetBlock. Block is seperate from BlockEditorUnit
         // Removing BlockEditorUnit, Element Of BlockUnit shouldn't effect to Block instance
+        this.ParentBlockEditorWindow = null;
         this.targetBlock = null;
 
         ClearDefinitionOfBlockEditorUnit();

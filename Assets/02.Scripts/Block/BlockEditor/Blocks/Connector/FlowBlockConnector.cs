@@ -93,9 +93,9 @@ public class FlowBlockConnector : BlockEditorElement, IAttachableEditorElement
 
     public enum ConnectorType
     {
-        None = 0x0,
-        UpNotch = 0x1,
-        DownBump = 0x2
+        None = 0,
+        UpNotch = 1<<1,
+        DownBump = 1<<2
     }
 
     public ConnectorType _ConnectorType;

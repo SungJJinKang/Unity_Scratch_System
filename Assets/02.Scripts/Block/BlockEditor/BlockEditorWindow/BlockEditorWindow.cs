@@ -1,15 +1,25 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class BlockEditorWindow : MonoBehaviour
+public abstract class BlockEditorWindow : MonoBehaviour
 {
     public static BlockEditorWindow ActiveBlockEditorWindow;
 
-    protected Canvas _Canvas;
+    private Canvas canvas;
+    protected Canvas _Canvas
+    {
+        get
+        {
+            if (this.canvas == null)
+                this.canvas = GetComponentInParent<Canvas>();
+
+            return this.canvas;
+        }
+    }
 
     protected virtual void Awake()
     {
-        _Canvas = GetComponentInParent<Canvas>();
     }
 
     protected virtual void Start()
@@ -21,6 +31,9 @@ public class BlockEditorWindow : MonoBehaviour
 #if UNITY_EDITOR
     private void tempSetRobotSourceCode()
     {
+        if (RobotSystem.instance == null)
+            return;
+
         if(RobotSystem.instance.RobotSourceCodeCount == 0)
         {
             _RobotSourceCode = RobotSystem.instance.CreateRobotSourceCode("fdf");
@@ -48,7 +61,7 @@ public class BlockEditorWindow : MonoBehaviour
             }
         }
 
-        UiUtility.SetTargetCanvas(_Canvas);
+        UiUtility.TargetCanvas = _Canvas;
 
 #if UNITY_EDITOR
         tempSetRobotSourceCode();
@@ -60,6 +73,8 @@ public class BlockEditorWindow : MonoBehaviour
     {
         this._RobotSourceCode = null; //for refrash editor window
         ActiveBlockEditorWindow = null;
+
+        System.GC.Collect();
     }
 
     public void ExitWindow()
@@ -102,7 +117,7 @@ public class BlockEditorWindow : MonoBehaviour
     {
         if (robotSourceCode != null)
         {
-            this.InitBlockWorkSpace();
+            this.InitSourceCodeViewer();
         }
         else
         {
@@ -110,33 +125,40 @@ public class BlockEditorWindow : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    protected Transform BlockEditorUnitContentSpace;
+    /// <summary>
+    /// Active Block Editor Unit at this RectTransform
+    /// Parent Of Root Block Editor Unit
+    /// </summary>
+    /// <value>The source code viewer rect transform.</value>
+    protected abstract RectTransform SourceCodeViewerRectTransform { get; }
+    public void SetBlockEditorUnitRootAtSourceCodeViewer(BlockEditorUnit blockEditorUnit)
+    {
+        if (blockEditorUnit == null)
+            return;
 
-    private void InitBlockWorkSpace()
+        blockEditorUnit.transform.SetParent(this.SourceCodeViewerRectTransform);
+    }
+
+    private void InitSourceCodeViewer()
     {
         if (this._RobotSourceCode == null)
             return;
 
 
         //Spawn Hat Blocks
-        BlockEditorUnit initBlockEditorUnit = BlockEditorManager.instnace.SpawnFlowBlockEditorUnit(this._RobotSourceCode.InitBlock, null, BlockEditorUnitContentSpace);
-        BlockEditorUnit loopedBlockEditorUnit = BlockEditorManager.instnace.SpawnFlowBlockEditorUnit(this._RobotSourceCode.LoopedBlock, null, BlockEditorUnitContentSpace);
+        BlockEditorUnit initBlockEditorUnit = BlockEditorManager.instnace.SpawnFlowBlockEditorUnit(this._RobotSourceCode.InitBlock, null, this, SourceCodeViewerRectTransform);
+        BlockEditorUnit loopedBlockEditorUnit = BlockEditorManager.instnace.SpawnFlowBlockEditorUnit(this._RobotSourceCode.LoopedBlock, null, this, SourceCodeViewerRectTransform);
 
         if (initBlockEditorUnit != null)
         {
-            initBlockEditorUnit._RectTransform.anchoredPosition = Vector2.right * -20;
             initBlockEditorUnit.IsRemovable = false;
-            initBlockEditorUnit.BackupUiTransform();
-            this.AddToSpawnedBlockEditorUnitInSourceCode(initBlockEditorUnit);
+            initBlockEditorUnit.BackupTransformInfo();
         }
 
         if (loopedBlockEditorUnit != null)
         {
-            loopedBlockEditorUnit._RectTransform.anchoredPosition = Vector2.zero;
             loopedBlockEditorUnit.IsRemovable = false;
-            loopedBlockEditorUnit.BackupUiTransform();
-            this.AddToSpawnedBlockEditorUnitInSourceCode(loopedBlockEditorUnit);
+            loopedBlockEditorUnit.BackupTransformInfo();
         }
 
 
@@ -145,8 +167,9 @@ public class BlockEditorWindow : MonoBehaviour
         {
             foreach (var eventBlock in this._RobotSourceCode.StoredEventBlocks)
             {
-                BlockEditorUnit blockEditorUnit = BlockEditorManager.instnace.SpawnFlowBlockEditorUnit(eventBlock, null, BlockEditorUnitContentSpace);
-                this.AddToSpawnedBlockEditorUnitInSourceCode(blockEditorUnit);
+                BlockEditorUnit blockEditorUnit = BlockEditorManager.instnace.SpawnFlowBlockEditorUnit(eventBlock, null, this, SourceCodeViewerRectTransform);
+                loopedBlockEditorUnit.IsRemovable = false;
+                loopedBlockEditorUnit.BackupTransformInfo();
             }
         }
 
@@ -156,9 +179,12 @@ public class BlockEditorWindow : MonoBehaviour
 
     /// <summary>
     /// Match One Block Instance To One BlockEditorUnit Object(Instance)
+    /// Item Should be at SourceCodeViewr
+    /// Items will be released when disable window 
+    /// so dont put shopBlockEditorUnit in here
     /// </summary>
     private Dictionary<Block, BlockEditorUnit> SpawnedBlockEditorUnitInSourceCode;
-    protected bool AddToSpawnedBlockEditorUnitInSourceCode(BlockEditorUnit blockEditorUnit)
+    public bool AddToSpawnedBlockEditorUnitInSourceCode(BlockEditorUnit blockEditorUnit)
     {
         if (blockEditorUnit.TargetBlock == null)
         {
@@ -176,6 +202,14 @@ public class BlockEditorWindow : MonoBehaviour
         return true;
     }
 
+    public void RemoveFromSpawnedBlockEditorUnitInSourceCode(BlockEditorUnit blockEditorUnit)
+    {
+        if (this.SpawnedBlockEditorUnitInSourceCode == null)
+            return;
+
+        this.SpawnedBlockEditorUnitInSourceCode.Remove(blockEditorUnit?.TargetBlock);
+    }
+
     public BlockEditorUnit GetSpawnedBlockEditorUnitInSourceCode(Block block)
     {
         if (this.SpawnedBlockEditorUnitInSourceCode == null)
@@ -187,15 +221,20 @@ public class BlockEditorWindow : MonoBehaviour
         return this.SpawnedBlockEditorUnitInSourceCode[block];
     }
 
+  
     private void ClearAllSpawnedBlockEditorUnitInSourceCode()
     {
         if (this.SpawnedBlockEditorUnitInSourceCode == null)
             return;
 
-        foreach (var value in this.SpawnedBlockEditorUnitInSourceCode.Values)
+        BlockEditorUnit[] spawnedBlockEditorUnit = this.SpawnedBlockEditorUnitInSourceCode.Values.ToArray();
+
+        for (int i = 0; i < spawnedBlockEditorUnit.Length; i++)
         {
-            if (value.IsSpawned)
-                value.Release();
+            if (spawnedBlockEditorUnit[i].IsSpawned && spawnedBlockEditorUnit[i].IsRemovable == true)
+            {
+                spawnedBlockEditorUnit[i].Release();
+            }
         }
         this.SpawnedBlockEditorUnitInSourceCode.Clear();
     }

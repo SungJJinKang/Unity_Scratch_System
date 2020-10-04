@@ -48,12 +48,12 @@ public class BlockEditorManager : MonoBehaviour
     /// and spawned child block create child of block of that ..........
     /// </summary>
     /// <param name="flowBlock"></param>
-    public FlowBlockEditorUnit SpawnFlowBlockEditorUnit(FlowBlock createdNewFlowBlock, FlowBlockEditorUnit parentBlockEditorUnit, Transform parent)
+    public FlowBlockEditorUnit SpawnFlowBlockEditorUnit(FlowBlock createdNewFlowBlock, FlowBlockEditorUnit parentBlockEditorUnit, BlockEditorWindow blockEditorWindow, Transform parent)
     {
         if (createdNewFlowBlock == null)
             return null;
 
-        FlowBlockEditorUnit blockEditorUnit = this.CreateBlockEditorUnit(createdNewFlowBlock, parent) as FlowBlockEditorUnit;
+        FlowBlockEditorUnit blockEditorUnit = this.CreateBlockEditorUnit(createdNewFlowBlock, blockEditorWindow, parent) as FlowBlockEditorUnit;
 
         if (parentBlockEditorUnit != null)
         {
@@ -62,7 +62,7 @@ public class BlockEditorManager : MonoBehaviour
 
         if (createdNewFlowBlock.NextBlock != null)
         {
-            this.SpawnFlowBlockEditorUnit(createdNewFlowBlock.NextBlock, blockEditorUnit, parent);
+            this.SpawnFlowBlockEditorUnit(createdNewFlowBlock.NextBlock, blockEditorUnit, blockEditorWindow, parent);
         }
 
 
@@ -85,14 +85,14 @@ public class BlockEditorManager : MonoBehaviour
     /// <param name="blockType"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public BlockEditorUnit CreateBlockEditorUnit(Type blockType, Transform parent = null)
+    public BlockEditorUnit CreateBlockEditorUnit(Type blockType, BlockEditorWindow blockEditorWindow, Transform parent = null)
     {
         if (blockType == null)
         {
             return null;
         }
 
-        return this.CreateBlockEditorUnit(Block.CreatBlock(blockType), parent);
+        return this.CreateBlockEditorUnit(Block.CreatBlock(blockType), blockEditorWindow, parent);
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class BlockEditorManager : MonoBehaviour
     /// <param name="block"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public BlockEditorUnit CreateBlockEditorUnit(Block block, Transform parent = null)
+    public BlockEditorUnit CreateBlockEditorUnit(Block block, BlockEditorWindow blockEditorWindow, Transform parent = null)
     {
         if (block == null)
         {
@@ -168,11 +168,15 @@ public class BlockEditorManager : MonoBehaviour
 
             blockEditorUnit.TargetBlock = block;
 
-            if (blockEditorUnit.TargetBlock.IsAllParameterFilled)
-            {
+            blockEditorUnit.ParentBlockEditorWindow = blockEditorWindow;
 
+            if(blockEditorUnit.IsRootBlock == true)
+            {//if rootblock
+                if(blockEditorUnit.ReturnToSavedUnitAnchoredPosition() == false)
+                {//if fail return to SavedUnitAnchoredPosition
+                    blockEditorUnit._RectTransform.anchoredPosition = Vector2.zero; // manually set 
+                }
             }
-
 
             blockEditorUnit.OnSpawned();
         }

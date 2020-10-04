@@ -11,6 +11,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
     public FlowBlock TargetFlowBlock => base.TargetBlock as FlowBlock;
 
     sealed public override BlockEditorElement ParentBlockEditorElement => this.PreviousFlowBlockEditorUnit;
+    sealed public override BlockEditorUnit ParentBlockEditorUnit => this.PreviousFlowBlockEditorUnit;
 
     public override void OnStartControllingByPlayer()
     {
@@ -204,7 +205,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
                 newChildBlock.PreviousFlowBlockEditorUnit = null;
             }
 
-            RobotSourceCodeEditorWindow.instance.SetBlockHoverOnBlockWorkSpaceContentBody(newChildBlock);
+            newChildBlock.ParentBlockEditorWindow.SetBlockEditorUnitRootAtSourceCodeViewer(newChildBlock);
             return;
         }
 

@@ -156,9 +156,9 @@ RectTransform:
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &137380658
 MonoBehaviour:
@@ -257,7 +257,7 @@ GameObject:
   - component: {fileID: 191250121}
   - component: {fileID: 191250120}
   m_Layer: 5
-  m_Name: BlockWorkSpaceContentBody
+  m_Name: SourceCodeViewerContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1195,7 +1195,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &519420033
 MonoBehaviour:
@@ -1372,8 +1372,8 @@ RectTransform:
   m_Father: {fileID: 1244774998}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.44677383, y: 0}
+  m_AnchorMax: {x: 0.5532262, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1565,10 +1565,10 @@ RectTransform:
   m_Father: {fileID: 809361720}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 124.32872, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -776.60004}
+  m_SizeDelta: {x: 124.32872, y: 1553.2001}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &838897922
 MonoBehaviour:
@@ -1770,10 +1770,10 @@ RectTransform:
   m_Father: {fileID: 809361720}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 661.47955, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 459.48212, y: -776.60004}
+  m_SizeDelta: {x: 661.47955, y: 1553.2001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1065784254
 MonoBehaviour:
@@ -1877,9 +1877,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: -17}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1144959612
 MonoBehaviour:
@@ -2121,7 +2121,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2175,7 +2175,7 @@ GameObject:
   - component: {fileID: 1348673957}
   - component: {fileID: 1348673956}
   m_Layer: 5
-  m_Name: BlockWorkSpace
+  m_Name: SourceCodeViewer Scroll View
   m_TagString: BlockEditorBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2380,8 +2380,8 @@ RectTransform:
   m_Father: {fileID: 866992294}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.42809886}
+  m_AnchorMax: {x: 1, y: 0.57190114}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2455,7 +2455,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2809,7 +2809,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1733285916
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2880,11 +2880,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c90f5fbe9ad214eebb76c980fd7f36b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlockEditorUnitContentSpace: {fileID: 191250119}
+  BlockEditorBody: {fileID: 917930467}
   BlockShopScrollRect: {fileID: 1065784254}
-  BlockShopContentBody: {fileID: 1800445524}
-  BlockWorkSpaceScrollRect: {fileID: 1348673956}
-  BlockEditorBodyTransform: {fileID: 917930467}
+  BlockShopContent: {fileID: 1800445524}
+  SourceCodeViewerScrollRect: {fileID: 1348673956}
+  SourceCodeViewerContent: {fileID: 191250119}
   BlockMockUpPrefab: {fileID: 7230540196876139837, guid: cc02e433c71694275a671efef9ebc9e5,
     type: 3}
   _GUIStyle:
@@ -3054,7 +3054,7 @@ RectTransform:
   m_Children:
   - {fileID: 1733285916}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3117,7 +3117,7 @@ GameObject:
   - component: {fileID: 1800445526}
   - component: {fileID: 1800445527}
   m_Layer: 5
-  m_Name: BlockShopContentBody
+  m_Name: BlockShopContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3140,7 +3140,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.000061035156, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1800445525
 CanvasRenderer:
@@ -3231,7 +3231,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2100572612
 GameObject:
@@ -3297,7 +3297,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2125757027
 GameObject:
@@ -3334,9 +3334,9 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: -17, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2125757029
 MonoBehaviour:

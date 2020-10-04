@@ -66,6 +66,8 @@ public abstract class BlockEditorElement : MonoBehaviour
     {
     }
 
+
+
     public bool IsSpawned
     {
         private set;

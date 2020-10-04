@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Runtime.CompilerServices;
 
 public class UiUtility : MonoBehaviour
 {
@@ -37,20 +38,33 @@ public class UiUtility : MonoBehaviour
         get;
     }
 
-    public static void SetTargetCanvas(Canvas canvas)
+    private static Canvas targetCanvas;
+    public static Canvas TargetCanvas
     {
-        _UiCamera = canvas.worldCamera;
-        _GraphicRaycaster = canvas.GetComponent<GraphicRaycaster>();
+        get
+        {
+            return targetCanvas;
+        }
+        set
+        {
+            _GraphicRaycaster = null;
+
+            targetCanvas = value;
+
+            _GraphicRaycaster = targetCanvas?.GetComponent<GraphicRaycaster>();
+        }
     }
 
+
     private static GraphicRaycaster _GraphicRaycaster;
-    private static Camera _UiCamera;
+
+   
 
     private static PointerEventData _PointerEventData = new PointerEventData(null);
 
     public static List<RaycastResult> GetUiRayHitListWithWorldPoint(Vector3 worldPoint)
     {
-        return GetUiRayHitListWithScreenPoint(RectTransformUtility.WorldToScreenPoint(_UiCamera, worldPoint));
+        return GetUiRayHitListWithScreenPoint(RectTransformUtility.WorldToScreenPoint(Utility.MainCamera, worldPoint));
     }
 
     private static bool IsMousePosition(Vector3 screenPoint)
@@ -96,7 +110,7 @@ public class UiUtility : MonoBehaviour
 
     public static T GetTopBlockEditorElementWithWorldPoint<T>(Vector3 worldPoint, string compareTag, Predicate<T> match = null)
     {
-        return GetTopBlockEditorElementWithScreenPoint<T>(RectTransformUtility.WorldToScreenPoint(_UiCamera, worldPoint), compareTag, match);
+        return GetTopBlockEditorElementWithScreenPoint<T>(RectTransformUtility.WorldToScreenPoint(Utility.MainCamera, worldPoint), compareTag, match);
     }
 
 
@@ -141,7 +155,7 @@ public class UiUtility : MonoBehaviour
         if (parentRect == null)
             return Vector3.zero;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, _UiCamera, out Vector2 mousePosOnBlockEditorBodyTransform);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, TargetCanvas.worldCamera, out Vector2 mousePosOnBlockEditorBodyTransform);
         return parentRect.TransformPoint(mousePosOnBlockEditorBodyTransform);
     }
 

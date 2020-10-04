@@ -77,10 +77,11 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
             }
 
 
-            BlockEditorUnit createdBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(type, this.BlockShopContentBody);
+            BlockEditorUnit createdBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(type, this, this.BlockShopContent);
             if (createdBlockEditorUnit != null)
             {
                 createdBlockEditorUnit.IsShopBlock = true;
+                createdBlockEditorUnit.IsRemovable = false;
                 //base.AddToSpawnedBlockEditorUnitList(createdBlockEditorUnit);
             }
 
@@ -142,7 +143,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
         {
             if (raycastResults[i].gameObject.CompareTag(HoveringBodyTag))
             {
-                if (raycastResults[i].gameObject == BlockShopScrollRect.gameObject || raycastResults[i].gameObject == BlockWorkSpaceScrollRect.gameObject)
+                if (raycastResults[i].gameObject == BlockShopScrollRect.gameObject || raycastResults[i].gameObject == SourceCodeViewerScrollRect.gameObject)
                 {
                     return BlockShopScrollRect;
                 }
@@ -164,20 +165,21 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     private const string HoveringBodyTag = "BlockEditorBody";
 
     [SerializeField]
+    private RectTransform BlockEditorBody;
+
+    protected override RectTransform SourceCodeViewerRectTransform => this.SourceCodeViewerContent;
+
+    [SerializeField]
     private ScrollRect BlockShopScrollRect;
     [SerializeField]
-    private RectTransform BlockShopContentBody;
+    private RectTransform BlockShopContent;
 
     [SerializeField]
-    private ScrollRect BlockWorkSpaceScrollRect;
+    private ScrollRect SourceCodeViewerScrollRect;
+    [SerializeField]
+    private RectTransform SourceCodeViewerContent;
 
-    public void SetBlockHoverOnBlockWorkSpaceContentBody(BlockEditorElement blockEditorElement)
-    {
-        if (blockEditorElement == null)
-            return;
 
-        blockEditorElement.transform.SetParent(base.BlockEditorUnitContentSpace);
-    }
 
     /// <summary>
     /// Make This Flow Block EditorUnit RootBlock
@@ -192,9 +194,8 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     }
 
 
+   
 
-    [SerializeField]
-    private RectTransform BlockEditorBodyTransform;
 
     private Vector2 screenPointWhenMouseClicked;
 
@@ -217,11 +218,12 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
 
                     bool IsShopBlock = this.PinchingBlockEditorUnit.IsShopBlock;
 
-                    this.ControllingBlockEditorUnit = IsShopBlock == true ? this.DuplicateBlockEditorUnit(this.PinchingBlockEditorUnit, this.BlockEditorBodyTransform) : this.PinchingBlockEditorUnit;
+                    //if PinchingBlockEditorUnit is shopblock, duplicate it, or controll it
+                    this.ControllingBlockEditorUnit = IsShopBlock == true ? this.DuplicateBlockEditorUnit(this.PinchingBlockEditorUnit, this.BlockEditorBody) : this.PinchingBlockEditorUnit;
 
                     if (this.ControllingBlockEditorUnit != null)
                     {
-                        Vector3 mouseWorldPos = UiUtility.GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition);
+                        Vector3 mouseWorldPos = UiUtility.GetUiWorldPos(this.BlockEditorBody, Input.mousePosition);
                         this.controllOffset = IsShopBlock == true ? Vector3.zero : mouseWorldPos - this.ControllingBlockEditorUnit.transform.position;
                         this.ControllingBlockEditorUnit.transform.position = mouseWorldPos - controllOffset;
 
@@ -237,7 +239,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
             }
             else
             {
-                this.ControllingBlockEditorUnit.transform.position = UiUtility.GetUiWorldPos(this.BlockEditorBodyTransform, Input.mousePosition) - controllOffset;
+                this.ControllingBlockEditorUnit.transform.position = UiUtility.GetUiWorldPos(this.BlockEditorBody, Input.mousePosition) - controllOffset;
 
 
             }
@@ -258,23 +260,18 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
                     }
                     else
                     {
-                        this.ControllingBlockEditorUnit.RevertUiPos();
+                        this.ControllingBlockEditorUnit.RevertTransformInfo();
                     }
                 }
                 else
                 {//if player end controlling block on BlockWorkSpace UI
 
-                    this.SetBlockHoverOnBlockWorkSpaceContentBody(this.ControllingBlockEditorUnit);
+                    base.SetBlockEditorUnitRootAtSourceCodeViewer(this.ControllingBlockEditorUnit);
 
                     if (this.ControllingBlockEditorUnit.IsAttatchable() == true)
                     {//if block can attach to other block as flowbloc or valueblock
                         this.controllingBlockEditorUnit.AttachBlock();
                     }
-                    else
-                    {
-                    }
-
-                    this.ControllingBlockEditorUnit.BackupUiTransform();
                     this.ControllingBlockEditorUnit.OnEndControlling();
                 }
             }
@@ -288,7 +285,6 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     private BlockEditorUnit DuplicateBlockEditorUnit(BlockEditorUnit blockEditorUnit, Transform parent)
     {
         BlockEditorUnit createdBlockEditorUnit = blockEditorUnit.Duplicate(parent);
-        base.AddToSpawnedBlockEditorUnitInSourceCode(createdBlockEditorUnit);
 
         return createdBlockEditorUnit;
     }
@@ -312,7 +308,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
             {//If controllingBlockEditorUnit is null
                 this.BlockShopScrollRect.enabled = true;
 
-                this.BlockWorkSpaceScrollRect.enabled = true;
+                this.SourceCodeViewerScrollRect.enabled = true;
 
 
                 this.StopUpdateIsControllingBlockEditorUnitAttachableCoroutine();
@@ -326,13 +322,16 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
                 this.BlockShopScrollRect.StopMovement();
                 this.BlockShopScrollRect.enabled = false;
 
-                this.BlockWorkSpaceScrollRect.StopMovement();
-                this.BlockWorkSpaceScrollRect.enabled = false;
+                this.SourceCodeViewerScrollRect.StopMovement();
+                this.SourceCodeViewerScrollRect.enabled = false;
 
                 this.ReleaseAllBlockMockUp();
                 this.StartUpdateIsControllingBlockEditorUnitAttachableCoroutine();
 
+              
                 this.ControllingBlockEditorUnit.OnStartControllingByPlayer();
+
+                this.ControllingBlockEditorUnit.BackupTransformInfo();
                 this.SetBlockHoverOnEditorWindow(this.ControllingBlockEditorUnit);
             }
 

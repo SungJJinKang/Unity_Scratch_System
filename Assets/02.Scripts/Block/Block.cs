@@ -8,7 +8,24 @@ using UnityEngine;
 [System.Serializable]
 public abstract class Block
 {
-    public byte BlockIndexInSouceCode;
+    public bool IsBlockEditorUnitAnchoredPositionSaved
+    {
+        private set;
+        get;
+    }
+    private Vector2 blockEditorUnitAnchoredPosition;
+    public Vector2 BlockEditorUnitAnchoredPosition
+    {
+        set
+        {
+            this.blockEditorUnitAnchoredPosition = value;
+            this.IsBlockEditorUnitAnchoredPositionSaved = true;
+        }
+        get
+        {
+            return this.blockEditorUnitAnchoredPosition;
+        }
+    }
 
     public static Block CreatBlock(Type type)
     {

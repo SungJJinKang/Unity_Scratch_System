@@ -12,7 +12,7 @@ public abstract class FlowBlock : Block
 
     public bool IsHavePreviousBlock => this is IUpNotchBlock;
 
-
+    /*
     private FlowBlock previousBlock;
     public FlowBlock PreviousBlock
     {
@@ -36,7 +36,7 @@ public abstract class FlowBlock : Block
             }
         }
     }
-
+    */
 
     /// <summary>
     /// NextBlock

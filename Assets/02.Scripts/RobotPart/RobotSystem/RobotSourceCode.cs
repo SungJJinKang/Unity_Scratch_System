@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System.Data;
+using Newtonsoft.Json;
 
 
 /// <summary>
@@ -10,7 +12,7 @@ using UnityEngine;
 /// This Class shouldn't have 
 /// </summary>
 [System.Serializable]
-public class RobotSourceCode
+public class RobotSourceCode : IJsonConvert
 {
     public RobotSourceCode(string sourceCodeName)
     {
@@ -25,16 +27,39 @@ public class RobotSourceCode
 
     }
 
+    /// <summary>
+    /// Convert to json
+    /// Converted Object List : 
+    /// SourceCodeName
+    /// InitBlock
+    /// LoopedBlock
+    /// StoredEventBlockDictonary
+    /// StoredCustomBlockDefinitionBlockList
+    /// RobotGlobalVariableTemplateDictionary
+    /// </summary>
+    /// <returns>The to json.</returns>
+    public string ConvertToJson()
+    {
+        string json = JsonConvert.SerializeObject(this);
+#if UNITY_EDITOR
+        Debug.Log(json);
+#endif
+        return json;
+    }
+
 
     /// <summary>
     /// If Robot Source Code is being edited In Block Editor
     /// If Source Code completely created in Block Editor, set to false
     /// For Modifing, set to true
     /// </summary>
+    [JsonIgnore]
     public bool IsEditing = false;
 
-    [SerializeField]
+  
+    [JsonIgnore]
     private string sourceCodeName;
+    [JsonPropertyAttribute]
     public string SourceCodeName
     {
         get
@@ -54,9 +79,10 @@ public class RobotSourceCode
         }
     }
 
-
+    [JsonIgnore]
     [SerializeField]
     private HatBlock initBlock;
+    [JsonPropertyAttribute]
     public HatBlock InitBlock
     {
         get
@@ -72,8 +98,10 @@ public class RobotSourceCode
         }
     }
 
+    [JsonIgnore]
     [SerializeField]
     private HatBlock loopedBlock;
+    [JsonPropertyAttribute]
     public HatBlock LoopedBlock
     {
         get
@@ -95,7 +123,9 @@ public class RobotSourceCode
     /// The stored event block list.
     /// Command is Event
     /// </summary>
+    [JsonPropertyAttribute]
     private Dictionary<string, EventBlock> StoredEventBlockDictonary;
+    [JsonIgnore]
     public EventBlock[] StoredEventBlocks
     {
         get
@@ -165,19 +195,14 @@ public class RobotSourceCode
     /// This can be called InternetAntenna_SendCommandThroughInternet!!!!!
     /// </summary>
     [SerializeField]
+    [JsonPropertyAttribute]
     private List<DefinitionCustomBlock> StoredCustomBlockDefinitionBlockList;
 
-    private DefinitionCustomBlock[] StoredCustomBlockDefinitionBlockListCache;
-    private void SetStoredCustomBlockDefinitionBlockListCache()
-    {
-        this.StoredCustomBlockDefinitionBlockListCache = this.StoredCustomBlockDefinitionBlockList.ToArray();
-    }
+    [JsonIgnore]
     public DefinitionCustomBlock[] StoredCustomBlockDefinitionBlockArray
     {
-        get { return StoredCustomBlockDefinitionBlockListCache; }
+        get { return StoredCustomBlockDefinitionBlockList.ToArray(); }
     }
-
-
 
 
     public bool AddToStoredCustomBlockDefinitionBlock(DefinitionCustomBlock definitionCustomBlock)
@@ -194,7 +219,6 @@ public class RobotSourceCode
         RemoveFromStoredCustomBlockDefinitionBlockt(definitionCustomBlock);
         this.StoredCustomBlockDefinitionBlockList.Add(definitionCustomBlock);
 
-        SetStoredCustomBlockDefinitionBlockListCache();
         return true;
 
     }
@@ -212,7 +236,6 @@ public class RobotSourceCode
 
         this.StoredCustomBlockDefinitionBlockList.Remove(definitionCustomBlock);
 
-        SetStoredCustomBlockDefinitionBlockListCache();
         return true;
     }
 
@@ -231,6 +254,7 @@ public class RobotSourceCode
     /// 
     /// Variable Can Have Init Value
     /// </summary>
+    [JsonPropertyAttribute]
     private Dictionary<string, string> RobotGlobalVariableTemplateDictionary;
 
     /// <summary>
@@ -332,6 +356,7 @@ public class RobotSourceCode
     /// <summary>
     /// Robot installed This Source Code List
     /// </summary>
+    [JsonIgnore]
     private List<RobotBase> InstalledRobotList;
     public bool AddToInstalledRobotList(RobotBase robotBase)
     {
@@ -347,6 +372,7 @@ public class RobotSourceCode
         return this.InstalledRobotList.Remove(robotBase);
     }
 
+   
     #endregion
 
 

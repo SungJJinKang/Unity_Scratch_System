@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using UnityEngine;
+using Newtonsoft.Json;
 /// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
@@ -8,12 +9,26 @@ using UnityEngine;
 [System.Serializable]
 public abstract class Block
 {
+
+    #region JSONCONVERT
+
+    public virtual void ConvertToJson()
+    {
+        //Dont use JSonConverter on Block Class
+        //write json converter ( BlockJsonConverter ) code manually       
+    }
+
+
+    #endregion
     public bool IsBlockEditorUnitAnchoredPositionSaved
     {
         private set;
         get;
     }
+
+    [JsonIgnore]
     private Vector2 blockEditorUnitAnchoredPosition;
+    [JsonProperty]
     public Vector2 BlockEditorUnitAnchoredPosition
     {
         set

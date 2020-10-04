@@ -64,7 +64,7 @@ public class UiUtility : MonoBehaviour
 
     public static List<RaycastResult> GetUiRayHitListWithWorldPoint(Vector3 worldPoint)
     {
-        return GetUiRayHitListWithScreenPoint(RectTransformUtility.WorldToScreenPoint(Utility.MainCamera, worldPoint));
+        return GetUiRayHitListWithScreenPoint(RectTransformUtility.WorldToScreenPoint(TargetCanvas.worldCamera, worldPoint));
     }
 
     private static bool IsMousePosition(Vector3 screenPoint)
@@ -110,7 +110,7 @@ public class UiUtility : MonoBehaviour
 
     public static T GetTopBlockEditorElementWithWorldPoint<T>(Vector3 worldPoint, string compareTag, Predicate<T> match = null)
     {
-        return GetTopBlockEditorElementWithScreenPoint<T>(RectTransformUtility.WorldToScreenPoint(Utility.MainCamera, worldPoint), compareTag, match);
+        return GetTopBlockEditorElementWithScreenPoint<T>(RectTransformUtility.WorldToScreenPoint(TargetCanvas.worldCamera, worldPoint), compareTag, match);
     }
 
 
@@ -144,17 +144,19 @@ public class UiUtility : MonoBehaviour
         return default(T);
     }
 
+
     /// <summary>
-    /// Set Ui Position To Mouse point
+    /// Convert ScreenPos to WorldPoint for ui
     /// </summary>
-    /// <param name="uiTransform"></param>
-    /// <param name="parentRect"></param>
-    /// <param name="offset"></param>
+    /// <returns>The user interface world position.</returns>
+    /// <param name="parentRect">Parent rect.</param>
+    /// <param name="ScreenPos">Screen position.</param>
     public static Vector3 GetUiWorldPos(RectTransform parentRect, Vector3 ScreenPos)
     {
         if (parentRect == null)
             return Vector3.zero;
 
+        //maybe TargetCanvas.worldCamera is null ( worldCamera is availiable when Canvas mode is WorldSpace )
         RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, ScreenPos, TargetCanvas.worldCamera, out Vector2 mousePosOnBlockEditorBodyTransform);
         return parentRect.TransformPoint(mousePosOnBlockEditorBodyTransform);
     }

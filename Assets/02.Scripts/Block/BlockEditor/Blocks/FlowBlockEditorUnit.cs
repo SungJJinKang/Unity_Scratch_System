@@ -98,7 +98,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
             if (this.IsPreviousBlockEditorUnitAssignable)
             {
                 this.previousFlowBlockEditorUnit = value;
-                this.TargetFlowBlock.PreviousBlock = value?.TargetFlowBlock;
+                //this.TargetFlowBlock.PreviousBlock = value?.TargetFlowBlock;
             }
         }
     }
@@ -249,11 +249,11 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
 
         if (IsPreviousBlockEditorUnitAssignable == true && PreviousFlowBlockEditorUnit == null)
         {
-            expectedConnectorTypeFlag |= FlowBlockConnector.ConnectorType.DownBump;
+            expectedConnectorTypeFlag = expectedConnectorTypeFlag | FlowBlockConnector.ConnectorType.DownBump;
         }
         if (IsNextBlockEditorUnitAssignable == true && NextFlowBlockEditorUnit == null)
         {
-            expectedConnectorTypeFlag |= FlowBlockConnector.ConnectorType.UpNotch;
+            expectedConnectorTypeFlag = expectedConnectorTypeFlag | FlowBlockConnector.ConnectorType.UpNotch;
         }
 
 
@@ -267,7 +267,7 @@ public abstract class FlowBlockEditorUnit : BlockEditorUnit
         }
 
 
-        if (flowBlockConnector == null || flowBlockConnector.OwnerFlowBlockEditorUnit == this || flowBlockConnector.OwnerBlockEditorUnit.IsShopBlock == true)
+        if (flowBlockConnector == null || flowBlockConnector.OwnerFlowBlockEditorUnit == this || flowBlockConnector.OwnerBlockEditorUnit._BlockEditorUnitFlag.HasFlag(BlockEditorUnitFlag.IsAttachable) == false)
         {
             base.AttachableEditorElement = null;
             return false;

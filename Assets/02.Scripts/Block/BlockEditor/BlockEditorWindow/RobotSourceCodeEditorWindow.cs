@@ -2,15 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-#if UNITY_EDITOR
-#endif
 
 public class RobotSourceCodeEditorWindow : BlockEditorWindow
 {
@@ -80,8 +75,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
             BlockEditorUnit createdBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(type, this, this.BlockShopContent);
             if (createdBlockEditorUnit != null)
             {
-                createdBlockEditorUnit.IsShopBlock = true;
-                createdBlockEditorUnit.IsRemovable = false;
+                createdBlockEditorUnit._BlockEditorUnitFlag = BlockEditorUnit.ShopBlockFlag;
                 //base.AddToSpawnedBlockEditorUnitList(createdBlockEditorUnit);
             }
 
@@ -216,15 +210,16 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
                 {   // If Move Mouse After Clicking Block, it start control clicked block
                     //Set this.ControllingBlockEditorUnit 
 
-                    bool IsShopBlock = this.PinchingBlockEditorUnit.IsShopBlock;
+                    bool isDuplicated = this.PinchingBlockEditorUnit._BlockEditorUnitFlag.HasFlag(BlockEditorUnit.BlockEditorUnitFlag.IsDuplicateType);
 
                     //if PinchingBlockEditorUnit is shopblock, duplicate it, or controll it
-                    this.ControllingBlockEditorUnit = IsShopBlock == true ? this.DuplicateBlockEditorUnit(this.PinchingBlockEditorUnit, this.BlockEditorBody) : this.PinchingBlockEditorUnit;
+                    this.ControllingBlockEditorUnit = isDuplicated ? this.DuplicateBlockEditorUnit(this.PinchingBlockEditorUnit, this.BlockEditorBody) : this.PinchingBlockEditorUnit;
 
                     if (this.ControllingBlockEditorUnit != null)
                     {
                         Vector3 mouseWorldPos = UiUtility.GetUiWorldPos(this.BlockEditorBody, Input.mousePosition);
-                        this.controllOffset = IsShopBlock == true ? Vector3.zero : mouseWorldPos - this.ControllingBlockEditorUnit.transform.position;
+                        this.controllOffset = isDuplicated ? Vector3.zero : mouseWorldPos - this.ControllingBlockEditorUnit.transform.position;
+          
                         this.ControllingBlockEditorUnit.transform.position = mouseWorldPos - controllOffset;
 
 
@@ -254,7 +249,7 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
 
                 if (HoveringBodyScrollRect == null || HoveringBodyScrollRect == this.BlockShopScrollRect.gameObject)
                 {//if player end controlling block on BlockShop UI or Outside of Editor UI
-                    if (this.ControllingBlockEditorUnit.IsRemovable == true)
+                    if (this.ControllingBlockEditorUnit._BlockEditorUnitFlag.HasFlag(BlockEditorUnit.BlockEditorUnitFlag.IsRemovable))
                     {
                         this.ControllingBlockEditorUnit.Release();
                     }
@@ -505,35 +500,3 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     #endregion
 }
 
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(RobotSourceCodeEditorWindow))]
-public class RobotSourceCodeEditorWindowEditor : Editor
-{
-    private RobotSourceCodeEditorWindow _RobotSourceCodeEditorWindow;
-
-    private void Awake()
-    {
-        _RobotSourceCodeEditorWindow = target as RobotSourceCodeEditorWindow;
-    }
-
-    public override void OnInspectorGUI()
-    {
-        base.DrawDefaultInspector();
-
-        GUILayout.Space(30);
-
-        if (GUILayout.Button("Create RobotSourceCode"))
-        {
-            RobotSystem.instance.CreateRobotSourceCode(System.DateTime.Now.ToString());
-        }
-
-        if (GUILayout.Button("Set First Robot Sourcode"))
-        {
-            _RobotSourceCodeEditorWindow._RobotSourceCode = RobotSystem.instance.RobotSourceCodeList[0];
-        }
- 
-    }
-
-}
-#endif

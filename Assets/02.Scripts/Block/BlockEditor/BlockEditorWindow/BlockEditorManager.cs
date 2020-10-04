@@ -268,22 +268,3 @@ public class BlockEditorManager : MonoBehaviour
 
     #endregion
 }
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(BlockEditorManager))]
-public class BlockEditorManagerEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.DrawDefaultInspector();
-
-        GUILayout.Space(30);
-
-        if (GUILayout.Button("Create RobotSourceCode"))
-        {
-            RobotSystem.instance.CreateRobotSourceCode(System.DateTime.Now.ToString());
-        }
-    }
-
-}
-#endif

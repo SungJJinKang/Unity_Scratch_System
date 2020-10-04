@@ -151,13 +151,11 @@ public abstract class BlockEditorWindow : MonoBehaviour
 
         if (initBlockEditorUnit != null)
         {
-            initBlockEditorUnit.IsRemovable = false;
             initBlockEditorUnit.BackupTransformInfo();
         }
 
         if (loopedBlockEditorUnit != null)
         {
-            loopedBlockEditorUnit.IsRemovable = false;
             loopedBlockEditorUnit.BackupTransformInfo();
         }
 
@@ -168,7 +166,6 @@ public abstract class BlockEditorWindow : MonoBehaviour
             foreach (var eventBlock in this._RobotSourceCode.StoredEventBlocks)
             {
                 BlockEditorUnit blockEditorUnit = BlockEditorManager.instnace.SpawnFlowBlockEditorUnit(eventBlock, null, this, SourceCodeViewerRectTransform);
-                loopedBlockEditorUnit.IsRemovable = false;
                 loopedBlockEditorUnit.BackupTransformInfo();
             }
         }
@@ -231,7 +228,7 @@ public abstract class BlockEditorWindow : MonoBehaviour
 
         for (int i = 0; i < spawnedBlockEditorUnit.Length; i++)
         {
-            if (spawnedBlockEditorUnit[i].IsSpawned && spawnedBlockEditorUnit[i].IsRemovable == true)
+            if (spawnedBlockEditorUnit[i].IsSpawned && spawnedBlockEditorUnit[i]._BlockEditorUnitFlag.HasFlag(BlockEditorUnit.BlockEditorUnitFlag.IsRemovable))
             {
                 spawnedBlockEditorUnit[i].Release();
             }

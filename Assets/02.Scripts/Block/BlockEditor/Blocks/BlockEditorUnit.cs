@@ -30,9 +30,6 @@ public abstract class BlockEditorUnit : BlockEditorElement
         gameObject.tag = BlockEditorUnitTag;
         _BlockMockupHelper = GetComponent<BlockMockupHelper>();
 
-        this.IsRemovable = true;
-        this.IsShopBlock = false;
-
 
     }
 
@@ -46,17 +43,22 @@ public abstract class BlockEditorUnit : BlockEditorElement
         base.OnEnable();
     }
 
+    [Flags]
     public enum BlockEditorUnitFlag
     {
-        IsRemovable = 0,
-        IsAttachable = 1<<1,
-        IsC
+        None = 0,
+        IsRemovable = 1,
+        IsAttachable = 1 << 1,
+        IsDuplicateType = 1 << 2,
 
     }
-    [HideInInspector]
-    public bool IsShopBlock = false;
-    [HideInInspector]
-    public bool IsRemovable = true;
+
+    public BlockEditorUnitFlag _BlockEditorUnitFlag;
+
+    public const BlockEditorUnitFlag DefaultFlag = BlockEditorUnitFlag.IsRemovable | BlockEditorUnitFlag.IsAttachable;
+    public const BlockEditorUnitFlag ShopBlockFlag = BlockEditorUnitFlag.IsDuplicateType;
+
+
 
     #region BackUpUiPos
     private Vector3 backupedPos;
@@ -136,6 +138,14 @@ public abstract class BlockEditorUnit : BlockEditorElement
         }
     }
 
+    public override void OnSpawned()
+    {
+        base.OnSpawned();
+
+        // basically set defualt block flag
+        this._BlockEditorUnitFlag = BlockEditorUnit.DefaultFlag;
+    }
+
 
     /// <summary>
     /// Release(Destroy) BlockEditorUnit
@@ -152,6 +162,8 @@ public abstract class BlockEditorUnit : BlockEditorElement
         this.targetBlock = null;
 
         ClearDefinitionOfBlockEditorUnit();
+
+        this._BlockEditorUnitFlag = BlockEditorUnitFlag.None;
 
         base.Release();
     }

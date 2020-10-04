@@ -8,6 +8,7 @@
 /// 
 /// In Block Editor, Place EventBlock, And Set Event Name To Input1, And Attach next block To This Placed Event Block
 /// </summary>
+[NotAutomaticallyMadeOnBlockShop]
 public sealed class EventBlock : HatBlock, IContainingParameter<LiteralReporterBlock>
 {
     /// <summary>

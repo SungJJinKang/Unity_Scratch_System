@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Newtonsoft.Json;
+using System.IO;
+using System;
 
 /// <summary>
 /// Robot system.
@@ -18,7 +21,7 @@ public class RobotSystem : MonoBehaviour
 
         this.SpawnedRobotDictionary = new Dictionary<string, RobotBase>();
         this.SpawnedRobotList = new List<RobotBase>();
-        this.StoredRobotSourceCode = new Dictionary<string, RobotSourceCode>();
+        this.StoredRobotSourceCodes = new List<RobotSourceCode>();
     }
 
     private void Start()
@@ -154,7 +157,7 @@ public class RobotSystem : MonoBehaviour
     #endregion
 
     #region RobotSourceCode
-    private Dictionary<string, RobotSourceCode> StoredRobotSourceCode;
+    private List<RobotSourceCode> StoredRobotSourceCodes;
 
     public RobotSourceCode CreateRobotSourceCode(string sourceCodeName)
     {
@@ -172,27 +175,106 @@ public class RobotSystem : MonoBehaviour
         if (robotSourceCode == null)
             return false;
 
-        if (this.StoredRobotSourceCode.ContainsKey(robotSourceCode.SourceCodeName) == true)
+        if (this.StoredRobotSourceCodes.Contains(robotSourceCode) == true)
         {
             Debug.LogError("Try AddStoredRobotSourceCodeTemplate. SourceCodeName : " + robotSourceCode.SourceCodeName);
             return false;
         }
 
-        this.StoredRobotSourceCode.Add(robotSourceCode.SourceCodeName, robotSourceCode);
+        this.StoredRobotSourceCodes.Add(robotSourceCode);
         return true;
     }
 
-    public RobotSourceCode GetRobotSourceCode(string sourceCodeName)
+    public RobotSourceCode GetRobotSourceCode(RobotSourceCode robotSourceCode)
     {
-        if (this.StoredRobotSourceCode.ContainsKey(sourceCodeName) == false)
+        if (this.StoredRobotSourceCodes.Contains(robotSourceCode) == false)
             return null;
 
 
-        return this.StoredRobotSourceCode[sourceCodeName];
+        return this.StoredRobotSourceCodes.Find(x => x == robotSourceCode);
     }
 
-    public RobotSourceCode[] RobotSourceCodeList => StoredRobotSourceCode.Values.ToArray();
-    public int RobotSourceCodeCount => StoredRobotSourceCode.Count;
+    public void ClearStoredRobotSourceCodes()
+    {
+        this.StoredRobotSourceCodes.Clear();
+    }
+
+    public RobotSourceCode[] RobotSourceCodeList => StoredRobotSourceCodes.ToArray();
+    public int RobotSourceCodeCount => this.StoredRobotSourceCodes.Count;
+
+    #endregion
+
+    #region Save RobotSourceCode
+    public void SaveAllRobotSourceCodes()
+    {
+        foreach(var robotSourceCode in this.StoredRobotSourceCodes)
+        {
+            this.SaveRobotSourceCode(robotSourceCode);
+        }
+
+        System.GC.Collect();
+    }
+
+  
+
+    private string saveFolderPath;
+    private string SaveFolderPath
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(this.saveFolderPath))
+            {
+                this.saveFolderPath = Application.persistentDataPath + "/RobotSourceCode/";
+                System.IO.Directory.CreateDirectory(this.saveFolderPath);
+            }
+
+            return this.saveFolderPath;
+        }
+    }
+
+    public void SaveRobotSourceCode(RobotSourceCode robotSourceCode)
+    {
+        if (robotSourceCode == null)
+            return;
+
+       
+
+        string json = JsonConvert.SerializeObject(robotSourceCode, Formatting.Indented, Utility.JsonSerializerSettings);
+        string savePath = GetSaveFilePath(robotSourceCode);
+        Debug.Log(savePath);
+
+        File.WriteAllText(savePath, json);
+#if UNITY_EDITOR
+        Utility.stringBuilderCache.Clear();
+        Utility.stringBuilderCache.Append("Success Serialize RobotSourceCode To Json : ");
+        Utility.stringBuilderCache.Append(robotSourceCode.SourceCodeName);
+        Utility.stringBuilderCache.Append("\n\n");
+        Utility.stringBuilderCache.Append(json);
+        Debug.Log(Utility.stringBuilderCache.ToString());
+#endif
+    }
+
+    private string GetSaveFilePath(RobotSourceCode robotSourceCode)
+    {
+        
+        return this.SaveFolderPath + robotSourceCode.SourceCodeName + ".json";
+    }
+
+
+    public void LoadAllRobotSourceCodes()
+    {
+        foreach (string file in Directory.EnumerateFiles(SaveFolderPath, "*.json"))
+        {
+            string json = File.ReadAllText(file);
+            this.AddStoredRobotSourceCodeTemplate(JsonConvert.DeserializeObject<RobotSourceCode>(json, Utility.JsonSerializerSettings));
+            
+        }
+
+
+        System.GC.Collect();
+    }
+
+    
     #endregion
 
 

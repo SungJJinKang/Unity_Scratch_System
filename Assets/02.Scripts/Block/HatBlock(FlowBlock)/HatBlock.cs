@@ -1,4 +1,5 @@
-﻿/// <summary>
+﻿using Newtonsoft.Json;
+/// <summary>
 /// Hat Block
 /// This Can be used as InitBlock, LoopBlock
 /// </summary>
@@ -7,6 +8,6 @@ public abstract class HatBlock : FlowBlock, IDownBumpBlock, IEventBlockType
 {
 
 
-
+    
 
 }

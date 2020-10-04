@@ -22,20 +22,33 @@ public class RobotSystemEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        this.DrawDefaultInspector();
 
         if (robotSystem != null)
         {
-            if(GUILayout.Button("Debug All RobotSourceCode JSON"))
+            if (GUILayout.Button("Save All RobotSourceCodes"))
             {
-                foreach(var code in robotSystem.RobotSourceCodeList)
-                {
-                    code.ConvertToJson();
-                }
+                robotSystem.SaveAllRobotSourceCodes();
+            }
+
+            if (GUILayout.Button("Load All RobotSourceCodes"))
+            {
+                robotSystem.LoadAllRobotSourceCodes();
             }
 
             if (GUILayout.Button("Create RobotSourceCode"))
             {
                 robotSystem.CreateRobotSourceCode(DateTime.Now.ToString());
+            }
+
+            if (GUILayout.Button("Clear StoredRobotSourceCodes"))
+            {
+                robotSystem.ClearStoredRobotSourceCodes();
+            }
+
+            if (GUILayout.Button("StoredRobotSourceCodes Count"))
+            {
+                Debug.Log(robotSystem.RobotSourceCodeCount.ToString());
             }
         }
     }

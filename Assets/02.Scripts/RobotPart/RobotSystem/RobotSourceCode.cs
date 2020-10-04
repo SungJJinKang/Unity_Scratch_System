@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using System.Data;
 using Newtonsoft.Json;
-
+using System.Runtime.Serialization;
 
 /// <summary>
 /// Robot source code Template.
@@ -11,8 +11,9 @@ using Newtonsoft.Json;
 /// Instance Of This Class is stored In Robot System
 /// This Class shouldn't have 
 /// </summary>
+[JsonObjectAttribute(MemberSerialization.OptIn)] // if set type to optIn, fields and properties of type is not serialized automatically, you should set JsonProperty manually
 [System.Serializable]
-public class RobotSourceCode : IJsonConvert
+public class RobotSourceCode 
 {
     public RobotSourceCode(string sourceCodeName)
     {
@@ -27,26 +28,7 @@ public class RobotSourceCode : IJsonConvert
 
     }
 
-    /// <summary>
-    /// Convert to json
-    /// Converted Object List : 
-    /// SourceCodeName
-    /// InitBlock
-    /// LoopedBlock
-    /// StoredEventBlockDictonary
-    /// StoredCustomBlockDefinitionBlockList
-    /// RobotGlobalVariableTemplateDictionary
-    /// </summary>
-    /// <returns>The to json.</returns>
-    public string ConvertToJson()
-    {
-        string json = JsonConvert.SerializeObject(this);
-#if UNITY_EDITOR
-        Debug.Log(json);
-#endif
-        return json;
-    }
-
+   
 
     /// <summary>
     /// If Robot Source Code is being edited In Block Editor
@@ -82,6 +64,7 @@ public class RobotSourceCode : IJsonConvert
     [JsonIgnore]
     [SerializeField]
     private HatBlock initBlock;
+    //[JsonConverter(typeof(BlockJsonConverter))]
     [JsonPropertyAttribute]
     public HatBlock InitBlock
     {
@@ -101,6 +84,7 @@ public class RobotSourceCode : IJsonConvert
     [JsonIgnore]
     [SerializeField]
     private HatBlock loopedBlock;
+    //[JsonConverter(typeof(BlockJsonConverter))]
     [JsonPropertyAttribute]
     public HatBlock LoopedBlock
     {
@@ -123,6 +107,7 @@ public class RobotSourceCode : IJsonConvert
     /// The stored event block list.
     /// Command is Event
     /// </summary>
+    //[JsonConverter(typeof(BlockJsonConverter))]
     [JsonPropertyAttribute]
     private Dictionary<string, EventBlock> StoredEventBlockDictonary;
     [JsonIgnore]
@@ -196,6 +181,7 @@ public class RobotSourceCode : IJsonConvert
     /// </summary>
     [SerializeField]
     [JsonPropertyAttribute]
+    //[JsonConverter(typeof(BlockJsonConverter))]
     private List<DefinitionCustomBlock> StoredCustomBlockDefinitionBlockList;
 
     [JsonIgnore]

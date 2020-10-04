@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
@@ -58,6 +59,22 @@ public static class Utility
             return GetAncestorAttribute<T>(t.BaseType);
     }
 
+    private static JsonSerializerSettings jsonSerializerSettings;
+    public static JsonSerializerSettings JsonSerializerSettings
+    {
+        get
+        {
+            if (jsonSerializerSettings == null)
+            {
+                jsonSerializerSettings = new JsonSerializerSettings();
+                jsonSerializerSettings.Converters.Add(new Vector2Converter());
+                jsonSerializerSettings.Converters.Add(new BlockConverter());
+                jsonSerializerSettings.TypeNameHandling = TypeNameHandling.All;
+            }
+
+            return jsonSerializerSettings;
+        }
+    }
 }
 
 

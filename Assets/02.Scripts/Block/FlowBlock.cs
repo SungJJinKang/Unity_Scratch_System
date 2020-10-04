@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using UnityEngine;
 
 [System.Serializable]
 public abstract class FlowBlock : Block
@@ -42,7 +43,10 @@ public abstract class FlowBlock : Block
     /// NextBlock
     /// </summary>
     private FlowBlock nextBlock;
+
+    
     public bool IsHaveNextBlock => this is IDownBumpBlock;
+    [JsonProperty]
     public FlowBlock NextBlock
     {
         get

@@ -477,17 +477,6 @@ public sealed class RobotBase : RobotPart
     public string RobotSourceCodeName => this.installedRobotSourceCode.SourceCodeName;
 
 
-    public bool InstallRobotSourceCodeWithName(string robotSourceCodeName)
-    {
-        RobotSourceCode robotSourceCode = RobotSystem.instance.GetRobotSourceCode(robotSourceCodeName);
-        if (robotSourceCode == null)
-        {
-            Debug.LogError("Cant Find Robot SourceCode : " + robotSourceCodeName);
-            return false;
-        }
-
-        return this.InstallRobotSourceCode(robotSourceCode);
-    }
 
 
     public bool InstallRobotSourceCode(RobotSourceCode robotSourceCode)

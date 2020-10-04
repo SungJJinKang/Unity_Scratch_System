@@ -2,11 +2,13 @@
 using System.Reflection;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Runtime.Serialization;
 /// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
 /// </summary>
 [System.Serializable]
+[JsonObjectAttribute(MemberSerialization.OptIn)]
 public abstract class Block
 {
 
@@ -28,6 +30,7 @@ public abstract class Block
 
     [JsonIgnore]
     private Vector2 blockEditorUnitAnchoredPosition;
+    [JsonConverter(typeof(Vector2Converter))]
     [JsonProperty]
     public Vector2 BlockEditorUnitAnchoredPosition
     {
@@ -279,6 +282,8 @@ public abstract class Block
 
     private bool isParametersTypesCached;
     private Type[] parametersTypes;
+
+
     /// <summary>
     /// Type of Parameters
     /// </summary>

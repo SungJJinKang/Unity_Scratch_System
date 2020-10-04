@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 [NotAutomaticallyMadeOnBlockShop]
 public sealed class LiteralReporterBlock : ReporterBlock, ILiteralReporterBlock
@@ -15,6 +16,7 @@ public sealed class LiteralReporterBlock : ReporterBlock, ILiteralReporterBlock
     /// LiteralValue는 RobotSourceCode에서 정해지고 각 로봇에서는 변경안된다!!!!!!
     /// READ ONLY
     /// </summary>
+    [JsonProperty]
     public string LiteralValue;
 
     sealed public override string GetReporterStringValue(RobotBase operatingRobotBase = null)

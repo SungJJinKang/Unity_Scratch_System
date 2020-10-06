@@ -15,6 +15,10 @@ using System.Runtime.Serialization;
 [System.Serializable]
 public class RobotSourceCode 
 {
+    public RobotSourceCode()
+    {
+        this.IsEditing = true;
+    }
     public RobotSourceCode(string sourceCodeName)
     {
         this.IsEditing = false;
@@ -50,12 +54,13 @@ public class RobotSourceCode
         }
         set
         {
+            
             if (this.IsEditing == false)
             {
                 Debug.LogError("You can't set SourceCodeName for editing");
                 return; // Can Change Only When IsEditing is true
             }
-
+            
 
             this.sourceCodeName = value;
         }

@@ -4,7 +4,12 @@ using System;
 [NotAutomaticallyMadeOnBlockShop]
 public sealed class LiteralReporterBlock : ReporterBlock, ILiteralReporterBlock
 {
-    public LiteralReporterBlock(string value = "")
+    public LiteralReporterBlock()
+    {
+        this.LiteralValue = System.String.Empty;
+    }
+
+    public LiteralReporterBlock(string value)
     {
         if (String.IsNullOrEmpty(value))
             value = System.String.Empty;

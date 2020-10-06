@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 /// </summary>
 [System.Serializable]
 [JsonObjectAttribute(MemberSerialization.OptIn)]
+[JsonConverter(typeof(BlockConverter))]
 public abstract class Block
 {
 

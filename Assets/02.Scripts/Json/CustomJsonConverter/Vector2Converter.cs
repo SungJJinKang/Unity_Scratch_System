@@ -11,14 +11,15 @@ public class Vector2Converter : JsonConverter<Vector2>
 
         try
         {
+            double[] values = new double[2];
             reader.Read();
-            double x = (double)reader.Value;
+            values[0] = (double)reader.Value;
             reader.Read();
-            double y = (double)reader.Value;
+            values[1] = (double)reader.Value;
             reader.Read();
             
             
-            return new Vector2(Convert.ToSingle(x), Convert.ToSingle(y));
+            return new Vector2(Convert.ToSingle(values[0]), Convert.ToSingle(values[1]));
         }
         catch
         {

@@ -2,6 +2,7 @@
 /// LoopedHatBlock
 [NotAutomaticallyMadeOnBlockShop]
 [BlockDefinitionAttribute("Looped Block")]
+[System.Serializable]
 public sealed class LoopedHatBlock : HatBlock
 {
 

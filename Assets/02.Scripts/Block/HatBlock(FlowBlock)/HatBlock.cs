@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-/// <summary>
+﻿/// <summary>
 /// Hat Block
 /// This Can be used as InitBlock, LoopBlock
 /// </summary>

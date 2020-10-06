@@ -266,8 +266,11 @@ public class RobotSystem : MonoBehaviour
         foreach (string file in Directory.EnumerateFiles(SaveFolderPath, "*.json"))
         {
             string json = File.ReadAllText(file);
-            this.AddStoredRobotSourceCodeTemplate(JsonConvert.DeserializeObject<RobotSourceCode>(json, Utility.JsonSerializerSettings));
-            
+            RobotSourceCode createdRobotSourceCode = JsonConvert.DeserializeObject<RobotSourceCode>(json, Utility.JsonSerializerSettings);
+            this.AddStoredRobotSourceCodeTemplate(createdRobotSourceCode);
+#if UNITY_EDITOR
+            Debug.Log(Utility.TraceWriter.ToString());
+#endif
         }
 
 

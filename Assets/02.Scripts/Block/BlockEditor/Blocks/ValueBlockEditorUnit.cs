@@ -26,7 +26,7 @@ public abstract class ValueBlockEditorUnit : BlockEditorUnit
     {
         InputDefinitionOfBlockEditorUnit topInputDefinitionOfBlockEditorUnit = UiUtility.GetTopBlockEditorElementWithWorldPoint<InputDefinitionOfBlockEditorUnit>(transform.position, InputDefinitionOfBlockEditorUnit.InputDefinitionOfBlockEditorUnitTag, x => x.GetType() == this.TargetEditorBlockType);
         //Debug.Log("topInputSpaceElementOfBlockUnit " + topInputSpaceElementOfBlockUnit?.OwnerBlockEditorUnit?.name);
-        if (topInputDefinitionOfBlockEditorUnit == null || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit == this || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit._BlockEditorUnitFlag.HasFlag(BlockEditorUnitFlag.IsAttachable) || topInputDefinitionOfBlockEditorUnit.IsEmpty == false)
+        if (topInputDefinitionOfBlockEditorUnit == null || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit == this || topInputDefinitionOfBlockEditorUnit.OwnerBlockEditorUnit._BlockEditorUnitFlag.HasFlag(BlockEditorUnitFlag.IsAttachable) == false || topInputDefinitionOfBlockEditorUnit.IsEmpty == false)
         {
             base.AttachableEditorElement = null;
             return false;

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Reflection;
 using System.Text;
@@ -60,6 +61,9 @@ public static class Utility
     }
 
     private static JsonSerializerSettings jsonSerializerSettings;
+#if UNITY_EDITOR
+    public static ITraceWriter TraceWriter;
+#endif
     public static JsonSerializerSettings JsonSerializerSettings
     {
         get
@@ -70,7 +74,18 @@ public static class Utility
                 jsonSerializerSettings.Converters.Add(new Vector2Converter());
                 jsonSerializerSettings.Converters.Add(new BlockConverter());
                 jsonSerializerSettings.TypeNameHandling = TypeNameHandling.All;
+                jsonSerializerSettings.MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead;
+                jsonSerializerSettings.Formatting = Formatting.Indented;
+
+#if UNITY_EDITOR
+                TraceWriter = new MemoryTraceWriter();
+                jsonSerializerSettings.TraceWriter = TraceWriter;
+#endif
+
             }
+
+
+
 
             return jsonSerializerSettings;
         }

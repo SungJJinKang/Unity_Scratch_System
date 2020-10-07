@@ -277,7 +277,7 @@ public class RobotBaseEditor : Editor
         EditorGUILayout.LabelField("Waiting Block", waitingBlockType);
 
         EditorGUILayout.LabelField("BlockCallStack", SubSubTitleGUIStyle);
-        List<FlowBlock> robotGlobalVariableKeyValuePair = robotBase.BlockCallStackList;
+        List<FlowBlock> robotGlobalVariableKeyValuePair = robotBase.BlockCallStackListForEditor;
 
         EditorGUI.indentLevel += 2;
         if (robotGlobalVariableKeyValuePair != null && robotGlobalVariableKeyValuePair.Count > 0)

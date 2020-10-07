@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using System;
+using System.Collections;
 
 /// <summary>
 /// Robot system.
@@ -26,13 +27,9 @@ public class RobotSystem : MonoBehaviour
 
     private void Start()
     {
-        //StartExecuteRobotsWaitingBlockCoroutine();
+        this.StartUpdateRobotCoroutine();
     }
 
-    private void Update()
-    {
-        this.ExecuteRobotsWaitingBlock(Time.deltaTime);
-    }
 
     #region ExecuteRobotsWaitingBlock
     /*
@@ -73,18 +70,45 @@ public class RobotSystem : MonoBehaviour
 
     */
 
+   
 
-    /// <summary>
-    /// Executes all spawned the robot's waiting block.
-    /// </summary>
-    private void ExecuteRobotsWaitingBlock(float deltaTime)
+    private const int UpdateRobotGroupCount = 5;
+    private const float UpdateRobotTime = 0.5f;
+
+
+    private Coroutine UpdateRobotCoroutine;
+    private IEnumerator UpdateRobot()
     {
-        for (int i = 0; i < this.SpawnedRobotList.Count; i++)
+        int groupIndex = 0;
+        float updateTimeOfGroup = UpdateRobotTime / UpdateRobotGroupCount;
+
+        while (true)
         {
-            if (this.SpawnedRobotList[i] != null)
-                this.SpawnedRobotList[i].ExecuteWaitingBlock(deltaTime);
+            groupIndex++;
+            groupIndex %= UpdateRobotGroupCount;
+
+            for (int i = groupIndex; i < this.SpawnedRobotList.Count; i = i + UpdateRobotGroupCount)
+            {
+                if (this.SpawnedRobotList[i] != null)
+                    this.SpawnedRobotList[i].ExecuteWaitingBlock(updateTimeOfGroup);
+            }
+
+
+            yield return new WaitForSeconds(updateTimeOfGroup);
         }
     }
+
+    private void StartUpdateRobotCoroutine()
+    {
+        if(UpdateRobotCoroutine != null)
+        {
+            StopCoroutine(UpdateRobotCoroutine);
+            UpdateRobotCoroutine = null;
+        }
+
+        UpdateRobotCoroutine = StartCoroutine(UpdateRobot());
+    }
+
 
     #endregion
 

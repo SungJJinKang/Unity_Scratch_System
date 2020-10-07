@@ -331,7 +331,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
         BlockDefinitionAttribute blockDefinition = this.TargetBlock.GetType().GetCustomAttribute<BlockDefinitionAttribute>();
         if (blockDefinition != null)
-        {//If Block class have ElementContentAttribute
+        {//If Block class have BlockDefinitionAttribute
 
             object[] blockDefinitions = blockDefinition._BlockDefinitions;
 
@@ -347,6 +347,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
                     else if (blockDefinitions[i] is BlockDefinitionAttribute.BlockDefinitionType)
                     {
 
+
 #if UNITY_EDITOR
                         if(parameterTypes == null || this.parameterIndex >= parameterTypes.Length)
                         {
@@ -358,10 +359,11 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
                         if (this.GetIsProperBlockDefinitionType(parameterTypes[this.parameterIndex], blockDefinitionType) == false)
                         {
-                            Debug.LogError("Can't add BlockInputDefinitionContent Please Change BlockDefinitionAttribute of Block ( " + this.TargetBlock.GetType().Name + " ) ");
+                            Debug.LogError("Improper BlockDefinitionAttribute of Block ( " + this.TargetBlock.GetType().Name + " ) , " + parameterTypes[this.parameterIndex].Name + " : " + blockDefinitionType.ToString());
                             continue;
                         }
 #endif
+
                         switch (blockDefinitionType)
                         {
                             case BlockDefinitionAttribute.BlockDefinitionType.BooleanBlockInput:
@@ -383,7 +385,7 @@ public abstract class BlockEditorUnit : BlockEditorElement
 
         }
         else
-        {//If Block class don't have ElementContentAttribute
+        {//If Block class don't have BlockDefinitionAttribute
 
             AddDefinitionOfBlockEditorUnit(new TextDefinitionContentOfBlock(this.TargetBlock.GetType().Name));//First Add Text Element with class name
 

@@ -369,7 +369,7 @@ public sealed class RobotBase : RobotPart
     /*
      *  if you push 1, 2, 3, 4, 5 then ToList will give you 5, 4, 3, 2, 1. 
      */
-    public List<FlowBlock> BlockCallStackList
+    public List<FlowBlock> BlockCallStackListForEditor
     {
         get
         {
@@ -394,7 +394,7 @@ public sealed class RobotBase : RobotPart
     public FlowBlock PopBlockCallStack()
     {
         if (this.BlockCallStack.Count > 0)
-        {
+        { 
             return this.BlockCallStack.Pop();
         }
         else
@@ -415,6 +415,12 @@ public sealed class RobotBase : RobotPart
     /// <param name="deltaTime"></param>
     public void ExecuteWaitingBlock(float deltaTime)
     {
+        if(this.installedRobotSourceCode == null)
+        {
+            Debug.Log("Please add RobotSourceCode");
+            return;
+        }
+
         this.WaitingTime += deltaTime; // Add WaitingTime
 
         if (this.waitingBlock == null)
@@ -442,7 +448,7 @@ public sealed class RobotBase : RobotPart
 
     }
 
-    private bool IsInitBlockCalled = false;
+
     public void SetInitBlockToWaitingBlock()
     {
         if (this.installedRobotSourceCode.InitBlock == null)
@@ -450,8 +456,6 @@ public sealed class RobotBase : RobotPart
             Debug.LogError("this.RobotSourceCode.InitBlock is null");
             return;
         }
-
-        this.IsInitBlockCalled = true;
 
         this.PushToBlockCallStack(this.waitingBlock);
         this.SetWaitingBlock(this.installedRobotSourceCode.InitBlock);

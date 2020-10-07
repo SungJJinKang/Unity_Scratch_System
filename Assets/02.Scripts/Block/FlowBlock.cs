@@ -70,7 +70,16 @@ public abstract class FlowBlock : Block
         }
     }
 
+    public bool IsOperatable(RobotBase operatingRobotBase)
+    {
+        float durationTime = this.GetDurationTime(operatingRobotBase);
+        return operatingRobotBase.WaitingTime >= durationTime - Mathf.Epsilon;
+    }
 
+    private bool IsOperatable(RobotBase operatingRobotBase, float durationTime)
+    {
+        return operatingRobotBase.WaitingTime >= durationTime - Mathf.Epsilon;
+    }
 
     /// <summary>
     /// 
@@ -80,10 +89,10 @@ public abstract class FlowBlock : Block
     /// If Robot should wait more, return false
     /// otherwise, return true
     /// </returns>
-    public bool StartFlowBlock(RobotBase operatingRobotBase, out FlowBlock NextBlock)
+    public FlowBlock StartFlowBlock(RobotBase operatingRobotBase)
     {
         float durationTime = this.GetDurationTime(operatingRobotBase);
-        if (operatingRobotBase.WaitingTime >= durationTime - Mathf.Epsilon)
+        if (this.IsOperatable(operatingRobotBase))
         {
             //RobotBase wait more than DurationTime
             //Can operate Block!!!!
@@ -92,15 +101,13 @@ public abstract class FlowBlock : Block
         else
         {
             //RobotBase should wait more
-            NextBlock = null;
-            return false;
+            return null;
         }
 
         Debug.Log("Start Flow Block : " + GetType().Name);
 
         this.Operation(operatingRobotBase); // Operate Block Work
-        NextBlock = this.EndFlowBlock(operatingRobotBase);
-        return true;
+        return this.EndFlowBlock(operatingRobotBase);
 
     }
 

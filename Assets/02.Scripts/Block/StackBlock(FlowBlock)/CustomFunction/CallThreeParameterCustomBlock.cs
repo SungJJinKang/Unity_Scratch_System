@@ -7,7 +7,7 @@ public sealed class CallThreeParameterCustomBlock : CallCustomBlock, IContaining
 {
 
     private DefinitionThreeParameterCustomBlock definitionThreeParameterCustomBlock;
-    public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionThreeParameterCustomBlock as DefinitionCustomBlock; }
+    public override DefinitionCustomBlock CustomBlockDefinitionBlock => definitionThreeParameterCustomBlock;
 
     public CallThreeParameterCustomBlock(DefinitionThreeParameterCustomBlock definitionThreeParameterCustomBlock)
     {

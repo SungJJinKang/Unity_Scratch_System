@@ -6,7 +6,7 @@
 public sealed class CallTwoParameterCustomBlock : CallCustomBlock, IContainingParameter<ReporterBlock, ReporterBlock>
 {
     private DefinitionTwoParameterCustomBlock definitionTwoParameterCustomBlock;
-    public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionTwoParameterCustomBlock as DefinitionCustomBlock; }
+    public override DefinitionCustomBlock CustomBlockDefinitionBlock => definitionTwoParameterCustomBlock;
 
     public CallTwoParameterCustomBlock(DefinitionTwoParameterCustomBlock definitionTwoParameterCustomBlock)
     {

@@ -48,7 +48,7 @@ public abstract class CallCustomBlock : StackBlock, ICallCustomBlockType
     /// </returns>
     sealed public override FlowBlock EndFlowBlock(RobotBase operatingRobotBase)
     {
-        return this.CustomBlockDefinitionBlock;
+        return this.CustomBlockDefinitionBlock; // return CustomBlockDefinitionBlock as NextBlock
     }
 
 

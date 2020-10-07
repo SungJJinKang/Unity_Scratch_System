@@ -6,7 +6,7 @@
 public sealed class CallOneParameterCustomBlock : CallCustomBlock, IContainingParameter<ReporterBlock>
 {
     private DefinitionOneParameterCustomBlock definitionOneParameterCustomBlock;
-    public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionOneParameterCustomBlock as DefinitionCustomBlock; }
+    public override DefinitionCustomBlock CustomBlockDefinitionBlock => definitionOneParameterCustomBlock;
 
     public CallOneParameterCustomBlock(DefinitionOneParameterCustomBlock definitionOneParameterCustomBlock)
     {

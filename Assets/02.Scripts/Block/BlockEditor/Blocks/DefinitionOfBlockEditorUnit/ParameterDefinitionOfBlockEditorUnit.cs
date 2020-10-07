@@ -16,7 +16,7 @@ public abstract class ParameterDefinitionOfBlockEditorUnit : DefinitionOfBlockEd
             if(value == -1)
             {
                 this.parameterIndex = value;
-                Debug.Log("Reset Parameter Indexx");
+                //Debug.Log("Reset Parameter Indexx");
                 return;
             }
 

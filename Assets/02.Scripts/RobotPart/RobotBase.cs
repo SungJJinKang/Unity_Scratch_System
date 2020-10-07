@@ -15,8 +15,11 @@ public sealed class RobotBase : RobotPart
     protected override void Awake()
     {
         base.Awake();
+
         base.MotherRobotBase = this; // set itsetf to mother robotbase
-        RobotPartCache = new Dictionary<Type, RobotPart>();
+
+        this.RobotPartCache = new Dictionary<Type, RobotPart>();
+        this.BlockCallStack = new Stack<FlowBlock>();
     }
 
     protected override void Start()
@@ -308,8 +311,7 @@ public sealed class RobotBase : RobotPart
             EventBlock eventBlock = this.installedRobotSourceCode.GetEventBlock(eventName); // Set EventBlock To WaitingBlock
             if (eventBlock != null)
             {
-                this.PushToBlockCallStack(this.waitingBlock);
-                this.SetWaitingBlock(eventBlock);
+                this.PushToBlockCallStack(eventBlock);
             }
         }
 
@@ -323,14 +325,15 @@ public sealed class RobotBase : RobotPart
     [SerializeField]
     public float WaitingTime = 0;
 
-    [SerializeField]
-    private FlowBlock waitingBlock = null;
 #if UNITY_EDITOR
     public FlowBlock WaitingBlock
     {
         get
         {
-            return this.waitingBlock;
+            if (this.BlockCallStack.Count == 0)
+                return null;
+
+            return this.BlockCallStack.Peek(); // return top block
         }
     }
 #endif
@@ -351,18 +354,7 @@ public sealed class RobotBase : RobotPart
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// Pushing To ComeBackFlowBlockStack should be called before Start New Flow
     /// </summary>
-    [SerializeField]
-    private Stack<FlowBlock> blockCallStack;
-    private Stack<FlowBlock> BlockCallStack
-    {
-        get
-        {
-            if (this.blockCallStack == null)
-                this.blockCallStack = new Stack<FlowBlock>();
-
-            return this.blockCallStack;
-        }
-    }
+    private Stack<FlowBlock> BlockCallStack;
 
 #if UNITY_EDITOR
 
@@ -381,34 +373,17 @@ public sealed class RobotBase : RobotPart
     }
 #endif
 
-    public void PushToBlockCallStack(FlowBlock returnedFlowBlock)
+    public void PushToBlockCallStack(FlowBlock addedBlock)
     {
-        if (returnedFlowBlock == null)
+        if (addedBlock == null)
             return;
 
-        this.BlockCallStack.Push(returnedFlowBlock);
+        this.BlockCallStack.Push(addedBlock);
 
     }
 
 
-    public FlowBlock PopBlockCallStack()
-    {
-        if (this.BlockCallStack.Count > 0)
-        { 
-            return this.BlockCallStack.Pop();
-        }
-        else
-        {
-            return null;
-        }
-
-    }
-
-    private void SetWaitingBlock(FlowBlock flowBlock)
-    {
-        this.waitingBlock = flowBlock;
-    }
-
+  
     /// <summary>
     /// Should called only From RobotSystem
     /// </summary>
@@ -423,44 +398,32 @@ public sealed class RobotBase : RobotPart
 
         this.WaitingTime += deltaTime; // Add WaitingTime
 
-        if (this.waitingBlock == null)
-        {
-            //If WaitingBlock is null, Set Top Of BlockCallStack ( Popped ) To WaitingBlock
-            this.SetWaitingBlock(this.PopBlockCallStack());
-        }
-
-        if (this.waitingBlock == null)
+      
+        if (this.BlockCallStack.Count == 0)
         {
             //Still WaitingBlock is null, Set Top Of LoopedBlock To WaitingBlock
-            this.SetWaitingBlock(this.installedRobotSourceCode.LoopedBlock);
+            this.PushToBlockCallStack(this.installedRobotSourceCode.LoopedBlock);
         }
 
-        if (this.waitingBlock == null)
+        if (this.BlockCallStack.Count == 0)
         {
             return;
         }
 
-        bool isOperationCalled = this.waitingBlock.StartFlowBlock(this, out FlowBlock nextBlock); // Start WaitingBlock
-        if (isOperationCalled == true)
+        FlowBlock topBlock = this.BlockCallStack.Peek();
+        bool isOperatable = topBlock.IsOperatable(this);
+        if(isOperatable == true)
         {
-            this.SetWaitingBlock(nextBlock); // set next block to waiting block, If null, Maybe PopBlockCallStack will be set to waitingBlock
-        }
+            this.BlockCallStack.Pop(); //remove top block
 
+            FlowBlock nextBlock = topBlock.StartFlowBlock(this); // Start WaitingBlock
+            this.PushToBlockCallStack(nextBlock);
+        }
+       
     }
 
 
-    public void SetInitBlockToWaitingBlock()
-    {
-        if (this.installedRobotSourceCode.InitBlock == null)
-        {
-            Debug.LogError("this.RobotSourceCode.InitBlock is null");
-            return;
-        }
-
-        this.PushToBlockCallStack(this.waitingBlock);
-        this.SetWaitingBlock(this.installedRobotSourceCode.InitBlock);
-    }
-
+   
 
 
     #endregion
@@ -519,8 +482,10 @@ public sealed class RobotBase : RobotPart
             }
         }
 
-        this.BlockCallStack.Push(this.installedRobotSourceCode.LoopedBlock); // After Init Block, Call LoopedBlock
-        this.SetInitBlockToWaitingBlock();
+        this.BlockCallStack.Clear(); // Cleare BlockCallStack
+        this.PushToBlockCallStack(this.installedRobotSourceCode.InitBlock);
+
+        this.WaitingTime = 0;
     }
 #endregion
 

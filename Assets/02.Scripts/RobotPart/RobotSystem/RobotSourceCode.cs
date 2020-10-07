@@ -351,6 +351,9 @@ public class RobotSourceCode
     private List<RobotBase> InstalledRobotList;
     public bool AddToInstalledRobotList(RobotBase robotBase)
     {
+        if (this.InstalledRobotList == null)
+            this.InstalledRobotList = new List<RobotBase>();
+
         if (this.InstalledRobotList.Contains(robotBase) == true)
             return false;
 
@@ -360,6 +363,9 @@ public class RobotSourceCode
 
     public bool RemoveFromInstalledRobotList(RobotBase robotBase)
     {
+        if (this.InstalledRobotList == null)
+            return false;
+
         return this.InstalledRobotList.Remove(robotBase);
     }
 

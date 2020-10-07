@@ -8,7 +8,7 @@ public sealed class CallFourParameterCustomBlock : CallCustomBlock, IContainingP
 
     private DefinitionFourParameterCustomBlock definitionFourParameterCustomBlock;
 
-    public override DefinitionCustomBlock CustomBlockDefinitionBlock { get => definitionFourParameterCustomBlock as DefinitionCustomBlock; }
+    public override DefinitionCustomBlock CustomBlockDefinitionBlock => definitionFourParameterCustomBlock;
 
     public CallFourParameterCustomBlock(DefinitionFourParameterCustomBlock definitionFourParameterCustomBlock)
     {

@@ -90,7 +90,7 @@ public class RobotSystem : MonoBehaviour
             for (int i = groupIndex; i < this.SpawnedRobotList.Count; i = i + UpdateRobotGroupCount)
             {
                 if (this.SpawnedRobotList[i] != null)
-                    this.SpawnedRobotList[i].ExecuteWaitingBlock(updateTimeOfGroup);
+                    this.SpawnedRobotList[i].ExecuteWaitingBlock(UpdateRobotTime);
             }
 
 

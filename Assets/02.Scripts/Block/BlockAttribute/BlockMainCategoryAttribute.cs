@@ -1,6 +1,6 @@
 ﻿using System;
 
-[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = false)]
+[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
 //[fsObject(Converter = typeof(UnitCategoryConverter))]
 public class BlockMainCategoryAttribute : Attribute
 {
@@ -34,7 +34,7 @@ public class BlockMainCategoryAttribute : Attribute
             return true;
         }
 
-        if (a == null || b == null)
+        if (a is null || b is null)
         {
             return false;
         }

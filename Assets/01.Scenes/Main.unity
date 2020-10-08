@@ -1189,6 +1189,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: SourceCodeEditor
       objectReference: {fileID: 0}
+    - target: {fileID: 7640431299386506244, guid: b22a6aadd96cbd04bb79bb4b9703f089,
+        type: 3}
+      propertyPath: BlockCategoryTextPrefab
+      value: 
+      objectReference: {fileID: 6048750240035370157, guid: f632a669131ca4417ae732c7d186d321,
+        type: 3}
     - target: {fileID: 7640431299386506247, guid: b22a6aadd96cbd04bb79bb4b9703f089,
         type: 3}
       propertyPath: m_LocalPosition.x

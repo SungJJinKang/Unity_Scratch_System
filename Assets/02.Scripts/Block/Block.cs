@@ -13,16 +13,6 @@ using System.Runtime.Serialization;
 public abstract class Block
 {
 
-    #region JSONCONVERT
-
-    public virtual void ConvertToJson()
-    {
-        //Dont use JSonConverter on Block Class
-        //write json converter ( BlockJsonConverter ) code manually       
-    }
-
-
-    #endregion
     public bool IsBlockEditorUnitAnchoredPositionSaved
     {
         private set;
@@ -70,7 +60,7 @@ public abstract class Block
     public virtual Block Clone()
     {
 
-        Block clonedBlock = (Block)this.MemberwiseClone();
+        Block clonedBlock = (Block)this.MemberwiseClone(); // shallow copy
         //clonedBlock.BlockIndexInSouceCode = this.BlockIndexInSouceCode;
 
         Type[] parameterTypes = this.ParametersTypes;
@@ -80,7 +70,7 @@ public abstract class Block
             {
                 //Bad Performance!!!!!!!
                 ValueBlock thisInput = (ValueBlock)(this.GetType().GetProperty("Input" + i.ToString()).GetValue(this)); // input of this instance
-                this.GetType().GetProperty("Input" + i.ToString()).SetValue(clonedBlock, thisInput); // set thisInput to input of clonedBlock 
+                this.GetType().GetProperty("Input" + i.ToString()).SetValue(clonedBlock, thisInput.Clone()); // set thisInput to input of clonedBlock 
             }
         }
 

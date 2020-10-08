@@ -44,6 +44,8 @@ public abstract class FlowBlock : Block
     /// </summary>
     private FlowBlock nextBlock;
 
+    [JsonProperty]
+    public int IndexInRobotSourceCode;
     
     public bool IsHaveNextBlock => this is IDownBumpBlock;
     [JsonProperty]

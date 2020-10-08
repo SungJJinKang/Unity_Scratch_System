@@ -5,6 +5,8 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.CodeDom;
+using System.Linq;
 
 
 public class RobotSourceCodeEditorWindow : BlockEditorWindow
@@ -15,6 +17,8 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
     {
         base.Awake();
         instance = this;
+
+        this.BlockEditorUnitsInBlockShop = new Dictionary<Type, List<BlockEditorUnit>>();
 
 #if UNITY_EDITOR
         _GUIStyle = new GUIStyle();
@@ -52,12 +56,16 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
         }
     }
 
-
+  
 
     private void InitBlockShop()
     {
+        TypeFilter typeFilter = new TypeFilter(FindIBlockCategoryFilter);
+
         foreach (Type type in BlockReflector.GetAllSealedBlockTypeContainingBlockTitleAttribute())
         {
+
+            #if UNITY_EDITOR
             if (type.GetConstructor(Type.EmptyTypes) == null)
             {
                 Debug.LogWarning(" \" " + type.Name + " \" Dont Have Default Constructor");
@@ -70,17 +78,72 @@ public class RobotSourceCodeEditorWindow : BlockEditorWindow
                 Debug.LogWarning(" \" " + type.Name + " \" Containing NotAutomaticallyMadeOnBlockShopAttribute");
                 continue;
             }
-
+            #endif
 
             BlockEditorUnit createdBlockEditorUnit = BlockEditorManager.instnace.CreateBlockEditorUnit(type, this, this.BlockShopContent);
             if (createdBlockEditorUnit != null)
             {
                 createdBlockEditorUnit._BlockEditorUnitFlag = BlockEditorUnit.ShopBlockFlag;
-                //base.AddToSpawnedBlockEditorUnitList(createdBlockEditorUnit);
+
+                Type[] interfaces = type.FindInterfaces(typeFilter, null);
+
+                if(interfaces.Length > 0)
+                {
+                    if(BlockEditorUnitsInBlockShop.ContainsKey(interfaces[0]) == false)
+                    {
+                        this.BlockEditorUnitsInBlockShop[interfaces[0]] = new List<BlockEditorUnit>();
+                    }
+
+                    BlockEditorUnitsInBlockShop[interfaces[0]].Add(createdBlockEditorUnit);
+
+                
+                }
+                else
+                {
+                    Debug.LogError("Please Add BlockMainCategoryAttribute To : " + type.FullName);
+                }
+
             }
-
-
         }
+
+        this.SortBlockEditorUnitsInBlockShop();
+    }
+
+    public static bool FindIBlockCategoryFilter(Type typeObj, object criteriaObj)
+    {
+        return typeof(IBlockCategory).IsAssignableFrom(typeObj) && typeObj.GetCustomAttribute<BlockMainCategoryAttribute>() != null;
+    }
+
+
+    /// <summary>
+    /// Key : IBlockCategory
+    /// Value : BlockEditorUnit
+    /// </summary>
+    private Dictionary<Type, List<BlockEditorUnit>> BlockEditorUnitsInBlockShop;
+
+    private int blockSortingIndex = 0;
+    [SerializeField]
+    private Text BlockCategoryTextPrefab;
+    private void SortBlockEditorUnitsInBlockShop()
+    {
+        foreach(var key in this.BlockEditorUnitsInBlockShop.Keys.ToArray())
+        {
+            //Set BlockCategoryText
+            Text blockCategoryText = Instantiate(BlockCategoryTextPrefab.gameObject).GetComponent<Text>();
+            blockCategoryText.text = key.Name;
+            blockCategoryText.transform.SetParent(this.BlockShopContent, false);
+            blockCategoryText.transform.SetSiblingIndex(this.blockSortingIndex);
+            this.blockSortingIndex++;
+            //
+
+            for (int i = 0; i < BlockEditorUnitsInBlockShop[key].Count; i++)
+            {
+                BlockEditorUnitsInBlockShop[key][i].transform.SetSiblingIndex(blockSortingIndex);
+                blockSortingIndex++;
+            }
+           
+        }
+
     }
 
 

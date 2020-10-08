@@ -1,5 +1,5 @@
 ﻿
-public class Speaker_Speak : StackBlock, IContainingParameter<ReporterBlock>, IVariableBlockType
+public class Speaker_Speak : StackBlock, IContainingParameter<ReporterBlock>, ISpeakerBlockType
 {
     public ReporterBlock Input1 { get; set; }
 

@@ -32,7 +32,60 @@ public class RobotSourceCode
 
     }
 
-   
+
+    /// <summary>
+    /// FlowBlockContainer
+    /// used for RobotBase save/load system
+    /// when save robotbase data, index of blockes on blockCallStack is saved
+    /// index of blocks is get from this property
+    /// </summary>
+    private FlowBlock[] FlowBlockContainer
+    {
+        get
+        {
+            FlowBlock[] flowBlockContainer = new FlowBlock[16]; // default capacity, set pow of 2 
+            int flowBlockIndex = 0;
+
+            this.AddFlowBlockRecursively(ref flowBlockContainer, ref flowBlockIndex, this.InitBlock);
+            this.AddFlowBlockRecursively(ref flowBlockContainer, ref flowBlockIndex, this.LoopedBlock);
+
+            foreach(var eventBlock in this.StoredEventBlockDictonary.Values)
+            {
+                this.AddFlowBlockRecursively(ref flowBlockContainer, ref flowBlockIndex, eventBlock);
+            }
+
+            foreach(var customBlock in this.StoredCustomBlockDefinitionBlockList)
+            {
+                this.AddFlowBlockRecursively(ref flowBlockContainer, ref flowBlockIndex, customBlock);
+            }
+
+            return flowBlockContainer;
+        }
+    }
+
+    private void AddFlowBlockRecursively(ref FlowBlock[] flowBlockContainer, ref int flowBlockIndex,  FlowBlock flowBlock)
+    {
+        if (flowBlock == null)
+            return;
+
+        flowBlock.IndexInRobotSourceCode = flowBlockIndex;
+
+        if(flowBlockContainer.Length == flowBlockIndex)
+        {//when flowBlockIndex meet flowBlockContainer size
+            //expand flowBlockContainer array
+            //this is little bit slow, so set large number to default capacity 
+            int originalSize = flowBlockContainer.Length;
+            FlowBlock[] newArray = new FlowBlock[originalSize * 2];
+            System.Array.Copy(flowBlockContainer, 0, newArray, 0, originalSize); // copy original array to new expanded array
+
+            flowBlockContainer = newArray; // set new 
+        }
+
+        flowBlockContainer[flowBlockIndex] = flowBlock;
+        flowBlockIndex++;
+        this.AddFlowBlockRecursively(ref flowBlockContainer, ref flowBlockIndex, flowBlock.NextBlock);
+    }
+
 
     /// <summary>
     /// If Robot Source Code is being edited In Block Editor

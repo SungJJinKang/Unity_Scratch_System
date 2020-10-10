@@ -2,7 +2,6 @@
 using System.Reflection;
 using UnityEngine;
 using Newtonsoft.Json;
-using System.Runtime.Serialization;
 /// <summary>
 /// reference from https://en.scratch-wiki.info/wiki/Blocks#Block_Shapes
 /// All Global, Local Variable in Block class shouldn't be changed during operating robot except editing block
@@ -120,13 +119,6 @@ public abstract class Block
        
     }
 
-    private void LoadParameterData(params ValueBlock[] valueBlock)
-    {
-        for (int i = 0; i < valueBlock.Length; i++)
-        {
-            this.PassParameter(i, valueBlock[i]);
-        }
-    }
 
 
     private void SetDefaultValueToParameter()
@@ -201,7 +193,7 @@ public abstract class Block
 
 
     /// <summary>
-    /// Passes the parameter to block
+    /// Passes the parameter with block
     /// </summary>
     /// <param name="inputIndex">Input index. 0 ~ 3</param>
     /// <param name="valueBlock">Value block. Passed Parameter Value Block</param>
